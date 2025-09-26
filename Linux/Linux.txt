@@ -1,0 +1,2 @@
+What is linux and why it is used over windows?
+Linux is an open-source operating system based on Unix. It’s widely used in DevOps and servers because it’s lightweight, secure, and highly customizable. Compared to Windows, Linux is free, supports powerful command-line tools, and is the backbone of most cloud and container environments. That’s why most companies rely on Linux for scalability, automation, and reliability.
