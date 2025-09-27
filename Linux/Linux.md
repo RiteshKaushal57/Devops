@@ -2,7 +2,7 @@
 Linux is an open-source operating system based on Unix. It’s widely used in DevOps and servers because it’s lightweight, secure, and highly customizable. Compared to Windows, Linux is free, supports powerful command-line tools, and is the backbone of most cloud and container environments. That’s why most companies rely on Linux for scalability, automation, and reliability.
 
 **2. Explain core components of linux machine.**  
-A Linux machine is built on several core components. At the base is the **hardware**. On top of that sits the **kernel**, which manages resources like memory, CPU, and devices. Users interact with the system through the **shell**, which passes commands to the kernel. The system also provides **libraries and utilities** to support applications. Finally, at the top layer, we have **user applications** that we install and run. This layered structure makes Linux powerful, modular, and flexible.    
+A Linux machine is built on several core components. At the base is the **hardware**. On top of that sits the **kernel**, which manages resources like memory, CPU, and devices. Linux interacts with hardware through the kernel. Users interact with the system through the **shell**, which passes commands to the kernel. The system also provides **libraries and utilities** to support applications. Finally, at the top layer, we have **user applications** that we install and run. This layered structure makes Linux powerful, modular, and flexible.    
 
 +----------------------------------------------------+  
 | User Applications (Vim, Docker, Apache, etc.)     |  
@@ -16,4 +16,27 @@ A Linux machine is built on several core components. At the base is the **hardwa
 | Linux Kernel (Process, Memory, FS, Network)       |  <-- Core of the OS  
 +----------------------------------------------------+  
 | Hardware (CPU, RAM, Disk, Network, Peripherals)   |  
-+----------------------------------------------------+  
++----------------------------------------------------+      
+
+
+**3. What are Linux Distributions?**  
+Linux distributions (distros) are different versions of Linux that package the Linux kernel with various software, system utilities, and package managers. Each distro is designed for different use cases, such as personal computing, server management, or security.  
+
+Here are some popular Linux distributions:  
+
+**Ubuntu** – One of the most beginner-friendly distros, widely used for personal and server use. It has great community support.  
+
+**CentOS** (discontinued, replaced by AlmaLinux/Rocky Linux) – Previously a popular choice for servers, based on Red Hat Enterprise Linux (RHEL).  
+
+**Debian** – A very stable and reliable distro, often used as a base for other distros like Ubuntu.  
+
+**Fedora** – A cutting-edge distro that introduces new features before they reach RHEL.   
+
+**Arch Linux** – A lightweight, rolling-release distro for advanced users who like customization.   
+
+**Kali Linux** – Designed for cybersecurity and penetration testing.   
+
+**Alpine Linux** – A lightweight, security-focused distro often used in containers.     
+
+
+
