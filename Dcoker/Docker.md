@@ -15,8 +15,21 @@ Containers and virtual machines are both technologies used to isolate applicatio
 A hypervisor is software that creates and manages virtual machines by allocating hardware resources to them. It allows multiple operating systems to run on one physical machine.  
 
 **5. What is Docker Architecture?**   
-Docker Architecture is a client-server-based architecture that defines how Docker components interact to build, ship, and run containerized applications. It includes the Docker Client, Docker Daemon (Engine), Docker Objects (Images, Containers), and Registries.   
-![Alt text](./images/image.png)  
+Docker Architecture is a client-server-based architecture that defines how Docker components interact to build, ship, and run containerized applications. It includes the **Docker Client**, **Docker Daemon (Engine)**, **Docker Objects (Images, Containers)**, and **Registries**.   
+![Alt text](./image.png)  
+
+**Docker Client:** CLI or API used to communicate with Docker Daemon (docker build, docker run).  
+
+**Docker Daemon (Docker Engine):** Runs on the host and manages images, containers, networks, and storage.  
+
+**Docker Images:** Read-only templates used to create containers.  
+
+**Docker Containers:** Running instances of images, providing isolated runtime environments.  
+
+**Docker Registries:** Storage for images (like Docker Hub or private registries).  
+
+*Orchestration Layer:* Tools like Kubernetes or Docker Swarm for managing multiple containers.  
+
 
 **5. What is Docker Container?**  
 A Docker container is a lightweight, standalone package that includes an application and all its dependencies. It runs in an isolated environment, ensuring consistency across different systems, is faster and more resource-efficient than virtual machines, and is widely used for scalable and microservices-based deployments.   
