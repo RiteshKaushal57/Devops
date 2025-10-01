@@ -59,7 +59,8 @@ Containers are lightweight because they use a technology called containerization
 
 The architecture of containers is layered. The Docker Engine runs on the host OS and manages containers. Each container is created from a Docker image, providing an isolated environment for the app while sharing the host OS kernel. Networking and volumes allow communication and persistent storage. For multiple containers, orchestration tools like Kubernetes handle scaling, load balancing, and monitoring.  
 
-**Files and Folders in containers base images**  
+## Files and Folders in containers base images  
+
     /bin: contains binary executable files, such as the ls, cp, and ps commands.  
 
     /sbin: contains system binary executable files, such as the init and shutdown commands.  
@@ -92,7 +93,7 @@ This guide explains step-by-step how to containerize a Node.js application local
 
 ---
 
-## Step 0 – Project Setup
+### Step 0 – Project Setup
 
 Make sure your project folder has the following files:
 
@@ -102,28 +103,28 @@ Make sure your project folder has the following files:
 
 ---
 
-## Step 1 – Write a Dockerfile
+### Step 1 – Write a Dockerfile
 
 dockerfile
-# Step 1: Use Node 18 base image
+### Step 1: Use Node 18 base image
 FROM node:18
 
-# Step 2: Set working directory inside the container
+### Step 2: Set working directory inside the container
 WORKDIR /app
 
-# Step 3: Copy package.json and package-lock.json to container
+### Step 3: Copy package.json and package-lock.json to container
 COPY package*.json ./
 
-# Step 4: Install app dependencies
+### Step 4: Install app dependencies
 RUN npm install
 
-# Step 5: Copy the rest of the app files
+### Step 5: Copy the rest of the app files
 COPY . .
 
-# Step 6: Expose port 3000 for the app
+### Step 6: Expose port 3000 for the app
 EXPOSE 3000
 
-# Step 7: Command to run the app
+### Step 7: Command to run the app
 CMD ["node", "server.js"]
 
 ---
