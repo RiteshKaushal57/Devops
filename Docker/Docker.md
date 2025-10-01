@@ -127,7 +127,34 @@ CMD ["node", "server.js"]
 
 ```
 
-### Step 2 – Build Your Docker Image
+### Step 2 – Write a server.js file  
+```
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+  res.end("Hello Ritesh! Your app is running inside a container 🚀");
+});
+
+server.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
+
+```
+
+### Step 3 – Write a package.json file   
+```
+{
+  "name": "myapp",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
+
+```
+
+### Step 4 – Build Your Docker Image
 
 ```
 docker build -t myapp .
@@ -139,7 +166,7 @@ docker build -t myapp .
 
 - . → current folder as the build context
 
-### Step 3 – Run Your Container Locally
+### Step 5 – Run Your Container Locally
 
 ```
 docker run -p 3000:3000 myapp
@@ -149,7 +176,7 @@ docker run -p 3000:3000 myapp
 - *-p 3000:3000* → maps container port 3000 to host port 3000
 - *myapp* → the image to run
 
-### Step 4 – Verify the App
+### Step 6 – Verify the App
 
 ```
 http://localhost:3000
