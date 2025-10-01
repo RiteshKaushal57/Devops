@@ -103,10 +103,10 @@ Make sure your project folder has the following files:
 
 ---
 
-**Step 1 – Write a Dockerfile**
-
+### Step 1 – Write a Dockerfile
 dockerfile  
-#### Step 1: Use Node 18 base image   
+
+**Step 1: Use Node 18 base image**   
 FROM node:18
 
 **Step 2: Set working directory inside the container**   
