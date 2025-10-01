@@ -59,7 +59,7 @@ Containers are lightweight because they use a technology called containerization
 
 The architecture of containers is layered. The Docker Engine runs on the host OS and manages containers. Each container is created from a Docker image, providing an isolated environment for the app while sharing the host OS kernel. Networking and volumes allow communication and persistent storage. For multiple containers, orchestration tools like Kubernetes handle scaling, load balancing, and monitoring.  
 
-## Files and Folders in containers base images  
+### Files and Folders in containers base images  
 
     /bin: contains binary executable files, such as the ls, cp, and ps commands.  
 
@@ -105,7 +105,7 @@ Make sure your project folder has the following files:
 
 ### Step 1 – Write a Dockerfile
 
-dockerfile
+dockerfile  
 **Step 1: Use Node 18 base image**   
 FROM node:18
 
