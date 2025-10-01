@@ -141,7 +141,7 @@ server.listen(3000, () => {
 
 ```
 
-**Step 3 – Write a package.json file   **
+**Step 3 – Write a package.json file**
 ```
 {
   "name": "myapp",
