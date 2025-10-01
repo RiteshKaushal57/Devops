@@ -103,7 +103,7 @@ Make sure your project folder has the following files:
 
 ---
 
-### Step 1 – Write a Dockerfile
+#### Step 1 – Write a Dockerfile
 
 dockerfile  
 **Step 1: Use Node 18 base image**   
@@ -127,7 +127,7 @@ EXPOSE 3000
 **Step 7: Command to run the app**   
 CMD ["node", "server.js"]
 
-## Step 2 – Build Your Docker Image
+### Step 2 – Build Your Docker Image
 
 docker build -t myapp .
 
@@ -137,7 +137,7 @@ docker build -t myapp .
 
 . → current folder as the build context
 
-## Step 3 – Run Your Container Locally
+### Step 3 – Run Your Container Locally
 
 docker run -p 3000:3000 myapp
 
@@ -147,8 +147,11 @@ docker run -p 3000:3000 myapp
 
 *myapp* → the image to run
 
-## Step 4 – Verify the App
+### Step 4 – Verify the App
 
 http://localhost:3000
 
-*You should see your Node.js app running inside the container.*
+*You should see your Node.js app running inside the container.*  
+
+
+
