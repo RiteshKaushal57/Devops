@@ -147,7 +147,8 @@ CMD ["node", "server.js"]
 
 ### Step 4 – Verify the App
 
-``` http://localhost:3000
+```
+http://localhost:3000
 ```  
 *You should see your Node.js app running inside the container.*  
 
