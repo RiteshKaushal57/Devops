@@ -129,9 +129,9 @@ CMD ["node", "server.js"]
 
 ### Step 2 – Build Your Docker Image
 
-``
+```
 docker build -t myapp .
-``
+```
 
 - *docker build* → builds an image from the Dockerfile
 
