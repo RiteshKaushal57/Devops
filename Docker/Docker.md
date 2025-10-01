@@ -104,6 +104,7 @@ Make sure your project folder has the following files:
 ---
 
 ### Step 1 – Write a Dockerfile
+```
 dockerfile  
 
 **Step 1: Use Node 18 base image**   
