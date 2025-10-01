@@ -129,7 +129,9 @@ CMD ["node", "server.js"]
 
 ### Step 2 – Build Your Docker Image
 
-` docker build -t myapp . `
+``
+docker build -t myapp .
+``
 
 - *docker build* → builds an image from the Dockerfile
 
@@ -139,7 +141,9 @@ CMD ["node", "server.js"]
 
 ### Step 3 – Run Your Container Locally
 
-`docker run -p 3000:3000 myapp`
+```
+docker run -p 3000:3000 myapp
+```
 
 - *docker run* → starts a container from the image
 - *-p 3000:3000* → maps container port 3000 to host port 3000
