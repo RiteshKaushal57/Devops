@@ -87,6 +87,9 @@ The architecture of containers is layered. The Docker Engine runs on the host OS
 
     Control groups (cgroups): Docker containers use cgroups to limit and control the amount of resources, such as CPU, memory, and I/O, that a container can access.   
 
+
+    
+
 ## Full step-by-step guide for containerizing your Node.js app with Docker  
 
 This guide explains step-by-step how to containerize a Node.js application locally using Docker.
@@ -127,7 +130,7 @@ CMD ["node", "server.js"]
 
 ```
 
-**Step 2 – Write a server.js file  **
+**Step 2 – Write a server.js file**
 ```
 const http = require("http");
 
