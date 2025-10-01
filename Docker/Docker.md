@@ -26,14 +26,16 @@ Docker Architecture is a client-server-based architecture that defines how Docke
 
 **Docker Containers:** Running instances of images, providing isolated runtime environments.  
 
-**Docker Registries:** Storage for images (like Docker Hub or private registries).  
+**Dockerfile:** Dockerfile is a file where you provide the steps to build your Docker Image.  
+
+**Docker Registries:** Storage for images (like Docker Hub Docker Hub (*place where you share your docker images with external hub*) or private registries).  
 
 *Orchestration Layer:* Tools like Kubernetes or Docker Swarm for managing multiple containers.  
 
 **Docker LifeCycle**  
 **docker build ->** builds docker images from Dockerfile  
 **docker run ->** runs container from docker images  
-**docker push ->** push the container image to public/private regestries to share the docker images.  
+**docker push ->** push the container image to public/private regestries to share the docker images.     
 
 **5. What is Docker Container?**  
 A Docker container is a lightweight, standalone package that includes an application and all its dependencies. It runs in an isolated environment, ensuring consistency across different systems, is faster and more resource-efficient than virtual machines, and is widely used for scalable and microservices-based deployments.   
