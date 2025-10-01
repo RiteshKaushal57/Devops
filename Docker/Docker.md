@@ -105,7 +105,6 @@ Make sure your project folder has the following files:
 
 ### Step 1 – Write a Dockerfile
 ```
-dockerfile  
 
 **Step 1: Use Node 18 base image**   
 FROM node:18
@@ -127,6 +126,8 @@ EXPOSE 3000
 
 **Step 7: Command to run the app**   
 CMD ["node", "server.js"]
+
+```
 
 ### Step 2 – Build Your Docker Image
 
