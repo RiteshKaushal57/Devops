@@ -103,10 +103,10 @@ Make sure your project folder has the following files:
 
 ---
 
-#### Step 1 – Write a Dockerfile
+**Step 1 – Write a Dockerfile**
 
 dockerfile  
-**Step 1: Use Node 18 base image**   
+#### Step 1: Use Node 18 base image   
 FROM node:18
 
 **Step 2: Set working directory inside the container**   
@@ -118,7 +118,7 @@ COPY package*.json ./
 **Step 4: Install app dependencies**   
 RUN npm install
 
-** Step 5: Copy the rest of the app files**   
+**Step 5: Copy the rest of the app files**   
 COPY . .
 
 **Step 6: Expose port 3000 for the app**   
@@ -141,16 +141,13 @@ docker build -t myapp .
 
 docker run -p 3000:3000 myapp
 
-*docker run* → starts a container from the image
-
-*-p 3000:3000* → maps container port 3000 to host port 3000
-
-*myapp* → the image to run
+- *docker run* → starts a container from the image
+- *-p 3000:3000* → maps container port 3000 to host port 3000
+- *myapp* → the image to run
 
 ### Step 4 – Verify the App
 
 http://localhost:3000
-
 *You should see your Node.js app running inside the container.*  
 
 
