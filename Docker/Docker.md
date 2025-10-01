@@ -91,7 +91,7 @@ The architecture of containers is layered. The Docker Engine runs on the host OS
 
 This guide explains step-by-step how to containerize a Node.js application locally using Docker.
 
-### Step 0 – Project Setup
+**Step 0 – Project Setup**
 
 Make sure your project folder has the following files:
 
@@ -101,7 +101,7 @@ Make sure your project folder has the following files:
 
 ---
 
-### Step 1 – Write a Dockerfile
+**Step 1 – Write a Dockerfile**
 ```
 
 Step 1: Use Node 18 base image  
@@ -127,7 +127,7 @@ CMD ["node", "server.js"]
 
 ```
 
-### Step 2 – Write a server.js file  
+**Step 2 – Write a server.js file  **
 ```
 const http = require("http");
 
@@ -141,7 +141,7 @@ server.listen(3000, () => {
 
 ```
 
-### Step 3 – Write a package.json file   
+**Step 3 – Write a package.json file   **
 ```
 {
   "name": "myapp",
@@ -154,7 +154,7 @@ server.listen(3000, () => {
 
 ```
 
-### Step 4 – Build Your Docker Image
+**Step 4 – Build Your Docker Image**
 
 ```
 docker build -t myapp .
@@ -166,7 +166,7 @@ docker build -t myapp .
 
 - . → current folder as the build context
 
-### Step 5 – Run Your Container Locally
+**Step 5 – Run Your Container Locally**
 
 ```
 docker run -p 3000:3000 myapp
@@ -176,7 +176,7 @@ docker run -p 3000:3000 myapp
 - *-p 3000:3000* → maps container port 3000 to host port 3000
 - *myapp* → the image to run
 
-### Step 6 – Verify the App
+**Step 6 – Verify the App**
 
 ```
 http://localhost:3000
