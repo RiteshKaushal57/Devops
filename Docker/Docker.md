@@ -154,7 +154,6 @@ server.listen(3000, () => {
     "start": "node server.js"
   }
 }
-
 ```
 
 **Step 4 – Build Your Docker Image**
@@ -162,21 +161,20 @@ server.listen(3000, () => {
 ```
 docker build -t myapp .
 ```
-- *docker build* → builds an image from the Dockerfile
-- *-t myapp* → names the image myapp
-- . → current folder as the build context
+- `docker build` → builds an image from the Dockerfile
+- `-t myapp` → names the image myapp
+- `.` → current folder as the build context
 
 **Step 5 – Run Your Container Locally**
 
 ```
 docker run -p 3000:3000 myapp
 ```
-- *docker run* → starts a container from the image
-- *-p 3000:3000* → maps container port 3000 to host port 3000
-- *myapp* → the image to run
+- `docker run` → starts a container from the image
+- `-p 3000:3000` → maps container port 3000 to host port 3000
+- `myapp` → the image to run
 
 **Step 6 – Verify the App**
-
 ```
 http://localhost:3000
 ```  
