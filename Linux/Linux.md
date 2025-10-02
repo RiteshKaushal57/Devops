@@ -82,7 +82,15 @@ passwd username
 ```
 ### Enforcing Password Policies  
 
-- **Password expiration:**Set password expiry days
+- **Password expiration:** Set password expiry days
 ```
 chage -M 90 username
+```
+- **PLock a user account**
+```
+passwd -l username
+```
+- **Unlock a user account**
+```
+passwd -u username
 ```
