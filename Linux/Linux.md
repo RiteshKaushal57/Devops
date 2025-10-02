@@ -41,7 +41,7 @@ Here are some popular Linux distributions:
 
 ## Linux Directory Definitions
 
-**/sbin**  
+- `**/sbin:**`
 System binaries used to manage the system as an administrator. Only root or users with sudo privileges can execute these commands.  
 **/lib**  
 Contains shared libraries used by the kernel and system programs. These are generally not used directly by regular users.  
