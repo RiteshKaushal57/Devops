@@ -67,6 +67,12 @@ A folder for sharing information among users. Access can be restricted based on 
 
 ## User Management  
 
-- **To create new users:** ```
+- **To create new user without a home directory:** 
+```
 useradd username
+```
+
+- **To create new user with home directory:** 
+```
+useradd -m username
 ```
