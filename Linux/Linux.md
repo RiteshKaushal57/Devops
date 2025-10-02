@@ -41,28 +41,28 @@ Here are some popular Linux distributions:
 
 ## Linux Directory Definitions
 
-- `**/sbin:**`
+- **`/sbin:`**
 System binaries used to manage the system as an administrator. Only root or users with sudo privileges can execute these commands.  
-**/lib**  
+- **`/lib:`**  
 Contains shared libraries used by the kernel and system programs. These are generally not used directly by regular users.  
-**/boot**  
+- **`/boot:`**  
 Contains files required for booting the system, such as the kernel, initial RAM disk image, and bootloader configuration.  
-**/bin**  
+- **`/bin:`**  
 User binaries. These are essential commands that can be used by all users. They are not limited to system administration.  
 
 > **Note:** As a Linux admin, you can restrict `/sbin` commands to administrators, whereas `/bin` commands can be accessible to every user.  
 
-**/srv**  
+- **`/srv:`**  
 Stores data for services provided by the system, such as web server files or FTP files.  
-**/opt**  
+- **`/opt:`**  
 Optional software packages or third-party applications. Useful in organizations or teams to keep additional software separate from system files.  
-**/mnt**  
+- **`/mnt:`**  
 Used by administrators to temporarily mount filesystems or external drives.  
-**/media**  
+- **`/media:`**  
 Used for mounting removable media such as USB drives, CDs, and DVDs.  
-**/var**  
+- **`/var:`**  
 Contains variable data files, such as logs, spool files, caches, and temporary files.  
-**/data**  
+- **`/data:`**  
 A folder for sharing information among users. Access can be restricted based on permissions.  
 
 ## User Management  
