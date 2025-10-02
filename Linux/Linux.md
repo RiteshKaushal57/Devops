@@ -76,3 +76,13 @@ useradd username
 ```
 useradd -m username
 ```
+- **To set or change a user’s password:** 
+```
+passwd username
+```
+### Enforcing Password Policies  
+
+- **Password expiration:**Set password expiry days
+```
+chage -M 90 username
+```
