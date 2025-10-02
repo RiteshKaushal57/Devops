@@ -86,11 +86,52 @@ passwd username
 ```
 chage -M 90 username
 ```
-- **PLock a user account**
+- **Lock a user account:**
 ```
 passwd -l username
 ```
-- **Unlock a user account**
+- **Unlock a user account:**
 ```
 passwd -u username
+```
+
+### Modifying Users  
+
+- **Change the username:**
+```
+usermod -l new_username old_username
+```
+- **Change the home directory:**
+```
+usermod -d /new/home/directory -m username
+```
+- **Change the default shell:**
+```
+usermod -s /bin/zsh username
+```
+
+### Deleting Users 
+
+- **To remove a user but keep their home directory:**
+```
+userdel username
+```
+- **To remove a user and their home directory:**
+```
+userdel -r username
+```
+
+### Deleting Users 
+
+- **Creating Groups:**
+```
+groupadd groupname
+```
+- **Adding Users to Groups:**
+```
+usermod -aG groupname username
+```
+- **Viewing Group Memberships:**
+```
+groups username
 ```
