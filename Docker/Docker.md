@@ -178,7 +178,8 @@ docker run -p 3000:3000 myapp
 ```
 http://localhost:3000
 ```  
-*You should see your Node.js app running inside the container.*  
+*You should see your Node.js app running inside the container.*  v
 
-
+## What is a Multi-Stage Docker Build?  
+Multi-stage builds allow us to create smaller, optimized Docker images by using multiple stages in a single Dockerfile. In the first stage, we can use heavy images with build tools to compile or install dependencies. In the final stage, we copy only the required artifacts into a lightweight image, such as alpine or node-slim. This reduces image size, improves security, and speeds up deployments. For example, in Node.js, we build dependencies in one stage and copy only the app code into a slimmer runtime image.
 
