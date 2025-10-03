@@ -213,3 +213,22 @@ docker build -t myapp-multistage .
 
 ## What’s the difference between Docker volumes and bind mounts?  
 Docker Volumes and Bind Mounts are mechanisms to provide persistent storage for Docker containers. Containers have an ephemeral filesystem, so data is lost when they stop. Volumes are managed by Docker and store data outside the container, persisting it even if the container is removed. Bind mounts directly map a host folder or file into the container, letting the container read/write to the host filesystem. Both are set using -v or --mount and help persist or share data between containers and the host.  
+
+## Docker Networking: Bridge vs Host vs Overlay  
+### Bridge Network   
+**What:** Default network created by Docker for containers on a single host.  
+**Why:** Lets containers communicate with each other securely while isolating them from the host network.  
+**How:** Docker assigns a private IP to each container. Containers can access each other via IP or container name. External access is through port mapping (-p hostPort:containerPort).    
+*Bridge network is like a private LAN inside the host. It isolates containers from host network but allows inter-container communication.*  
+
+### Host Network   
+**What:** Containers share the host’s network stack.  
+**Why:** Needed for performance-sensitive applications (low latency) or when using host-only services.  
+**How:** No port mapping is needed because container uses host IP directly. But containers are not isolated from host network.  
+*Host network removes network isolation. Useful for testing, but not recommended for untrusted containers due to security risks.*    
+
+### Overlay Network  
+**What:** Overlay networks are used when your Docker containers are not all on the same physical or virtual machine (like Docker Swarm or Kubernetes).  
+**Why:** Enables secure cross-host communication between containers.  
+**How:** Docker creates an encrypted VXLAN overlay network. Containers on different hosts appear as if on the same network.  
+*Overlay networks are used in multi-node clusters. They allow containers on different hosts to communicate securely as if they were on the same LAN.*  
