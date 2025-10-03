@@ -215,20 +215,42 @@ docker build -t myapp-multistage .
 Docker Volumes and Bind Mounts are mechanisms to provide persistent storage for Docker containers. Containers have an ephemeral filesystem, so data is lost when they stop. Volumes are managed by Docker and store data outside the container, persisting it even if the container is removed. Bind mounts directly map a host folder or file into the container, letting the container read/write to the host filesystem. Both are set using -v or --mount and help persist or share data between containers and the host.  
 
 ## Docker Networking: Bridge vs Host vs Overlay  
-### Bridge Network   
+### Bridge Network
 **What:** Default network created by Docker for containers on a single host.  
 **Why:** Lets containers communicate with each other securely while isolating them from the host network.  
 **How:** Docker assigns a private IP to each container. Containers can access each other via IP or container name. External access is through port mapping (-p hostPort:containerPort).    
 *Bridge network is like a private LAN inside the host. It isolates containers from host network but allows inter-container communication.*  
 
-### Host Network   
+### Host Network
 **What:** Containers share the host’s network stack.  
 **Why:** Needed for performance-sensitive applications (low latency) or when using host-only services.  
 **How:** No port mapping is needed because container uses host IP directly. But containers are not isolated from host network.  
 *Host network removes network isolation. Useful for testing, but not recommended for untrusted containers due to security risks.*    
 
-### Overlay Network  
+### Overlay Network
 **What:** Overlay networks are used when your Docker containers are not all on the same physical or virtual machine (like Docker Swarm or Kubernetes).  
 **Why:** Enables secure cross-host communication between containers.  
 **How:** Docker creates an encrypted VXLAN overlay network. Containers on different hosts appear as if on the same network.  
 *Overlay networks are used in multi-node clusters. They allow containers on different hosts to communicate securely as if they were on the same LAN.*  
+
+### Securing containers with custom bridge network
+By default, Docker creates a bridge network called bridge. All containers connected to it can communicate freely, and ports are exposed to the host. This can be insecure for production or multi-container setups because containers can see each other even if they don’t need to.
+
+A custom bridge network allows you to:
+- Isolate containers that don’t need to talk to each other.
+- Control communication between containers explicitly.
+- Avoid exposing unnecessary ports to the host.
+- Give containers predictable DNS names for easier inter-container communication.
+
+### How it works
+
+**1. Create a custom bridge network:**  
+```
+docker network create my-bridge-network
+```
+**2. Run containers on this network:**  
+```
+docker run -d --name app1 --network my-bridge-network myapp
+docker run -d --name app2 --network my-bridge-network mydb
+```
+*Only containers on my-bridge-network can communicate with each other.*
