@@ -135,7 +135,7 @@ CMD ["node", "server.js"]
 const http = require("http");
 
 const server = http.createServer((req, res) => {
-  res.end("Hello Ritesh! Your app is running inside a container 🚀");
+  res.end("Hello Ritesh! Your app is running inside a container.");
 });
 
 server.listen(3000, () => {
@@ -186,15 +186,30 @@ Multi-stage builds allow us to create smaller, optimized Docker images by using 
 ## What’s the difference between Docker volumes and bind mounts?  
 Volumes are Docker-managed storage used to persist data independently of containers. Bind mounts use a directory from the host filesystem directly. Volumes are safer and easier for production, while bind mounts are great for development when you want live changes from your host reflected in the container.  
 
-{
-  "AutoStart": false,
-  "DisplayedOnboarding": true,
-  "EnableDockerAI": true,
-  "IntegratedWslDistros": [
-    "Ubuntu"
-  ],
-  "LastContainerdSnapshotterEnable": 1759397829,
-  "LicenseTermsVersion": 2,
-  "SettingsVersion": 43,
-  "UseContainerdSnapshotter": true
-}
+### Optimizing the Same Node.js App We Containerized Above  
+**Rewrite the Dockerfile**
+```
+# First stage: Build
+FROM node:18 AS builder
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+# Second stage: Production
+FROM node:18-slim
+
+WORKDIR /app
+COPY --from=builder /app ./
+
+EXPOSE 3000
+CMD ["node", "server.js"]   
+```
+
+
+**– Build the new optimized Docker Image**  
+```
+docker build -t myapp-multistage .   
+```
+*Run `docker images` Compare the image size with the previous build — you’ll notice a huge difference.*
