@@ -258,5 +258,5 @@ docker run -d --name app2 --network my-bridge-network mydb
 - *-d* → “Detached” mode: runs the container in the background instead of your terminal.
 - *--name app1* → Assigns the container a custom name (app1) so you can refer to it easily instead of using its auto-generated container ID.
 - *--network my-bridge-network* → Connects this container to the custom bridge network my-bridge-network instead of the default network. This allows secure communication with other containers on the same network.
-- *myapp* → The Docker image used to create the container. Docker looks for an image called myapp locally or pulls it from a registry if it doesn’t exist locally.
-*Only containers on my-bridge-network can communicate with each other.*
+- *myapp* → The Docker image used to create the container. Docker looks for an image called myapp locally or pulls it from a registry if it doesn’t exist locally.  
+- *Only containers on my-bridge-network can communicate with each other.*
