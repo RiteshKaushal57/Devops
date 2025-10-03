@@ -181,10 +181,7 @@ http://localhost:3000
 *You should see your Node.js app running inside the container.*  v
 
 ## What is a Multi-Stage Docker Build?  
-Multi-stage builds allow us to create smaller, optimized Docker images by using multiple stages in a single Dockerfile. In the first stage, we can use heavy images with build tools to compile or install dependencies. In the final stage, we copy only the required artifacts into a lightweight image, such as alpine or node-slim. This reduces image size, improves security, and speeds up deployments. For example, in Node.js, we build dependencies in one stage and copy only the app code into a slimmer runtime image.
-
-## What’s the difference between Docker volumes and bind mounts?  
-Volumes are Docker-managed storage used to persist data independently of containers. Bind mounts use a directory from the host filesystem directly. Volumes are safer and easier for production, while bind mounts are great for development when you want live changes from your host reflected in the container.  
+Multi-stage builds allow us to create smaller, optimized Docker images by using multiple stages in a single Dockerfile. In the first stage, we can use heavy images with build tools to compile or install dependencies. In the final stage, we copy only the required artifacts into a lightweight image, such as alpine or node-slim. This reduces image size, improves security, and speeds up deployments. For example, in Node.js, we build dependencies in one stage and copy only the app code into a slimmer runtime image.   
 
 ### Optimizing the Same Node.js App We Containerized Above  
 **Rewrite the Dockerfile**
@@ -212,4 +209,7 @@ CMD ["node", "server.js"]
 ```
 docker build -t myapp-multistage .   
 ```
-*Run `docker images` Compare the image size with the previous build — you’ll notice a huge difference.*
+*Run `docker images` Compare the image size with the previous build — you’ll notice a huge difference.*  
+
+## What’s the difference between Docker volumes and bind mounts?  
+Docker Volumes and Bind Mounts are mechanisms to provide persistent storage for Docker containers. Containers have an ephemeral filesystem, so data is lost when they stop. Volumes are managed by Docker and store data outside the container, persisting it even if the container is removed. Bind mounts directly map a host folder or file into the container, letting the container read/write to the host filesystem. Both are set using -v or --mount and help persist or share data between containers and the host.  
