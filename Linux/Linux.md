@@ -157,6 +157,24 @@ groups username
 - **`mv old_name new_nam`:** mv old_name new_nam    
 
 
-- *`:w!`:* Save file   
-- *`:wq!`:* Save and exit   
-- *`:q!`:* Quit without saving   
+- **`:w!`:** Save file   
+- **`:wq!`:** Save and exit   
+- **`:q!`:** Quit without saving   
+
+
+## File Permissions Management  
+
+### Each file and directory has three levels of permission:
+- **Owner (User):** The creator of the file.  
+- **Group:** Users belonging to the assigned group.  
+- **Others:** All other users on the system   
+
+Permissions are represented as:  
+- **Read (r or 4) –** View file contents.  
+- **Write (w or 2) –** Modify file contents.  
+- **Execute (x or 1) –** Run scripts or programs.  
+
+- **To check file permissions:**  
+```
+ls -l filename
+```
