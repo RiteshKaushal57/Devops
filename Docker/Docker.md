@@ -259,4 +259,21 @@ docker run -d --name app2 --network my-bridge-network mydb
 - *--name app1* → Assigns the container a custom name (app1) so you can refer to it easily instead of using its auto-generated container ID.
 - *--network my-bridge-network* → Connects this container to the custom bridge network my-bridge-network instead of the default network. This allows secure communication with other containers on the same network.
 - *myapp* → The Docker image used to create the container. Docker looks for an image called myapp locally or pulls it from a registry if it doesn’t exist locally.  
-- *Only containers on my-bridge-network can communicate with each other.*
+- *Only containers on my-bridge-network can communicate with each other.*  
+
+
+## Docker Compose
+Docker Compose is a tool that lets you define and manage multi-container applications using a single YAML file.
+Instead of running multiple docker run commands, you describe everything — containers, networks, volumes, environment variables — in a single file (docker-compose.yml) and start them all at once using docker-compose up.
+When your app has multiple services (like frontend, backend, and database), manually linking containers becomes messy.
+Docker Compose simplifies this — it manages dependencies, networking, and lifecycle (start, stop, rebuild) of all services together.
+
+Example:
+**1. You write a `docker-compose.yml` file.**  
+**2. Define each container under services: (e.g., app, db).**
+**3. Docker Compose automatically creates a custom network for them.**
+**4. Containers can communicate using service names (like db, backend), not IPs.**
+**5. Run the app using:**
+```
+docker-compose up
+```
