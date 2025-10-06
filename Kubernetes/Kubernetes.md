@@ -40,4 +40,8 @@ Kubernetes follows a master–worker architecture. The control plane (master) ma
 - Actually runs containers (e.g., Docker, containerd, CRI-O).
 
 ## What is Kubernetes Production System?
-A Kubernetes production system is a multi-node, highly available cluster used to run real-world applications at scale. It includes a control plane, worker nodes, networking, storage, monitoring, and CI/CD integration.
+A Kubernetes production system is a multi-node, highly available cluster used to run real-world applications at scale. It includes a control plane, worker nodes, networking, storage, monitoring, and CI/CD integration.  
+
+## What are Pods?
+A Pod is the smallest and simplest deployable unit in Kubernetes.
+Think of it as a wrapper around one or more containers that share the same network, storage, and configuration.
