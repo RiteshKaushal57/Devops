@@ -15,11 +15,11 @@ Kubernetes follows a master–worker architecture. The control plane (master) ma
 *Example: kubectl get pods → goes to API Server.*  
 
 **2. etcd**
-- A key-value database that stores all cluster data (state, config, secrets, etc.).  
+-A key-value database that stores all cluster data (state, config, secrets, etc.).  
 *Example: if a pod crashes, etcd helps restore its desired state.*
 
 **3. Controller Manager**
-- Ensures the cluster is always in the desired state.  
+-Ensures the cluster is always in the desired state.  
 *Example: if a pod dies, Controller Manager creates a new one.*
 
 **4. Scheduler**
