@@ -47,3 +47,4 @@ A Pod is the smallest and simplest deployable unit in Kubernetes.
 Think of it as a wrapper around one or more containers that share the same network, storage, and configuration.  
 
 ## What is the difference between a container pod and a deployment?
+A container is the actual app running in isolation. A pod is a wrapper that holds one or more containers and provides them with shared networking, storage, and lifecycle management. A deployment is a higher-level Kubernetes object that manages pods declaratively — it ensures the desired number of pods are running, handles scaling, rolling updates, and automatically replaces failed pods. So, containers run the app, pods package the containers for management, and deployments automate pod management at scale.
