@@ -44,4 +44,6 @@ A Kubernetes production system is a multi-node, highly available cluster used to
 
 ## What are Pods?
 A Pod is the smallest and simplest deployable unit in Kubernetes.
-Think of it as a wrapper around one or more containers that share the same network, storage, and configuration.
+Think of it as a wrapper around one or more containers that share the same network, storage, and configuration.  
+
+## What is the difference between a container pod and a deployment?
