@@ -46,5 +46,15 @@ A Kubernetes production system is a multi-node, highly available cluster used to
 A Pod is the smallest and simplest deployable unit in Kubernetes.
 Think of it as a wrapper around one or more containers that share the same network, storage, and configuration.  
 
-## What is the difference between a container pod and a deployment?
+## What is the difference between a container, pod and a deployment?
 A container is the actual app running in isolation. A pod is a wrapper that holds one or more containers and provides them with shared networking, storage, and lifecycle management. A deployment is a higher-level Kubernetes object that manages pods declaratively — it ensures the desired number of pods are running, handles scaling, rolling updates, and automatically replaces failed pods. So, containers run the app, pods package the containers for management, and deployments automate pod management at scale.
+
+## What is namespace in Kubernetes?
+Namespaces in Kubernetes are logical partitions within a cluster. They allow you to organize and isolate resources like pods, services, and deployments. Namespaces also help manage access and set resource limits, making it easier to control and manage multiple teams or projects in the same cluster.
+
+## What are different types of services in Kubernetes?
+Kubernetes has four main types of services:
+**1. ClusterIP** – The default type, used for communication inside the cluster.
+**2. NodePort** – Exposes the service on a static port on each node for external access.
+**3. LoadBalancer** – Provides an external IP and load balancing, usually in cloud environments.
+**4. ExternalName** – Maps the service to an external DNS name for accessing external resources.
