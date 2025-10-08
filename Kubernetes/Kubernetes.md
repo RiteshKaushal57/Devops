@@ -61,3 +61,20 @@ Kubernetes has four main types of services:
 
 ## What is kubernetes ingress?
 In Kubernetes, Ingress is used to manage external access to applications inside the cluster. Instead of exposing each app separately with NodePort or LoadBalancer, Ingress provides a single entry point and routes traffic based on the URL or domain name. It also supports load balancing and HTTPS. In short, Ingress acts like a smart traffic manager that decides how incoming requests reach the right Service inside Kubernetes.
+
+## Kubernetes RBAC
+RBAC means Role-Based Access Control. It’s used to manage who can access the cluster and what actions they can perform.  
+RBAC works through four main components:
+**1. Role** — defines what actions are allowed.  
+**2. RoleBinding** — assigns that Role to a specific user or group.  
+**3. ClusterRole** — same as Role, but applies to the entire cluster, not just one namespace.  
+**4. ClusterRoleBinding** — connects a ClusterRole to a user or group across the cluster.
+
+## What are Custom Resources and Custom Controller?
+Custom Resources in Kubernetes are user-defined objects that are used to add new types of resources and automate custom behaviors. They are created using something called a **CustomResourceDefinition (CRD)**, which tells Kubernetes about the new resource type. Once defined, these custom resources can be managed just like normal Kubernetes objects.  
+A Custom Controller is the logic that watches these resources and performs actions automatically to maintain the desired state.
+
+## Kubernetes CONFIGMAPS & SECRETS
+In Kubernetes, we use ConfigMaps and Secrets to separate configuration data from application code.
+This means we can change settings without rebuilding or redeploying the container.
+ConfigMaps hold normal configuration values, while Secrets hold confidential ones like passwords or keys — but both are mounted into Pods as environment variables or files.
