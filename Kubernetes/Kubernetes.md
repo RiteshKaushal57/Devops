@@ -57,4 +57,7 @@ Kubernetes has four main types of services:
 **1. ClusterIP** – The default type, used for communication inside the cluster.
 **2. NodePort** – Exposes the service on a static port on each node for external access.
 **3. LoadBalancer** – Provides an external IP and load balancing, usually in cloud environments.
-**4. ExternalName** – Maps the service to an external DNS name for accessing external resources.
+**4. ExternalName** – Maps the service to an external DNS name for accessing external resources.  
+
+## What is kubernetes ingress?
+In Kubernetes, Ingress is used to manage external access to applications inside the cluster. Instead of exposing each app separately with NodePort or LoadBalancer, Ingress provides a single entry point and routes traffic based on the URL or domain name. It also supports load balancing and HTTPS. In short, Ingress acts like a smart traffic manager that decides how incoming requests reach the right Service inside Kubernetes.
