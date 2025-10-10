@@ -78,3 +78,12 @@ A **Custom Controller** is the logic that watches these resources and performs a
 In Kubernetes, we use ConfigMaps and Secrets to separate configuration data from application code.
 This means we can change settings without rebuilding or redeploying the container.
 ConfigMaps hold normal configuration values, while Secrets hold confidential ones like passwords or keys — but both are mounted into Pods as environment variables or files.
+
+## EKS Project
+Create a cluster using eksctl
+```
+eksctl create cluster --name demo-cluster --region us-east-1 --fargate
+```
+whenever you create kubernetes
+pods you can attach or you can integrate that IAM roles with your kubernetes
+service accounts so that you can talk to any other AWS services
