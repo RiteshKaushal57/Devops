@@ -1,0 +1,5 @@
+## What is IaC?
+Infrastructure as Code means setting up and managing infrastructure using code instead of doing it by hand. The reason it’s used is because it saves a lot of time, reduces mistakes, and keeps all environments consistent. It works by writing a configuration file that describes what kind of setup you want — like your servers or databases — and tools such as Terraform automatically create that setup for you. So, it makes managing infrastructure as easy and reliable as writing software code.
+
+## What is Terraform?
+Terraform is a tool that allows you to manage infrastructure using code rather than doing everything manually. It’s used because it automates the setup, reduces human errors, and ensures that the same infrastructure can be recreated easily across different environments. It works by writing configuration files that describe what resources you need, and Terraform reads those files to automatically create, update, or delete the infrastructure as needed. This makes managing cloud resources fast, consistent, and reliable.
