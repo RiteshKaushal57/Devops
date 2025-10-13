@@ -74,3 +74,6 @@ In Terraform, variables are used to store values like region names, instance typ
 
 ## What are conditions?
 Conditions in Terraform are used to make decisions within our code, similar to an if–else statement. They help us choose different values or configurations based on certain situations. For example, we can say — if the environment is production, use a bigger instance type; otherwise, use a smaller one. Terraform uses a simple ternary operator to do this, which looks like a short if–else expression. This makes the setup smarter, because Terraform automatically adjusts the configuration based on the condition we define.
+
+## What are Modules?
+In Terraform, modules are like reusable blocks of code that help organize and simplify your setup. Instead of writing the same Terraform configuration multiple times, you can define it once as a module and use it anywhere. It’s mainly used to make the code cleaner, more modular, and easier to maintain. A module usually contains files like main.tf, variables.tf, and outputs.tf. We can then call that module from our main Terraform file using a module block. This approach saves time, avoids duplication, and keeps the infrastructure setup more consistent and manageable.
