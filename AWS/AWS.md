@@ -36,11 +36,11 @@ It ensures high availability, fault tolerance, and scalability by preventing any
 **1. Application Load Balancer (ALB):**  
 - Works at Layer 7 (HTTP/HTTPS).
 - Routes requests based on content (URL path, hostname, query).
-- Example: /api → microservice A, /images → microservice B.
+- Example: /api → microservice A, /images → microservice B.  
 **2. Network Load Balancer (NLB):**  
 - Works at Layer 4 (TCP/UDP/TLS).
 - Handles millions of requests per second with ultra-low latency.
-- Example: Ideal for gaming, IoT, or real-time financial apps.
+- Example: Ideal for gaming, IoT, or real-time financial apps.  
 **3. Gateway Load Balancer (GLB):**  
 - Works at Layer 3 (IP level).
 - Routes traffic to third-party virtual appliances (firewalls, intrusion detection systems).
