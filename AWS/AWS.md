@@ -51,6 +51,8 @@ They work by translating the private IP of the instance to the NAT Gateway’s p
 
 ## 🌐 Request Journey Inside a VPC (Step-by-Step)
 
+![Alt text](./VPC.png)  
+
 ### 🧭 Step 1: User Sends a Request
 - A user types your application URL in their browser.  
 - The request comes from the internet and tries to reach your AWS resources.
