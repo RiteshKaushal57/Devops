@@ -79,11 +79,11 @@ Once inside, the request checks the Route Table.
 - Security Groups (SGs) filter traffic to and from individual EC2 instances. They allow or block requests based on defined rules (like allowing HTTP on port 80).  
 - Network ACLs (NACLs) act as an extra layer of protection at the subnet level. They control which types of traffic can enter or leave the subnet.
 
-## 💻 Step 8: EC2 Instance Processes the Request
+### 💻 Step 8: EC2 Instance Processes the Request
 - After passing all the routes and security checks, the request finally reaches the EC2 instance that runs your application.  
 - The instance processes the request — for example, fetching data or rendering a web page.
 
-## 🔁 Step 9: Response Sent Back
+### 🔁 Step 9: Response Sent Back
 The EC2 instance sends the response (like your website HTML) back along the same path — through SGs, NACLs, Route Table, and Internet Gateway — back to the user’s browser.
 
 
