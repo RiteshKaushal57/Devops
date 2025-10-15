@@ -56,8 +56,8 @@ They work by translating the private IP of the instance to the NAT Gateway’s p
 - The request comes from the internet and tries to reach your AWS resources.
 
 ### 🚪 Step 2: Internet Gateway (IGW)
--The request first hits the Internet Gateway, which acts like the main gate of your VPC.  
--Without this gateway, the internet cannot communicate with anything inside your VPC.
+- The request first hits the Internet Gateway, which acts like the main gate of your VPC.  
+- Without this gateway, the internet cannot communicate with anything inside your VPC.
 
 ### 🗺️ Step 3: Route Table
 Once inside, the request checks the Route Table.
