@@ -32,16 +32,16 @@ A **private subnet** is a subnet without a direct route to the internet. Resourc
 An AWS Load Balancer is a service in Elastic Load Balancing (ELB) that automatically distributes incoming traffic across multiple targets (EC2 instances, containers, IPs, or Lambda functions).
 It ensures high availability, fault tolerance, and scalability by preventing any single server from being overloaded.
 
-**Types of Load Balancers in AWS:**
-### 1.	Application Load Balancer (ALB):
+### Types of Load Balancers in AWS:
+**1. Application Load Balancer (ALB):**  
 - Works at Layer 7 (HTTP/HTTPS).
 - Routes requests based on content (URL path, hostname, query).
 - Example: /api → microservice A, /images → microservice B.
-### 2.	Network Load Balancer (NLB):
+**2. Network Load Balancer (NLB):**  
 - Works at Layer 4 (TCP/UDP/TLS).
 - Handles millions of requests per second with ultra-low latency.
 - Example: Ideal for gaming, IoT, or real-time financial apps.
-### 3.	Gateway Load Balancer (GLB):
+**3. Gateway Load Balancer (GLB):**  
 - Works at Layer 3 (IP level).
 - Routes traffic to third-party virtual appliances (firewalls, intrusion detection systems).
 - Example: Deploying Palo Alto or Fortinet in AWS.
