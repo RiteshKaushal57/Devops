@@ -49,56 +49,41 @@ Instances in a private subnet don’t have public IPs, so they can’t directly 
 They work by translating the private IP of the instance to the NAT Gateway’s public IP when sending requests to the internet. Responses come back through the NAT Gateway, ensuring the instance can access external resources without being directly exposed.
 
 
-🌐 Request Journey Inside a VPC (Step-by-Step)
-🧭 Step 1: User Sends a Request
+## 🌐 Request Journey Inside a VPC (Step-by-Step)
 
-A user types your application URL in their browser.
-The request comes from the internet and tries to reach your AWS resources.
+### 🧭 Step 1: User Sends a Request
+- A user types your application URL in their browser.  
+- The request comes from the internet and tries to reach your AWS resources.
 
-🚪 Step 2: Internet Gateway (IGW)
+### 🚪 Step 2: Internet Gateway (IGW)
+-The request first hits the Internet Gateway, which acts like the main gate of your VPC.  
+-Without this gateway, the internet cannot communicate with anything inside your VPC.
 
-The request first hits the Internet Gateway, which acts like the main gate of your VPC.
-
-Without this gateway, the internet cannot communicate with anything inside your VPC.
-
-🗺️ Step 3: Route Table
-
+### 🗺️ Step 3: Route Table
 Once inside, the request checks the Route Table.
+- The Route Table tells the request where to go — for example, toward a Load Balancer or directly to a subnet.
+- Think of it as a map that defines all allowed paths for traffic.
 
-The Route Table tells the request where to go — for example, toward a Load Balancer or directly to a subnet.
+### ⚖️ Step 4: Load Balancer
+- The Load Balancer receives the incoming traffic and distributes it evenly across multiple EC2 instances (your web servers).  
+- This ensures no single server is overloaded and the application stays fast and reliable.
 
-Think of it as a map that defines all allowed paths for traffic.
+### 🧱 Step 5: Public and Private Subnets
+- If your EC2 instances are in a Public Subnet, they can talk directly to the internet (through IGW).  
+- If they are in a Private Subnet, they can’t talk to the internet directly. They use a NAT Gateway to make outbound connections securely.
 
-⚖️ Step 4: Load Balancer
+### 🔐 Step 6: NAT Gateway (for Private Subnets)
+- The NAT Gateway allows EC2 instances in private subnets to access the internet (for updates or APIs) without exposing them to incoming internet traffic.
 
-The Load Balancer receives the incoming traffic and distributes it evenly across multiple EC2 instances (your web servers).
+### 🧰 Step 7: Security Checks
+- Security Groups (SGs) filter traffic to and from individual EC2 instances. They allow or block requests based on defined rules (like allowing HTTP on port 80).  
+- Network ACLs (NACLs) act as an extra layer of protection at the subnet level. They control which types of traffic can enter or leave the subnet.
 
-This ensures no single server is overloaded and the application stays fast and reliable.
+## 💻 Step 8: EC2 Instance Processes the Request
+- After passing all the routes and security checks, the request finally reaches the EC2 instance that runs your application.  
+- The instance processes the request — for example, fetching data or rendering a web page.
 
-🧱 Step 5: Public and Private Subnets
-
-If your EC2 instances are in a Public Subnet, they can talk directly to the internet (through IGW).
-
-If they are in a Private Subnet, they can’t talk to the internet directly. They use a NAT Gateway to make outbound connections securely.
-
-🔐 Step 6: NAT Gateway (for Private Subnets)
-
-The NAT Gateway allows EC2 instances in private subnets to access the internet (for updates or APIs) without exposing them to incoming internet traffic.
-
-🧰 Step 7: Security Checks
-
-Security Groups (SGs) filter traffic to and from individual EC2 instances. They allow or block requests based on defined rules (like allowing HTTP on port 80).
-
-Network ACLs (NACLs) act as an extra layer of protection at the subnet level. They control which types of traffic can enter or leave the subnet.
-
-💻 Step 8: EC2 Instance Processes the Request
-
-After passing all the routes and security checks, the request finally reaches the EC2 instance that runs your application.
-
-The instance processes the request — for example, fetching data or rendering a web page.
-
-🔁 Step 9: Response Sent Back
-
+## 🔁 Step 9: Response Sent Back
 The EC2 instance sends the response (like your website HTML) back along the same path — through SGs, NACLs, Route Table, and Internet Gateway — back to the user’s browser.
 
 
