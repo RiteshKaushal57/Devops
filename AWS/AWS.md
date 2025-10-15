@@ -29,10 +29,23 @@ A **public subnet** is a subnet that has a route to the Internet Gateway, so its
 A **private subnet** is a subnet without a direct route to the internet. Resources here cannot be accessed from the internet directly and are usually used for databases, backend services, or sensitive workloads. To allow outbound internet access (like updates or API calls), a private subnet can use a NAT Gateway.
 
 ## What is Load Balancer?
-A Load Balancer in AWS is a service that distributes incoming traffic across multiple instances or servers.
-We use it to ensure that no single instance gets overloaded, to improve application performance, and to provide high availability in case some instances fail.
-It works by monitoring the health of instances and automatically routing requests only to healthy ones.
-You can choose different types like Application Load Balancer for HTTP/HTTPS traffic or Network Load Balancer for TCP traffic.
+An AWS Load Balancer is a service in Elastic Load Balancing (ELB) that automatically distributes incoming traffic across multiple targets (EC2 instances, containers, IPs, or Lambda functions).
+It ensures high availability, fault tolerance, and scalability by preventing any single server from being overloaded.
+
+**Types of Load Balancers in AWS:**
+### 1.	Application Load Balancer (ALB):
+- Works at Layer 7 (HTTP/HTTPS).
+- Routes requests based on content (URL path, hostname, query).
+- Example: /api → microservice A, /images → microservice B.
+### 2.	Network Load Balancer (NLB):
+- Works at Layer 4 (TCP/UDP/TLS).
+- Handles millions of requests per second with ultra-low latency.
+- Example: Ideal for gaming, IoT, or real-time financial apps.
+### 3.	Gateway Load Balancer (GLB):
+- Works at Layer 3 (IP level).
+- Routes traffic to third-party virtual appliances (firewalls, intrusion detection systems).
+- Example: Deploying Palo Alto or Fortinet in AWS.
+
 
 ## What are Route Tables?
 Route Tables make sure traffic flows in the right direction, whether it’s between subnets, to the internet, or through other gateways inside your AWS environment. Each route table has entries that define a destination and a target. For example, traffic meant for the internet (0.0.0.0/0) is sent to the Internet Gateway, while traffic meant for private resources might go through a NAT Gateway or stay within the VPC.
