@@ -55,10 +55,10 @@ Route Tables make sure traffic flows in the right direction, whether it’s betw
 Security Groups are used to protect our resources by controlling which traffic is allowed to reach them and which traffic can leave them. Without Security Groups, anyone on the internet could attempt to connect to your instances, creating security risks. They work by letting you define rules based on protocols, ports, and source/destination IP addresses. AWS automatically enforces these rules, allowing only the traffic you permit and blocking everything else.
 
 ## What are NACL?
-Network Access Control Lists (NACLs) in AWS are another layer of security for your VPC subnets. They are used to control inbound and outbound traffic at the subnet level, acting as a filter for all resources inside that subnet. Unlike Security Groups, which are attached to individual instances, NACLs apply to the entire subnet and evaluate rules in order, allowing or denying traffic based on IP addresses, protocols, and ports. They provide an extra layer of defense, especially for controlling traffic entering or leaving a private subnet.
+Network Access Control Lists (NACLs) in AWS are another layer of security for your VPC subnets. They are used to control inbound and outbound traffic at the subnet level. Unlike Security Groups, which are attached to individual instances, NACLs apply to the entire subnet and evaluate rules in order, allowing or denying traffic based on IP addresses, protocols, and ports. They provide an extra layer of defense, especially for controlling traffic entering or leaving a private subnet.
 
 ## What are Nat Gateways?
-NAT Gateways (Network Address Translation Gateways) in AWS are managed services that allow resources in a private subnet to access the internet for updates, downloads, or API calls without exposing their private IP addresses.
+NAT Gateways (Network Address Translation Gateways) allows resources in a private subnet to access the internet without exposing their private IP addresses.
 Instances in a private subnet don’t have public IPs, so they can’t directly reach the internet. NAT Gateways let these instances communicate externally securely, while keeping their private IP hidden.
 They work by translating the private IP of the instance to the NAT Gateway’s public IP when sending requests to the internet. Responses come back through the NAT Gateway, ensuring the instance can access external resources without being directly exposed.
 
