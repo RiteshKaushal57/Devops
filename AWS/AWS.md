@@ -48,9 +48,8 @@ It ensures high availability, fault tolerance, and scalability by preventing any
 - Routes traffic to third-party virtual appliances (firewalls, intrusion detection systems).
 - Example: Deploying Palo Alto or Fortinet in AWS.
 
-
 ## What are Route Tables?
-Route Tables make sure traffic flows in the right direction, whether it’s between subnets, to the internet, or through other gateways inside your AWS environment. Each route table has entries that define a destination and a target. For example, traffic meant for the internet (0.0.0.0/0) is sent to the Internet Gateway, while traffic meant for private resources might go through a NAT Gateway or stay within the VPC.
+Route Tables make sure traffic flows in the right direction, whether it’s between subnets, to the internet, or through other gateways inside your AWS environment. For example, traffic meant for the internet (0.0.0.0/0) is sent to the Internet Gateway, while traffic meant for private resources might go through a NAT Gateway or stay within the VPC.
 
 ## What are Security Groups?
 Security Groups in AWS are virtual firewalls attached to your EC2 instances or other resources. We need them to protect our resources by controlling which traffic is allowed to reach them and which traffic can leave them. Without Security Groups, anyone on the internet could attempt to connect to your instances, creating security risks. They work by letting you define rules based on protocols, ports, and source/destination IP addresses. AWS automatically enforces these rules, allowing only the traffic you permit and blocking everything else.
