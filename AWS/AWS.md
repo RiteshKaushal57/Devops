@@ -147,6 +147,17 @@ When an event occurs (for example, a file is uploaded to S3 or an HTTP request h
 
 In simple terms, **Lambda lets developers focus purely on writing logic, not managing infrastructure**. It’s the backbone of serverless architecture on AWS, making applications faster to build, easier to scale, and cheaper to run.
 
+##  What is AWS Config?
+**AWS Config** is a service that helps you continuously monitor, record, and evaluate the configuration of your AWS resources. It basically acts like a *watchdog* that keeps track of how your AWS environment changes over time — what resources you have, their settings, and whether they meet your organization’s compliance or security rules.
+
+The main reason AWS Config is important is **visibility and compliance**. In large environments, it’s hard to manually track every EC2 instance, S3 bucket, or security group setting. Config helps by automatically recording any changes, such as if someone opens a port in a security group or makes an S3 bucket public. You can then compare these changes against predefined rules to check if your infrastructure follows best practices or company policies.
+
+*Here’s how it works:* once AWS Config is enabled, it starts recording configuration details of your resources (like VPCs, EC2, IAM roles, etc.) and stores this data in an S3 bucket. You can then create **Config Rules** — for example, “S3 buckets must not be public” — and AWS Config will continuously evaluate your setup to see if it complies. If something violates a rule, it can send an alert or even trigger an automated fix through AWS Lambda.
+
+In short, **AWS Config helps you maintain control, security, and compliance** by giving you a clear picture of what’s happening in your AWS account and automatically ensuring your resources stay within policy.
+
+
+
 
 ## What is AWS Elastic Container Registry (ECR)?
 AWS ECR is a fully managed service where we store our container images. It works just like Docker Hub, but it’s more secure and tightly integrated with AWS services like ECS, EKS, and CodePipeline. Developers push images to ECR and Kubernetes or ECS can pull those images automatically during deployment.
