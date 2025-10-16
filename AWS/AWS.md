@@ -62,19 +62,6 @@ NAT Gateways (Network Address Translation Gateways) allows resources in a privat
 Instances in a private subnet don’t have public IPs, so they can’t directly reach the internet. NAT Gateways let these instances communicate externally securely, while keeping their private IP hidden.
 They work by translating the private IP of the instance to the NAT Gateway’s public IP when sending requests to the internet. Responses come back through the NAT Gateway, ensuring the instance can access external resources without being directly exposed.
 
-## What is Route53?
-Amazon Route 53 is AWS’s DNS (Domain Name System) service thatbtranslates human-readable domain names into IP addresses that computers use to communicate.
-When a user types your website name into a browser, Route 53 receives that request, looks up the DNS record, and routes the user to the right destination.
-It can also perform health checks, so if one server fails, Route 53 automatically redirects users to a healthy one.
-That’s why it’s not just a DNS service — it’s a smart traffic manager for your global applications.
-
-
-
-
-
-
-
-
 ## 🌐 Request Journey Inside a VPC (Step-by-Step)
 
 ![Alt text](./VPC.png)  
@@ -114,7 +101,51 @@ Once inside, the request checks the Route Table.
 ### 🔁 Step 9: Response Sent Back
 The EC2 instance sends the response (like your website HTML) back along the same path — through SGs, NACLs, Route Table, and Internet Gateway — back to the user’s browser.
 
+## What is Route53?
+Route 53 is DNS (Domain Name System) service that translates domain names into IP addresses.
+When a user types your website name into a browser, Route 53 receives that request, looks up the DNS record, and routes the user to the right destination.
+It can also perform health checks, so if one server fails, Route 53 automatically redirects users to a healthy one.
 
+## What is S3?
+Amazon S3 (Simple Storage Service) is an object storage service on AWS used to store and retrieve any amount of data — like images, videos, backups, logs, or even static websites — from anywhere on the internet.
+
+We use S3 because it’s highly durable (99.999999999%), scalable, and cost-effective and integrates easily with many AWS services — for example, CloudFront for faster delivery, Lambda for automation, or CloudWatch for monitoring.
+
+**What if availability zones, s3 bucket or region goes down?**  
+Data is always safe because AWS follows S3 replication mechanism.
+
+**Versioning**  
+If versioning is disabled, and you tried to upload a file 2nd time with updated content, then the old old file will get uploaded and replaces the old one. But if versioning is enabled, then the different version of same file can be seen in version tab of same file.
+
+## What is AWS CLI?
+AWS CLI, or Command Line Interface, is a tool that lets you control and manage AWS services directly from your terminal using simple commands instead of relying on the AWS Console.
+
+When you install and configure AWS CLI, you provide your access key, secret key, and region. After that, whenever you type a command — like listing S3 buckets or starting an EC2 instance — the CLI securely sends an API request to AWS in the background. AWS processes that request and returns the result directly in your terminal. This makes it much easier for developers and DevOps engineers to interact with AWS, especially when building automation scripts or integrating AWS into CI/CD pipelines.
+
+## What is AWS CFT ?
+AWS CloudFormation (CFT) is a service that helps you automate the process of creating and managing AWS infrastructure using code instead of doing it manually through the console. Normally, when you build something on AWS — like EC2 instances, VPCs, load balancers, or S3 buckets — you’d click around in the dashboard to set everything up. But with CloudFormation, you describe all those resources in a single YAML or JSON file called a template.
+
+Once the template is ready, CloudFormation reads it and automatically provisions everything exactly as defined. This approach is called Infrastructure as Code (IaC) — meaning your infrastructure setup is stored as code, so it’s repeatable, version-controlled, and consistent across environments.
+
+*For example, if your team needs the same setup for multiple regions, you can simply deploy the same CloudFormation template — AWS will create all the resources automatically.*
+
+## What is AWS CLOUD FRONT?
+AWS CloudFront is a **Content Delivery Network (CDN)** service that speeds up the delivery of your website’s content — like images, videos, HTML, CSS, or APIs — to users all around the world. Normally, if your website is hosted in one region (say, Mumbai) and someone tries to access it from London, it takes longer because data has to travel across continents. CloudFront solves this problem by storing copies of your content in **edge locations** — data centers located in multiple cities globally — so that users always get data from the nearest location instead of the main server.
+
+The main purpose of CloudFront is to **reduce latency and improve performance**. When a user requests your website, CloudFront checks if the content is already available in the nearest edge location (called a cache). If it is, it delivers it instantly; if not, it fetches it from the origin (like an S3 bucket or EC2 instance), delivers it to the user, and stores a copy for future requests.
+
+It’s also used for **security and reliability**. CloudFront integrates with services like AWS Shield and AWS WAF to protect against DDoS attacks and block malicious traffic before it reaches your server.
+
+In short, AWS CloudFront acts as a global layer in front of your application that makes your website faster, safer, and more reliable by delivering content efficiently from the nearest AWS edge location.
+
+## What is Lambda function?
+AWS Lambda is a **serverless compute service** that lets you run your code without managing servers. Instead of setting up and maintaining EC2 instances, you just upload your function code to Lambda, and AWS automatically takes care of everything — from provisioning servers to scaling and running the code whenever it’s needed.
+
+The reason Lambda is used is because it’s **cost-efficient and highly scalable**. You only pay for the exact time your code runs — measured in milliseconds — not for idle server time. This makes it ideal for event-driven tasks like processing S3 uploads, responding to API Gateway requests, or automating system tasks.
+
+When an event occurs (for example, a file is uploaded to S3 or an HTTP request hits an API endpoint), AWS triggers your Lambda function automatically. The function executes the logic you’ve written — like resizing an image, validating data, or updating a database — and then shuts down. There’s no need to manually start or stop servers.
+
+In simple terms, **Lambda lets developers focus purely on writing logic, not managing infrastructure**. It’s the backbone of serverless architecture on AWS, making applications faster to build, easier to scale, and cheaper to run.
 
 
 ## What is AWS Elastic Container Registry (ECR)?
