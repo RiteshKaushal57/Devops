@@ -62,6 +62,18 @@ NAT Gateways (Network Address Translation Gateways) allows resources in a privat
 Instances in a private subnet don’t have public IPs, so they can’t directly reach the internet. NAT Gateways let these instances communicate externally securely, while keeping their private IP hidden.
 They work by translating the private IP of the instance to the NAT Gateway’s public IP when sending requests to the internet. Responses come back through the NAT Gateway, ensuring the instance can access external resources without being directly exposed.
 
+## What is Route53?
+Amazon Route 53 is AWS’s DNS (Domain Name System) service thatbtranslates human-readable domain names into IP addresses that computers use to communicate.
+When a user types your website name into a browser, Route 53 receives that request, looks up the DNS record, and routes the user to the right destination.
+It can also perform health checks, so if one server fails, Route 53 automatically redirects users to a healthy one.
+That’s why it’s not just a DNS service — it’s a smart traffic manager for your global applications.
+
+
+
+
+
+
+
 
 ## 🌐 Request Journey Inside a VPC (Step-by-Step)
 
