@@ -123,20 +123,18 @@ AWS CLI, or Command Line Interface, is a tool that lets you control and manage A
 When you install and configure AWS CLI, you provide your access key, secret key, and region. After that, whenever you type a command — like listing S3 buckets or starting an EC2 instance — the CLI securely sends an API request to AWS in the background. AWS processes that request and returns the result directly in your terminal. This makes it much easier for developers and DevOps engineers to interact with AWS, especially when building automation scripts or integrating AWS into CI/CD pipelines.
 
 ## What is AWS CFT ?
-AWS CloudFormation (CFT) is a service that helps you automate the process of creating and managing AWS infrastructure using code instead of doing it manually through the console. Normally, when you build something on AWS — like EC2 instances, VPCs, load balancers, or S3 buckets — you’d click around in the dashboard to set everything up. But with CloudFormation, you describe all those resources in a single YAML or JSON file called a template.
+AWS CloudFormation (CFT) is a service that helps you automate the process of creating and managing AWS infrastructure using code instead of doing it manually through the console. With CloudFormation, you describe all those resources in a single YAML or JSON file called a template.
 
 Once the template is ready, CloudFormation reads it and automatically provisions everything exactly as defined. This approach is called Infrastructure as Code (IaC) — meaning your infrastructure setup is stored as code, so it’s repeatable, version-controlled, and consistent across environments.
 
 *For example, if your team needs the same setup for multiple regions, you can simply deploy the same CloudFormation template — AWS will create all the resources automatically.*
 
 ## What is AWS CLOUD FRONT?
-AWS CloudFront is a **Content Delivery Network (CDN)** service that speeds up the delivery of your website’s content — like images, videos, HTML, CSS, or APIs — to users all around the world. Normally, if your website is hosted in one region (say, Mumbai) and someone tries to access it from London, it takes longer because data has to travel across continents. CloudFront solves this problem by storing copies of your content in **edge locations** — data centers located in multiple cities globally — so that users always get data from the nearest location instead of the main server.
+AWS CloudFront is a **Content Delivery Network (CDN)** service that speeds up the delivery of your website’s content to users all around the world. Normally, if your website is hosted in one region (say, Mumbai) and someone tries to access it from London, it takes longer because data has to travel across continents. CloudFront solves this problem by storing copies of your content in **edge locations** — data centers located in multiple cities globally — so that users always get data from the nearest location instead of the main server.
 
 The main purpose of CloudFront is to **reduce latency and improve performance**. When a user requests your website, CloudFront checks if the content is already available in the nearest edge location (called a cache). If it is, it delivers it instantly; if not, it fetches it from the origin (like an S3 bucket or EC2 instance), delivers it to the user, and stores a copy for future requests.
 
 It’s also used for **security and reliability**. CloudFront integrates with services like AWS Shield and AWS WAF to protect against DDoS attacks and block malicious traffic before it reaches your server.
-
-In short, AWS CloudFront acts as a global layer in front of your application that makes your website faster, safer, and more reliable by delivering content efficiently from the nearest AWS edge location.
 
 ## What is Lambda function?
 AWS Lambda is a **serverless compute service** that lets you run your code without managing servers. Instead of setting up and maintaining EC2 instances, you just upload your function code to Lambda, and AWS automatically takes care of everything — from provisioning servers to scaling and running the code whenever it’s needed.
