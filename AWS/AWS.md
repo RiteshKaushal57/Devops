@@ -164,6 +164,11 @@ AWS ECR is a fully managed service where we store our container images. It works
 AWS ECS (Elastic Container Service) is a fully managed service that runs and scales Docker containers. It takes care of scheduling, running, and monitoring containers, so developers don’t have to manage servers manually. It can run on EC2 or in a serverless way using AWS Fargate.
 
 ## What is AWS Elastic Kubernetes Service (EKS)?
-AWS EKS is a managed Kubernetes service by Amazon. It helps you run Kubernetes clusters without having to install or manage the Kubernetes control plane (the master nodes). You just focus on your applications (pods, deployments, services), and AWS handles the heavy lifting — like control plane setup, security, and scaling.
+AWS Elastic Kubernetes Service (EKS) is a managed Kubernetes platform that makes it easy to deploy, manage, and scale containerized applications on AWS.
+What it does is take away the operational burden of setting up and maintaining your own Kubernetes control plane — AWS does that automatically for you.
+
+Why it’s used is because managing Kubernetes manually is complicated — you’d need to configure networking, handle upgrades, monitor master nodes, and ensure security. EKS simplifies all of that. You just focus on running your applications inside pods and AWS handles the backend cluster management, scalability, and reliability.
+
+How it works is that you define your application as containers (using Docker or any container runtime), deploy them as pods through Kubernetes, and EKS runs them on EC2 instances or Fargate (serverless compute). AWS automatically distributes, scales, and keeps your containers healthy — while integrating with services like IAM (for security), CloudWatch (for monitoring), and Load Balancers (for traffic).
 
 ## ECS vs EKS vs Kubernetes
