@@ -28,11 +28,11 @@ aws configure
 eksctl create cluster --name your-cluster-name --region us-east-1 --fargate
 ```
 
-**What this command does**
+**What this command does**  
 This command **creates a fully managed EKS (Elastic Kubernetes Service) cluster** named `your-cluster-name` in the AWS region `us-east-1`.
 The flag `--fargate` tells AWS to use **AWS Fargate**, which means your pods (containers) will run on **serverless compute** — you don’t need to manage EC2 instances or node groups manually.
 
-**Why we use this command**
+**Why we use this command**  
 To run any Kubernetes app, you need a **cluster** — a combination of:
 * **Control Plane** → manages everything (AWS manages this part)
 * **Worker Nodes** → actually run your containers (you usually manage these)
@@ -41,22 +41,20 @@ To run any Kubernetes app, you need a **cluster** — a combination of:
 * It gives you a **ready-to-use Kubernetes cluster** integrated with AWS.
 * The `--fargate` option eliminates node management — AWS allocates compute resources automatically.
 
-**How it works internally**
-1. **Authentication with AWS:**
+**How it works internally**  
+1. **Authentication with AWS:**  
    `eksctl` uses your credentials from `aws configure` to access your AWS account.
 
-2. **Infrastructure setup via CloudFormation:**
+2. **Infrastructure setup via CloudFormation:**  
    Under the hood, `eksctl` uses **AWS CloudFormation templates** to create:
 
-   * An **EKS control plane**
-   * A **VPC (Virtual Private Cloud)** with subnets and security groups
-   * **IAM roles** for cluster and Fargate
+   * An **EKS control plane**  
+   * A **VPC (Virtual Private Cloud)** with subnets and security groups  
+   * **IAM roles** for cluster and Fargate  
    * **Fargate profile** (so your pods run on AWS Fargate)
 
-3. **Fargate integration:**
+3. **Fargate integration:**  
    With `--fargate`, AWS handles compute dynamically — your pods are placed on AWS-managed serverless infrastructure instead of EC2 instances.
-
-
 
 *Note:*
 *To delete the cluster*
@@ -69,11 +67,11 @@ eksctl delete cluster --name your-cluster-name --region us-east-1
 aws eks update-kubeconfig --name your-cluster-name --region us-east-1
 ```
 
-**What this command does**
-This command **connects your local `kubectl` to your AWS EKS cluster**.
-It updates your **Kubeconfig file** (usually located at `~/.kube/config`) so that `kubectl` knows:
-* which cluster to talk to (`your-cluster-name`)
-* where that cluster is hosted (`us-east-1`)
+**What this command does**  
+This command **connects your local `kubectl` to your AWS EKS cluster**.  
+It updates your **Kubeconfig file** (usually located at `~/.kube/config`) so that `kubectl` knows:  
+* which cluster to talk to (`your-cluster-name`)  
+* where that cluster is hosted (`us-east-1`)  
 * which credentials to use (your AWS credentials)
 
 After running this, you can use Kubernetes commands like:
@@ -85,14 +83,14 @@ to directly talk to your EKS cluster.
 ## Deploy 2048 pod using the deployment
 ### Step 7: Create Fargate profile
 ```
-eksctl create fargateprofile \
-    --cluster your-cluster-name \
-    --region us-east-1 \
-    --name alb-sample-app \
-    --namespace game-2048
-```
+eksctl create fargateprofile \  
+    --cluster your-cluster-name \  
+    --region us-east-1 \  
+    --name alb-sample-app \  
+    --namespace game-2048  
+```  
 
-**What this command does**
+**What this command does**  
 This command **creates a Fargate profile** for your EKS cluster named `your-cluster-name`.
 A **Fargate profile** is like a *rulebook* that tells AWS:
 
@@ -100,7 +98,7 @@ A **Fargate profile** is like a *rulebook* that tells AWS:
 
 So basically:
 
-* It connects your Kubernetes **namespace** (game-2048)
+* It connects your Kubernetes **namespace** (game-2048)  
 * With **Fargate compute resources** inside AWS.
 
 From now on, any pod you deploy inside that namespace automatically runs in a **serverless environment** (no EC2 setup needed).
@@ -109,13 +107,13 @@ From now on, any pod you deploy inside that namespace automatically runs in a **
 When you create an EKS cluster with `--fargate`, AWS enables Fargate support for the cluster,
 but it doesn’t automatically know **which pods** should use Fargate.
 
-That’s where this command comes in.
+That’s where this command comes in.  
 You need to define a **Fargate profile** to:
 
-1. Tell AWS which **namespace(s)** or **pod labels** to run on Fargate.
+1. Tell AWS which **namespace(s)** or **pod labels** to run on Fargate.  
 2. Separate workloads — for example,
 
-   * run `game-2048` namespace pods on Fargate,
+   * run `game-2048` namespace pods on Fargate,  
    * but run other system pods on EC2 nodes.
 
 This helps you mix and match — using Fargate for some parts and EC2 for others, depending on your use case.
