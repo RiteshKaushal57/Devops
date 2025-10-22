@@ -28,11 +28,11 @@ aws configure
 eksctl create cluster --name your-cluster-name --region us-east-1 --fargate
 ```
 
-**What this command does**  
+**What this command does?**  
 This command **creates a fully managed EKS (Elastic Kubernetes Service) cluster** named `your-cluster-name` in the AWS region `us-east-1`.
 The flag `--fargate` tells AWS to use **AWS Fargate**, which means your pods (containers) will run on **serverless compute** — you don’t need to manage EC2 instances or node groups manually.
 
-**Why we use this command**  
+**Why we use this command?**  
 To run any Kubernetes app, you need a **cluster** — a combination of:
 * **Control Plane** → manages everything (AWS manages this part)
 * **Worker Nodes** → actually run your containers (you usually manage these)
@@ -41,7 +41,7 @@ To run any Kubernetes app, you need a **cluster** — a combination of:
 * It gives you a **ready-to-use Kubernetes cluster** integrated with AWS.
 * The `--fargate` option eliminates node management — AWS allocates compute resources automatically.
 
-**How it works internally**  
+**How it works internally?**  
 1. **Authentication with AWS:**  
    `eksctl` uses your credentials from `aws configure` to access your AWS account.
 
@@ -67,7 +67,7 @@ eksctl delete cluster --name your-cluster-name --region us-east-1
 aws eks update-kubeconfig --name your-cluster-name --region us-east-1
 ```
 
-**What this command does**  
+**What this command does?**  
 This command **connects your local `kubectl` to your AWS EKS cluster**.  
 It updates your **Kubeconfig file** (usually located at `~/.kube/config`) so that `kubectl` knows:  
 * which cluster to talk to (`your-cluster-name`)  
@@ -90,7 +90,7 @@ eksctl create fargateprofile \
     --namespace game-2048  
 ```  
 
-**What this command does**  
+**What this command does?**  
 This command **creates a Fargate profile** for your EKS cluster named `your-cluster-name`.
 A **Fargate profile** is like a *rulebook* that tells AWS:
 
@@ -103,7 +103,7 @@ So basically:
 
 From now on, any pod you deploy inside that namespace automatically runs in a **serverless environment** (no EC2 setup needed).
 
-**Why we use this command**
+**Why we use this command?**
 When you create an EKS cluster with `--fargate`, AWS enables Fargate support for the cluster,
 but it doesn’t automatically know **which pods** should use Fargate.
 
@@ -123,7 +123,7 @@ This helps you mix and match — using Fargate for some parts and EC2 for others
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/examples/2048/2048_full.yaml
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **deploys the 2048 game application** into your EKS cluster by applying a YAML configuration file that defines three things:
 
@@ -137,7 +137,7 @@ This command **deploys the 2048 game application** into your EKS cluster by appl
 eksctl utils associate-iam-oidc-provider --cluster your-cluster-name --approve
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **connects your EKS cluster to AWS IAM** using an **OIDC provider (OpenID Connect)**.
 
@@ -147,7 +147,7 @@ In simple words:
 
 So this command sets up a **trust bridge** between your EKS cluster and AWS Identity & Access Management (IAM).
 
-**Why we use this command**
+**Why we use this command?**
 
 By default, your EKS pods (applications running in the cluster) **don’t have AWS permissions** — they can’t create or access AWS resources like a Load Balancer, even if you need them to.
 
@@ -167,7 +167,7 @@ This works only if your cluster is connected to **OIDC (OpenID Connect)**. Hence
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **downloads a JSON file** (called `iam_policy.json`) from the **official AWS Load Balancer Controller GitHub repo**.
 
@@ -178,7 +178,7 @@ That JSON file contains all the **AWS permissions** (IAM policy) that the **Load
 * Create listeners and routing rules
 * Manage security groups and network interfaces
 
-**Why we use this command**
+**Why we use this command?**
 
 When you deploy the **AWS Load Balancer Controller** in your EKS cluster, it runs as a **Kubernetes pod**.
 That pod needs permission to talk to AWS and manage load balancers on your behalf.
@@ -198,7 +198,7 @@ aws iam create-policy \
     --policy-document file://iam_policy.json
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **creates a new IAM policy inside your AWS account** using the rules defined in the `iam_policy.json` file.
 
@@ -208,7 +208,7 @@ This policy contains detailed permissions like:
 * `ec2:*` → allows managing security groups and network interfaces  
 * `iam:List*` → allows reading IAM-related info needed for configuration
 
-**Why we use this command**
+**Why we use this command?**
 
 When the **AWS Load Balancer Controller** runs inside your Kubernetes cluster, it acts on behalf of you to create AWS resources.
 But AWS services are **secure by design** — they never allow actions unless the requester has explicit permission.
@@ -230,7 +230,7 @@ eksctl create iamserviceaccount \
   --approve
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **creates an IAM Role** and a **Kubernetes Service Account** that are linked together.
 
@@ -244,7 +244,7 @@ After this command, your EKS cluster will have:
 * A new **Kubernetes service account** → `aws-load-balancer-controller` in the `kube-system` namespace.
 * A new **IAM role** → `AmazonEKSLoadBalancerControllerRole` with the permissions defined in your earlier policy (`AWSLoadBalancerControllerIAMPolicy`).
 
-**Why we use this command**
+**Why we use this command?**
 
 In Kubernetes, every pod runs isolated — it doesn’t automatically know about AWS.
 The **AWS Load Balancer Controller** pod, however, needs to talk to AWS APIs (to create load balancers, listeners, etc.).
@@ -262,12 +262,12 @@ So instead, AWS provides **IRSA**, which allows:
 helm repo add eks https://aws.github.io/eks-charts
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **adds the official AWS EKS Helm chart repository (like the Load Balancer Controller, EBS CSI driver, CloudWatch agent, etc.)** to your local Helm configuration.
 
 
-**WHY — Why we use this command**
+**Why we use this command?**
 
 In Kubernetes, installing complex applications (like controllers or dashboards) manually using multiple YAML files can be tedious.
 That’s where **Helm** comes in — it acts like a *“package manager”* for Kubernetes (just like npm for Node.js or pip for Python).
@@ -283,7 +283,7 @@ You use this command because:
 helm repo update eks
 ```
 
-**What this command does**
+**What this command does?**
 
 This command tells Helm to **fetch the latest chart information** from the `eks` repository you added earlier.
 
@@ -303,7 +303,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
   --set vpcId=<your-vpc-id>
 ```
 
-**What this command does**
+**What this command does?**
 
 This command **installs the AWS Load Balancer Controller** into your EKS cluster using Helm.
 
@@ -313,7 +313,7 @@ The Load Balancer Controller:
 * Automatically **creates, updates, or deletes** AWS **Application Load Balancers (ALBs)** based on them.
 * Manages routing between external traffic (internet) and your Kubernetes pods.
 
-**Why we use this command**
+**Why we use this command?**
 
 Earlier, you deployed your **2048 app** and created an **Ingress** resource — but it didn’t get an external address because Kubernetes didn’t have a controller to handle ALB creation.
 
@@ -328,12 +328,12 @@ By installing this controller, you’re giving Kubernetes the ability to:
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
 
-**What this command does**
+**What this command does?**
 
 This command checks whether the **AWS Load Balancer Controller** is **successfully running** inside the **`kube-system` namespace**.
 It lists all the details about that **deployment**, including its **current status, desired replicas, and available pods**.
 
-**Why we use this command**
+**Why we use this command?**
 
 We use this command to **verify that our controller is working properly** before exposing our app to the internet.
 If this controller isn’t running, then **Ingress and Load Balancer setup won’t work**, meaning users outside AWS can’t access your app (like your 2048 game).
@@ -345,7 +345,7 @@ So, this is basically a **health check** step before testing your app externally
 kubectl get ingress -n game-2048
 ```
 
-**What this command does**
+**What this command does?**
 
 This command checks the **Ingress resource** created for your 2048 app — specifically inside the **`game-2048` namespace**.
 Ingress is like a **doorway** that lets external users access your app running inside Kubernetes using a **public URL (DNS name)**.
@@ -353,7 +353,7 @@ Ingress is like a **doorway** that lets external users access your app running i
 So, this command helps you find that **public address** (the “door”) to open your game in a browser.
 
 
-**Why we use this command**
+**Why we use this command?**
 
 We use it to **verify that our Ingress is successfully linked to an AWS Application Load Balancer (ALB)**.
 When everything is set up correctly, the command output will show an **“ADDRESS”** — this is your **public DNS** created by AWS.
