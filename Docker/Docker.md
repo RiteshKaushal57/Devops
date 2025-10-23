@@ -5,7 +5,7 @@ Docker is an open-source platform that lets us package applications and all thei
 A Virtual Machine is a software-based computer that runs its own operating system and apps on top of a physical machine. It’s managed by a hypervisor and provides isolation, making it useful for running multiple OSes or testing in different environments.  
 
 ## 3. What is difference between VM and Docker?  
-Containers and virtual machines are both technologies used to isolate applications and their dependencies, but they have some key differences:  
+Docker and virtual machines are both technologies used to isolate applications and their dependencies, but they have some key differences:  
 **1. Resource Utilization:** Containers share the host operating system kernel, making them lighter and faster than VMs. VMs have a full-fledged OS and hypervisor, making them more resource-intensive.  
 **2. Portability:** Containers are designed to be portable and can run on any system with a compatible host operating system. VMs are less portable as they need a compatible hypervisor to run.  
 **3. Security:** VMs provide a higher level of security as each VM has its own operating system and can be isolated from the host and other VMs. Containers provide less isolation, as they share the host operating system.  
@@ -178,10 +178,14 @@ docker run -p 3000:3000 myapp
 ```
 http://localhost:3000
 ```  
-*You should see your Node.js app running inside the container.*  v
+*You should see your Node.js app running inside the container.*
 
 ## What is a Multi-Stage Docker Build?  
-Multi-stage builds allow us to create smaller, optimized Docker images by using multiple stages in a single Dockerfile. In the first stage, we can use heavy images with build tools to compile or install dependencies. In the final stage, we copy only the required artifacts into a lightweight image, such as alpine or node-slim. This reduces image size, improves security, and speeds up deployments. For example, in Node.js, we build dependencies in one stage and copy only the app code into a slimmer runtime image.   
+A Multi-Stage Docker Build is a way to create Docker images in multiple steps within one Dockerfile. Instead of doing everything—like installing dependencies, building the app, and running it—in a single large image, the process is divided into smaller stages, each with a specific purpose. 
+
+The main reason we use multi-stage builds is to reduce the final image size and make it more efficient. Normally, when you build an app inside Docker, the image includes all the build tools and temporary files, even though they aren’t needed in production. This makes the image large, slow, and less secure. Multi-stage builds solve this by using one stage for building and another for running, and only copying the required files from the builder to the final stage. 
+
+For example, the first stage might use a full Node image to install and build the app, while the second stage uses a lighter image like `node:18-slim` to run it. This way, you get a clean, lightweight image that runs faster and takes up less space.
 
 ### Optimizing the Same Node.js App We Containerized Above  
 **Rewrite the Dockerfile**
