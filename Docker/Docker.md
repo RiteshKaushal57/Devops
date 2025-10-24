@@ -59,133 +59,10 @@ Containers are lightweight because they share the main operating system of your 
 
 The architecture of containers is layered. The Docker Engine runs on the host OS and manages containers. Each container is created from a Docker image, providing an isolated environment for the app while sharing the host OS kernel. Networking and volumes allow communication and persistent storage. For multiple containers, orchestration tools like Kubernetes handle scaling, load balancing, and monitoring.  
 
-### Files and Folders in containers base images  
+## 8. What is a Multi-Stage Docker Build?  
+A Multi-Stage Docker Build is a way to create Docker images in multiple steps within one Dockerfile.
 
-    /bin: contains binary executable files, such as the ls, cp, and ps commands.  
-
-    /sbin: contains system binary executable files, such as the init and shutdown commands.  
-
-    /etc: contains configuration files for various system services.  
-
-    /lib: contains library files that are used by the binary executables.  
-
-    /usr: contains user-related files and utilities, such as applications, libraries, and documentation.   
-
-    /var: contains variable data, such as log files, spool files, and temporary files.   
-
-    /root: is the home directory of the root user.  
-
-
-### Files and Folders that containers use from host operating system  
-    The host's file system: Docker containers can access the host file system using bind mounts, which allow the container to read and write files in the host file system.  
-
-    Networking stack: The host's networking stack is used to provide network connectivity to the container. Docker containers can be connected to the host's network directly or through a virtual network.   
-
-    System calls: The host's kernel handles system calls from the container, which is how the container accesses the host's resources, such as CPU, memory, and I/O.   
- 
-    Namespaces: Docker containers use Linux namespaces to create isolated environments for the container's processes. Namespaces provide isolation for resources such as the file system, process ID, and network.   
-
-    Control groups (cgroups): Docker containers use cgroups to limit and control the amount of resources, such as CPU, memory, and I/O, that a container can access.   
-
-
-
-
-## Full step-by-step guide for containerizing your Node.js app with Docker  
-
-This guide explains step-by-step how to containerize a Node.js application locally using Docker.
-
-**Step 0 – Project Setup**
-
-Make sure your project folder has the following files:
-
-- `server.js` → your Node.js application  
-- `package.json` → lists dependencies like express  
-- `Dockerfile` → instructions to build the Docker image  
-
----
-
-**Step 1 – Write a Dockerfile**
-```
-# Step 1: Use Node 18 base image
-FROM node:18
-
-# Step 2: Set working directory inside the container
-WORKDIR /app
-
-# Step 3: Copy package.json and package-lock.json to container
-COPY package*.json ./
-
-# Step 4: Install app dependencies
-RUN npm install
-
-# Step 5: Copy the rest of the app files
-COPY . .
-
-# Step 6: Expose port 3000 for the app
-EXPOSE 3000
-
-# Step 7: Command to run the app
-CMD ["node", "server.js"]
-
-
-```
-
-**Step 2 – Write a server.js file**
-```
-const http = require("http");
-
-const server = http.createServer((req, res) => {
-  res.end("Hello Ritesh! Your app is running inside a container.");
-});
-
-server.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
-
-```
-
-**Step 3 – Write a package.json file**
-```
-{
-  "name": "myapp",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  }
-}
-```
-
-**Step 4 – Build Your Docker Image**
-
-```
-docker build -t myapp .
-```
-- `docker build` → builds an image from the Dockerfile
-- `-t myapp` → names the image myapp
-- `.` → current folder as the build context
-
-**Step 5 – Run Your Container Locally**
-
-```
-docker run -p 3000:3000 myapp
-```
-- `docker run` → starts a container from the image
-- `-p 3000:3000` → maps container port 3000 to host port 3000
-- `myapp` → the image to run
-
-**Step 6 – Verify the App**
-```
-http://localhost:3000
-```  
-*You should see your Node.js app running inside the container.*
-
-## What is a Multi-Stage Docker Build?  
-A Multi-Stage Docker Build is a way to create Docker images in multiple steps within one Dockerfile. Instead of doing everything—like installing dependencies, building the app, and running it—in a single large image, the process is divided into smaller stages, each with a specific purpose. 
-
-The main reason we use multi-stage builds is to reduce the final image size and make it more efficient. Normally, when you build an app inside Docker, the image includes all the build tools and temporary files, even though they aren’t needed in production. This makes the image large, slow, and less secure. Multi-stage builds solve this by using one stage for building and another for running, and only copying the required files from the builder to the final stage. 
-
-For example, the first stage might use a full Node image to install and build the app, while the second stage uses a lighter image like `node:18-slim` to run it. This way, you get a clean, lightweight image that runs faster and takes up less space.
+The main reason we use multi-stage builds is to reduce the final image size and make it more efficient. Normally, when you build an app inside Docker, the image includes all the build tools and temporary files, even though they aren’t needed in production. This makes the image large, slow, and less secure. Multi-stage builds solve this by using one stage for building and another for running, and only copying the required files from the builder to the final stage.
 
 ### Optimizing the Same Node.js App We Containerized Above  
 **Rewrite the Dockerfile**
@@ -208,34 +85,28 @@ EXPOSE 3000
 CMD ["node", "server.js"]   
 ```
 
-
 **– Build the new optimized Docker Image**  
 ```
 docker build -t myapp-multistage .   
 ```
 *Run `docker images` Compare the image size with the previous build — you’ll notice a huge difference.*  
 
-## What’s the difference between Docker volumes and bind mounts?  
-Docker Volumes and Bind Mounts are mechanisms to provide persistent storage for Docker containers. Containers have an ephemeral filesystem, so data is lost when they stop. Volumes are managed by Docker and store data outside the container, persisting it even if the container is removed. Bind mounts directly map a host folder or file into the container, letting the container read/write to the host filesystem. Both are set using -v or --mount and help persist or share data between containers and the host.  
+## 9. What’s the difference between Docker volumes and Bind mounts?  
+The main difference between Docker volumes and bind mounts is where the data is stored and how it’s managed.
+
+**Bind mounts** directly link a folder from your computer (the host machine) to a folder inside the container. So if you make a change on your computer, it immediately shows up inside the container, and vice versa. It’s great for development when you want live updates — for example, editing your app code on your system and seeing changes instantly in the running container. But the downside is that it depends on your system’s file structure and can be messy or less secure.
+
+**Volumes**, on the other hand, are fully managed by Docker. The data is stored in a special Docker-controlled location (usually under /var/lib/docker/volumes). This makes them more portable, secure, and reliable — ideal for production use. Docker handles everything behind the scenes, so even if you remove a container, the data in a volume stays safe. 
 
 ## Docker Networking: Bridge vs Host vs Overlay  
 ### Bridge Network
-**What:** Default network created by Docker for containers on a single host.  
-**Why:** Lets containers communicate with each other securely while isolating them from the host network.  
-**How:** Docker assigns a private IP to each container. Containers can access each other via IP or container name. External access is through port mapping (-p hostPort:containerPort).    
-*Bridge network is like a private LAN inside the host. It isolates containers from host network but allows inter-container communication.*  
+Default network created by Docker for containers on a single host. Lets containers communicate with each other securely while isolating them from the host network.  
 
 ### Host Network
-**What:** Containers share the host’s network stack.  
-**Why:** Needed for performance-sensitive applications (low latency) or when using host-only services.  
-**How:** No port mapping is needed because container uses host IP directly. But containers are not isolated from host network.  
-*Host network removes network isolation. Useful for testing, but not recommended for untrusted containers due to security risks.*    
+Containers share the host’s network stack. It performs better (since there’s no network translation), but it’s less secure because the container is directly exposed to the outside network. It’s often used for performance-critical apps or when you need full host network access.   
 
 ### Overlay Network
-**What:** Overlay networks are used when your Docker containers are not all on the same physical or virtual machine (like Docker Swarm or Kubernetes).  
-**Why:** Enables secure cross-host communication between containers.  
-**How:** Docker creates an encrypted VXLAN overlay network. Containers on different hosts appear as if on the same network.  
-*Overlay networks are used in multi-node clusters. They allow containers on different hosts to communicate securely as if they were on the same LAN.*  
+Overlay networks are used when your Docker containers are not all on the same physical or virtual machine (like Docker Swarm or Kubernetes). Enables secure cross-host communication between containers. Docker creates an encrypted VXLAN overlay network. Containers on different hosts appear as if on the same network.  
 
 ### Securing containers with custom bridge network
 By default, Docker creates a bridge network called bridge. All containers connected to it can communicate freely, and ports are exposed to the host. This can be insecure for production or multi-container setups because containers can see each other even if they don’t need to.
