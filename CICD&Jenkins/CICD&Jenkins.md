@@ -26,8 +26,35 @@ In short, this pipeline automates everything from code commit to deployment — 
 ssh -i ~/.ssh/*AWSKeyPair.pem ubuntu@PublicIPv4
 ```
 
-So the developers store the code into the git repository and there is Jenkins which watches the commits or pull request onto this repository. So when a developer committed the change to the repository, Jenkins pipeline gets triggered using **webhooks**. So Jenkins will not watch your repository instead git will send notification to the Jenkins and Jenkins will trigger the pipeline. We configure webhook by getting to the Jenkins and get the **web hook url**. put this in github settings where we can define the action ( it can be triggered on commit, pull request, issues) the web hook has to be triggered. So now we will perform set of actions using Jenkins file on Jenkins. First action, we will use Maven to build application. As a part of build, unit test will run. After unit test successfull. you will perform some static code analysis and it is also successfull then we will go to next stage. But what if build state fails? In such cases we configure some alerts as email notifications or slack notifications using api's. But if build state passes then next stage is to integrate the Sonar Cube to verify what happened in previous stage. EX: If build was
-successful but still you can verify did it reach a specific threshold of our organization, is it matching with the compliance of our organization, does it have errors less than x percentage or are there any security vulnerabilities inside the code that is written by the developer in the pull request. if there is any security vulnerability than what is that security vulnerability and you can send the email notification. If everything thing is right then you can proceed to Docker Image creation and send this Docker Image to the  Docker registry.
+
+We have a Git repository where our application’s source code is stored. Let’s say I’m talking about a Java application. As soon as a developer raises a pull request to this Git repository, we have configured webhooks to trigger the Jenkins pipeline automatically.
+
+We’re using **declarative Jenkins pipelines** because they are easier to write, maintain, and collaborate on. As part of this declarative Jenkins pipeline, we run multiple stages.
+
+The first stage is the **build stage**. Using Maven as our build tool, we build the application and execute unit tests. If the build stage is successful, the next stage is **static code analysis**. This step ensures the application isn’t exposed to any code quality or security issues.
+
+After that, we use **SAST and DAST tools** to verify the application’s security — to check whether any new changes introduced by the developer cause security vulnerabilities. If any of these checks fail, Jenkins sends **email or Slack notifications** that we’ve configured.
+
+If all the stages are successful, we move forward to create a **Docker image**. We use simple shell commands to build the Docker image from the Dockerfile stored in the Git repository. Once the Docker image is created, we again use shell commands to push it to the **container registry**.
+
+This completes our **Continuous Integration (CI)** process, which is handled entirely through Jenkins.
+
+For the **Continuous Delivery (CD)** process, once the Docker image is pushed to the container registry, we have a **Kubernetes cluster** where two continuous delivery tools are deployed — **Argo Image Updater** and **Argo CD**. Both of these are Kubernetes controllers running inside the cluster.
+
+Here’s how they work together:
+
+* **Argo Image Updater** continuously monitors the container registry. As soon as a new image is available, it picks up the new image tag and updates another Git repository that contains our **Helm charts and Kubernetes manifests**.
+* Once this Git repository is updated with the new image, **Argo CD** automatically detects the change, pulls the updated manifests, and deploys the new version of the application to the Kubernetes cluster.
+
+This is our **Continuous Delivery process**, and together, this is how we’ve implemented **Continuous Integration and Continuous Delivery (CI/CD)** in our organization.
+
+
+
+
+
+
+
+
 
 I/O: What type of Jenkins file are using.? Declarative Jenkins file.
-I/O: What type of agents are you using in Jenkins? Docker agent
+I/O: What type of agents are you using in Jenkins? Docker agent 
