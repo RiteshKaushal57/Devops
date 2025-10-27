@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // SonarQube token stored in Jenkins credentials (type: Secret Text)
-        SONAR_TOKEN = credentials('sonar-token-id')
+        SONAR_TOKEN = credentials('sonarqube-token')
     }
 
     stages {
