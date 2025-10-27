@@ -21,11 +21,10 @@ This keeps everything self-contained — perfect for learning.
 
 ---
 
-## 🏗️ PHASE 2 — Build a Simple Java Spring Boot App
+## 🏗️ PHASE 2 — Build a Simple node App
 
 We’ll create a **tiny app** with:
 
-* `/hello` endpoint
 * Basic `pom.xml` (with JUnit for unit tests)
 * Dockerfile
 * Helm chart
