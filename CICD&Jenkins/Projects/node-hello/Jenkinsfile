@@ -2,14 +2,19 @@ pipeline {
     agent any
 
     environment {
-        // SonarQube token stored in Jenkins credentials (type: Secret Text)
+        // Jenkins credentials for SonarQube (Secret Text)
         SONAR_TOKEN = credentials('sonarqube-token')
+
+        // App and Helm details
+        APP_NAME = "node-hello"
+        IMAGE_TAG = "latest"
+        CHART_PATH = "CICD&Jenkins/Projects/node-hello/node-hello-chart"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Pull code from GitHub
+                echo "🔹 Checking out source code..."
                 git url: 'https://github.com/RiteshKaushal57/Devops.git', branch: 'main'
             }
         }
@@ -17,6 +22,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
+                    echo "📦 Installing dependencies..."
                     sh 'npm install'
                 }
             }
@@ -25,6 +31,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
+                    echo "🧪 Running tests..."
                     sh 'npm test'
                 }
             }
@@ -33,6 +40,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
+                    echo "🔍 Running SonarQube analysis..."
                     sh """
                     npx sonar-scanner \
                         -Dsonar.projectKey=node-hello \
@@ -44,31 +52,44 @@ pipeline {
             }
         }
 
-        stage('Build & Deploy Docker') {
+        stage('Build Docker Image') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
-                    // Build Docker image
-                    sh 'docker build -t node-hello:latest .'
-
-                    // Stop and remove old container if exists
-                    sh 'if [ $(docker ps -aq -f name=node-hello) ]; then docker rm -f node-hello; fi'
-
-                    // Run new container
-                    sh 'docker run -d -p 3000:3000 --name node-hello node-hello:latest'
+                    echo "🐳 Building Docker image..."
+                    sh "docker build -t ${APP_NAME}:${IMAGE_TAG} ."
                 }
+            }
+        }
+
+        stage('Deploy via Helm on Minikube') {
+            steps {
+                echo "🚀 Deploying application on Kubernetes using Helm..."
+                sh """
+                kubectl cluster-info
+                helm upgrade --install ${APP_NAME}-release ${CHART_PATH} \
+                    --values ${CHART_PATH}/values.yaml
+                """
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo "🔎 Checking deployment status..."
+                sh "kubectl get pods -l app.kubernetes.io/instance=${APP_NAME}-release"
+                sh "kubectl get svc -l app.kubernetes.io/instance=${APP_NAME}-release"
             }
         }
     }
 
     post {
         always {
-            echo 'CI/CD pipeline completed'
+            echo '📦 CI/CD pipeline completed.'
         }
         success {
-            echo 'Build, analysis, and deployment successful!'
+            echo '✅ Build, test, analysis, and deployment successful!'
         }
         failure {
-            echo 'Pipeline failed at some stage!'
+            echo '❌ Pipeline failed at some stage!'
         }
     }
 }
