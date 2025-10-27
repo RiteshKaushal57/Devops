@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        // SonarQube token stored in Jenkins credentials (type: Secret Text)
+        SONAR_TOKEN = credentials('sonarqube-token')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Pull code from GitHub
+                git url: 'https://github.com/RiteshKaushal57/Devops.git', branch: 'main'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Enter project folder and install Node.js dependencies
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Run tests
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Run SonarQube scanner
+                    sh """
+                    npx sonar-scanner \
+                        -Dsonar.projectKey=node-hello \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'CI pipeline completed'
+        }
+        success {
+            echo 'Build and analysis successful!'
+        }
+        failure {
+            echo 'Build or analysis failed!'
+        }
+    }
+}
