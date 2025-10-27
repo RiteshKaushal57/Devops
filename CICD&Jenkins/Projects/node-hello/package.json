@@ -10,5 +10,7 @@
   "keywords": [],
   "author": "Ritesh",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
