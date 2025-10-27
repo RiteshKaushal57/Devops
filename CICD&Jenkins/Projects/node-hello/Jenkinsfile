@@ -16,7 +16,6 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Enter project folder and install Node.js dependencies
                 dir('CICD&Jenkins/Projects/node-hello') {
                     sh 'npm install'
                 }
@@ -26,7 +25,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
-                    // Run tests
                     sh 'npm test'
                 }
             }
@@ -35,7 +33,6 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('CICD&Jenkins/Projects/node-hello') {
-                    // Run SonarQube scanner
                     sh """
                     npx sonar-scanner \
                         -Dsonar.projectKey=node-hello \
@@ -46,17 +43,32 @@ pipeline {
                 }
             }
         }
+
+        stage('Build & Deploy Docker') {
+            steps {
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Build Docker image
+                    sh 'docker build -t node-hello:latest .'
+
+                    // Stop and remove existing container if running
+                    sh 'docker rm -f node-hello || true'
+
+                    // Run new container
+                    sh 'docker run -d -p 3000:3000 --name node-hello node-hello:latest'
+                }
+            }
+        }
     }
 
     post {
         always {
-            echo 'CI pipeline completed'
+            echo 'CI/CD pipeline completed'
         }
         success {
-            echo 'Build and analysis successful!'
+            echo 'Build, analysis, and deployment successful!'
         }
         failure {
-            echo 'Build or analysis failed!'
+            echo 'Pipeline failed at some stage!'
         }
     }
 }
