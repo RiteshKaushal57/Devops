@@ -66,9 +66,8 @@ pipeline {
                 echo "🚀 Deploying application on Kubernetes using Helm..."
                 sh """
                 kubectl cluster-info
-                helm upgrade --install ${APP_NAME}-release ${CHART_PATH} \
-                    --values ${CHART_PATH}/values.yaml
-                """
+                helm upgrade --install node-hello-release "CICD&Jenkins/Projects/node-hello/node-hello-chart" --values "CICD&Jenkins/Projects/node-hello/node-hello-chart/values.yaml"
+        """
             }
         }
 
