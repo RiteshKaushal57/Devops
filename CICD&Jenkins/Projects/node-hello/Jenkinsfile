@@ -45,23 +45,20 @@ pipeline {
         }
 
         stage('Build & Deploy Docker') {
-    steps {
-        dir('CICD&Jenkins/Projects/node-hello') {
-            // Build Docker image
-            sh 'docker build -t node-hello:latest .'
+            steps {
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Build Docker image
+                    sh 'docker build -t node-hello:latest .'
 
-            // Stop and remove existing container if running
-            sh '''
-            if [ $(docker ps -aq -f name=node-hello) ]; then
-                docker rm -f node-hello
-            fi
-            '''
+                    // Stop and remove old container if exists
+                    sh 'if [ $(docker ps -aq -f name=node-hello) ]; then docker rm -f node-hello; fi'
 
-            // Run new container
-            sh 'docker run -d -p 3000:3000 --name node-hello node-hello:latest'
+                    // Run new container
+                    sh 'docker run -d -p 3000:3000 --name node-hello node-hello:latest'
+                }
+            }
         }
     }
-}
 
     post {
         always {
