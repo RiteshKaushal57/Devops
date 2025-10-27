@@ -16,28 +16,34 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install Node.js dependencies
-                sh 'npm install'
+                // Enter project folder and install Node.js dependencies
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Run tests
-                sh 'npm test'
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Run tests
+                    sh 'npm test'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                // Run SonarQube scanner
-                sh """
-                npx sonar-scanner \
-                    -Dsonar.projectKey=node-hello \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=http://localhost:9000 \
-                    -Dsonar.login=$SONAR_TOKEN
-                """
+                dir('CICD&Jenkins/Projects/node-hello') {
+                    // Run SonarQube scanner
+                    sh """
+                    npx sonar-scanner \
+                        -Dsonar.projectKey=node-hello \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    """
+                }
             }
         }
     }
