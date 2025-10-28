@@ -38,7 +38,7 @@ securityContext: {}
 # Kubernetes service configuration
 service:
   # Expose via NodePort so you can access locally
-  type: NodePort
+  type: LoadBalancer
   port: 3000
   targetPort: 3000
   nodePort: 32000  # You can choose any available port between 30000–32767
