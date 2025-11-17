@@ -67,7 +67,7 @@ Collections are a distribution format for Ansible content. They bundle together 
 An Ansible Role is simply a structured folder that organizes everything needed for one specific configuration, like installing Apache or setting up a user. We use roles because playbooks become messy when they grow, and roles help us keep things clean, reusable, and easy to maintain. Roles work by following a fixed folder structure that contains tasks, handlers, variables, templates, and files. When we call a role inside a playbook, Ansible automatically runs all parts of that folder in the correct order. It makes automation scalable and professional.
 ### Example
 **Role Name: apache_role**
-``
+```
 apache_role/
  ├── tasks/
  │    └── main.yml
