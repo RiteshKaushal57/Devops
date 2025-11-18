@@ -65,16 +65,50 @@ Collections are a distribution format for Ansible content. They bundle together 
 
 ## What is Ansible Role?
 An Ansible Role is simply a structured folder that organizes everything needed for one specific configuration, like installing Apache or setting up a user. We use roles because playbooks become messy when they grow, and roles help us keep things clean, reusable, and easy to maintain. Roles work by following a fixed folder structure that contains tasks, handlers, variables, templates, and files. When we call a role inside a playbook, Ansible automatically runs all parts of that folder in the correct order. It makes automation scalable and professional.
-### Example
-**Role Name: apache_role**
+
+**1. tasks/**  
+Contains the main list of actions the role will perform (like install package, start service).
+
+**2. handlers/**  
+Contains actions that run only when notified (e.g., restart a service after config change).
+
+**3. files/**  
+Static files to be copied to managed hosts.
+
+**4. templates/**  
+Files with variables inside, usually using Jinja2 (.j2) templates.
+
+**5. vars/**  
+Variables that are used within the role.
+
+**6. defaults/** 
+Default variables for the role, which can be overridden.
+
+**7. meta/** 
+Metadata about the role — dependencies, author info, supported platforms.
+
+**8. library/** 
+Custom modules or plugins used within the role.
+
+**9. Module_defaults/**
+Default module parameters for the role.
+
+**10. Lookup_plugins/**
+Custom lookup plugins for the role.
+
+**Directory Structure of an Ansible Role**
 ```
-apache_role/
- ├── tasks/
- │    └── main.yml
- ├── handlers/
- │    └── main.yml
- ├── templates/
- │    └── index.html.j2
- └── vars/
+<role_name>/
+  ├── defaults/
+  │   └── main.yml
+  ├── files/
+  ├── handlers/
+  │   └── main.yml
+  ├── meta/
+  │   └── main.yml
+  ├── tasks/
+  │   └── main.yml
+  ├── templates/
+  ├── vars/
       └── main.yml
 ```
