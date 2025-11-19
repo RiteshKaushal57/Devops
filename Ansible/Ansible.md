@@ -112,3 +112,11 @@ Custom lookup plugins for the role.
   ├── vars/
       └── main.yml
 ```
+
+## What is Ansible Vault?
+Ansible Vault is a feature that protects sensitive data by encrypting it inside Ansible files. We use Vault to secure passwords, API keys, and other secrets so they don’t remain in plain text or get exposed in Git. It works by applying AES-256 encryption to files and requires a vault password to view or use that data. With Vault, we can create, edit, encrypt, or decrypt files safely, and Ansible decrypts them only at runtime. It keeps automation secure and production-ready.
+
+## Error Handling in Ansible Playbooks
+
+### Order of execution of tasks Ansible
+Only when task number one is complete and successful, Ansible will move to the task number two and only when task number two is complete and successful, Anible will move to the task number three. 
