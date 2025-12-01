@@ -124,38 +124,54 @@ A custom bridge network allows you to:
 - Avoid exposing unnecessary ports to the host.
 - Give containers predictable DNS names for easier inter-container communication.
 
-### How it works
-
-**1. Create a custom bridge network:**  
-```
-docker network create my-bridge-network
-```
-**2. Run containers on this network:**  
-```
-docker run -d --name app1 --network my-bridge-network myapp
-docker run -d --name app2 --network my-bridge-network mydb
-```
-- *docker* → The CLI tool to interact with Docker.
-- *run* → Command to create and start a new container from an image.
-- *-d* → “Detached” mode: runs the container in the background instead of your terminal.
-- *--name app1* → Assigns the container a custom name (app1) so you can refer to it easily instead of using its auto-generated container ID.
-- *--network my-bridge-network* → Connects this container to the custom bridge network my-bridge-network instead of the default network. This allows secure communication with other containers on the same network.
-- *myapp* → The Docker image used to create the container. Docker looks for an image called myapp locally or pulls it from a registry if it doesn’t exist locally.  
-- *Only containers on my-bridge-network can communicate with each other.*  
-
-
 ## Docker Compose
 Docker Compose is a tool that lets you define and manage multi-container applications using a single YAML file.
 Instead of running multiple docker run commands, you describe everything — containers, networks, volumes, environment variables — in a single file (docker-compose.yml) and start them all at once using docker-compose up.
 When your app has multiple services (like frontend, backend, and database), manually linking containers becomes messy.
 Docker Compose simplifies this — it manages dependencies, networking, and lifecycle (start, stop, rebuild) of all services together.
 
-Example:
-**1. You write a `docker-compose.yml` file.**  
-**2. Define each container under services: (e.g., app, db).**
-**3. Docker Compose automatically creates a custom network for them.**
-**4. Containers can communicate using service names (like db, backend), not IPs.**
-**5. Run the app using:**
-```
-docker-compose up
-```
+---
+services:
+  # ******************
+  # Core Demo Services
+  # ******************
+  # Accounting service
+  accounting:
+    image: ${IMAGE_NAME}:${DEMO_VERSION}-accounting
+    container_name: accounting
+    build:
+      context: ./
+      dockerfile: ${ACCOUNTING_DOCKERFILE}
+      cache_from:
+        - ${IMAGE_NAME}:${IMAGE_VERSION}-accounting
+    deploy:
+      resources:
+        limits:
+          memory: 120M
+    restart: unless-stopped
+    environment:
+      - KAFKA_ADDR
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
+      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_SERVICE_NAME=accounting
+      - DB_CONNECTION_STRING=Host=${POSTGRES_HOST};Username=otelu;Password=otelp;Database=${POSTGRES_DB}
+      - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false
+    depends_on:
+      otel-collector:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+    logging: *logging
+--- 
+
+
+**ports**  
+1. Accessing a container from a browser.  
+`ports: - "8080:80"`  
+- 80 = internal port inside the container  
+- 8080 = external port on the EC2 machine or your local computer
+
+2. Container-to-container communication.  
+Inside docker-compose, all containers are in the same internal network. They communicate using service name + internal port, NOT the exposed port.  Even if we don’t write ports at all, other containers can still access it because Docker auto-connects containers using service name.  
+Note: If we dont want the contaierns to talk, just seperate the network.-
