@@ -105,37 +105,37 @@ Docker Compose simplifies this — it manages dependencies, networking, and life
 
 ---
 services:
-  # ******************
-  # Core Demo Services
-  # ******************
-  # Accounting service
-  accounting:
-    image: ${IMAGE_NAME}:${DEMO_VERSION}-accounting
-    container_name: accounting
-    build:
-      context: ./
-      dockerfile: ${ACCOUNTING_DOCKERFILE}
-      cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-accounting
-    deploy:
-      resources:
-        limits:
-          memory: 120M
-    restart: unless-stopped
-    environment:
-      - KAFKA_ADDR
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
-      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
-      - OTEL_SERVICE_NAME=accounting
-      - DB_CONNECTION_STRING=Host=${POSTGRES_HOST};Username=otelu;Password=otelp;Database=${POSTGRES_DB}
-      - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false
-    depends_on:
-      otel-collector:
-        condition: service_started
-      kafka:
-        condition: service_healthy
-    logging: *logging
+  # ******************  
+  # Core Demo Services  
+  # ******************  
+  # Accounting service   
+  accounting:    
+    image: ${IMAGE_NAME}:${DEMO_VERSION}-accounting   
+    container_name: accounting   
+    build:   
+      context: ./   
+      dockerfile: ${ACCOUNTING_DOCKERFILE}   
+      cache_from:   
+        - ${IMAGE_NAME}:${IMAGE_VERSION}-accounting   
+    deploy:   
+      resources:   
+        limits:   
+          memory: 120M    
+    restart: unless-stopped   
+    environment:    
+      - KAFKA_ADDR   
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}   
+      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE   
+      - OTEL_RESOURCE_ATTRIBUTES    
+      - OTEL_SERVICE_NAME=accounting     
+      - DB_CONNECTION_STRING=Host=${POSTGRES_HOST};Username=otelu;Password=otelp;Database=${POSTGRES_DB}    
+      - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false   
+    depends_on:    
+      otel-collector:   
+        condition: service_started   
+      kafka:   
+        condition: service_healthy   
+    logging: *logging   
 --- 
 
 
