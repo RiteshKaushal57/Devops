@@ -16,7 +16,7 @@ A hypervisor is software that creates and manages virtual machines by allocating
 
 ## 5. What is Docker Architecture?   
 Docker Architecture is a client-server-based architecture that defines how Docker components interact to build, ship, and run containerized applications. It includes the **Docker Client**, **Docker Daemon (Engine)**, **Docker Objects (Images, Containers)**, and **Registries**.   
-![Alt text](./image.png)  
+![Alt text](image.png)  
 
 **Docker Client:** CLI or API used to communicate with Docker Daemon (docker build, docker run).  
 
@@ -70,39 +70,13 @@ The main reason we use multi-stage builds is to reduce the final image size and 
 Distroless images are special Docker images that contain only the files needed to run your app, nothing extra — no shell, no package manager, no tools. We use them because they make our applications more secure, lighter, and faster. When an image has less stuff inside it, there is less for hackers to attack, less space taken on servers, and less time spent pulling or deploying it. They also help keep production environments clean, because only the final application code goes inside the container. We use distroless images by first building our full app in a normal image (using a multi-stage build) and then copying only the final output into the distroless image. This way, we get a very small, very secure final container that is perfect for production.
 
 
-### Optimizing the Same Node.js App We Containerized Above  
-**Rewrite the Dockerfile**
-```
-# First stage: Build
-FROM node:18 AS builder
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-
-# Second stage: Production
-FROM node:18-slim
-
-WORKDIR /app
-COPY --from=builder /app ./
-
-EXPOSE 3000
-CMD ["node", "server.js"]   
-```
-
-**– Build the new optimized Docker Image**  
-```
-docker build -t myapp-multistage .   
-```
-*Run `docker images` Compare the image size with the previous build — you’ll notice a huge difference.*  
-
 ## 9. What’s the difference between Docker volumes and Bind mounts?  
 The main difference between Docker volumes and bind mounts is where the data is stored and how it’s managed.
 
 **Bind mounts** directly link a folder from your computer (the host machine) to a folder inside the container. So if you make a change on your computer, it immediately shows up inside the container, and vice versa. It’s great for development when you want live updates — for example, editing your app code on your system and seeing changes instantly in the running container. But the downside is that it depends on your system’s file structure and can be messy or less secure.
 
-**Volumes**, on the other hand, are fully managed by Docker. The data is stored in a special Docker-controlled location (usually under /var/lib/docker/volumes). This makes them more portable, secure, and reliable — ideal for production use. Docker handles everything behind the scenes, so even if you remove a container, the data in a volume stays safe. 
+**Volumes** are storage spaces that Docker creates and manages by itself, outside of the container but still on the host machine. They allow a container to store data permanently, even if the container stops, restarts, or gets deleted. The main purpose of volumes is to have a safe and consistent way of storing persistent data, especially in production environments, where Docker manages the storage location and performance optimizations behind the scenes.
+
 
 ## Docker Networking: Bridge vs Host vs Overlay  
 ### Bridge Network
