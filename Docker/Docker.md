@@ -73,7 +73,7 @@ Distroless images are special Docker images that contain only the files needed t
 ## 9. What’s the difference between Docker volumes and Bind mounts?  
 The main difference between Docker volumes and bind mounts is where the data is stored and how it’s managed.
 
-**Bind mounts** directly link a folder from your computer (the host machine) to a folder inside the container. So if you make a change on your computer, it immediately shows up inside the container, and vice versa. It’s great for development when you want live updates — for example, editing your app code on your system and seeing changes instantly in the running container. But the downside is that it depends on your system’s file structure and can be messy or less secure.
+**Bind mounts** directly connect a folder on your own host machine to a folder inside the container. This allows instant two-way synchronization — if you change a file in your system, it changes inside the container, and vice-versa. Bind mounts are commonly used in development because they allow you to edit code locally and see the changes reflected inside the running container immediately, making development faster and smoother.
 
 **Volumes** are storage spaces that Docker creates and manages by itself, outside of the container but still on the host machine. They allow a container to store data permanently, even if the container stops, restarts, or gets deleted. The main purpose of volumes is to have a safe and consistent way of storing persistent data, especially in production environments, where Docker manages the storage location and performance optimizations behind the scenes.
 
