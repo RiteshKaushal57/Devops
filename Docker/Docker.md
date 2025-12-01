@@ -22,9 +22,9 @@ Docker Architecture is a client-server-based architecture that defines how Docke
 
 **Docker Daemon (Docker Engine):** Runs on the host and manages images, containers, networks, and storage.  
 
-**Docker Images:** Read-only templates used to create containers.  
+**Docker Images:** Read-only templates used to create containers. A Docker image is like a blueprint of an application and everything it needs to run—code, libraries, dependencies, environment variables.   
 
-**Docker Containers:** Running instances of images, providing isolated runtime environments.  
+**Docker Containers:** A container is a running instance of an image. The image itself is static—it’s just the blueprint with your app and dependencies. The container is like a “live copy” of that blueprint that can actually execute code, hold temporary data, and interact with the system. When you run a container, Docker takes the image, sets up a thin writable layer on top, and starts executing it. This writable layer is where all changes inside the container happen (like creating files, updating data, or installing something temporarily). The image underneath remains unchanged, so you can always create new containers from the same image, and they’ll start fresh every time.      
 
 **Dockerfile:** Dockerfile is a file where you provide the steps to build your Docker Image.  
 
