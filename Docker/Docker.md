@@ -78,17 +78,17 @@ The main difference between Docker volumes and bind mounts is where the data is 
 **Volumes** are storage spaces that Docker creates and manages by itself, outside of the container but still on the host machine. They allow a container to store data permanently, even if the container stops, restarts, or gets deleted. The main purpose of volumes is to have a safe and consistent way of storing persistent data, especially in production environments, where Docker manages the storage location and performance optimizations behind the scenes.
 
 
-## Docker Networking: Bridge vs Host vs Overlay  
-### Bridge Network
+## 10. Docker Networking: Bridge vs Host vs Overlay  
+**Bridge Network**  
 Default network created by Docker for containers on a single host. Lets containers communicate with each other securely while isolating them from the host network.  
 
-### Host Network
+**Host Network**  
 Containers share the host’s network stack. It performs better (since there’s no network translation), but it’s less secure because the container is directly exposed to the outside network. It’s often used for performance-critical apps or when you need full host network access.   
 
-### Overlay Network
+**Overlay Network**  
 Overlay networks are used when your Docker containers are not all on the same physical or virtual machine (like Docker Swarm or Kubernetes). Enables secure cross-host communication between containers. Docker creates an encrypted VXLAN overlay network. Containers on different hosts appear as if on the same network.  
 
-### Securing containers with custom bridge network
+**Securing containers with custom bridge network**  
 By default, Docker creates a bridge network called bridge. All containers connected to it can communicate freely, and ports are exposed to the host. This can be insecure for production or multi-container setups because containers can see each other even if they don’t need to.
 
 A custom bridge network allows you to:
@@ -97,7 +97,7 @@ A custom bridge network allows you to:
 - Avoid exposing unnecessary ports to the host.
 - Give containers predictable DNS names for easier inter-container communication.
 
-## Docker Compose
+## 11. Docker Compose
 Docker Compose is a tool that lets you define and manage multi-container applications using a single YAML file.
 Instead of running multiple docker run commands, you describe everything — containers, networks, volumes, environment variables — in a single file (docker-compose.yml) and start them all at once using docker-compose up.
 When your app has multiple services (like frontend, backend, and database), manually linking containers becomes messy.
@@ -145,5 +145,3 @@ services:
 Inside docker-compose, all containers are in the same internal network. They communicate using service name + internal port, NOT the exposed port.  Even if we don’t write ports at all, other containers can still access it because Docker auto-connects containers using service name.  
 Note: If we dont want the contaierns to talk, just seperate the network.-
 
-
-POUCH
