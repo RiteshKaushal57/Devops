@@ -26,7 +26,7 @@ Docker Architecture is a client-server-based architecture that defines how Docke
 
 **Docker Containers:** A container is a running instance of an image. The image itself is static—it’s just the blueprint with your app and dependencies. The container is like a “live copy” of that blueprint that can actually execute code, hold temporary data, and interact with the system. When you run a container, Docker takes the image, sets up a thin writable layer on top, and starts executing it. This writable layer is where all changes inside the container happen (like creating files, updating data, or installing something temporarily). The image underneath remains unchanged, so you can always create new containers from the same image, and they’ll start fresh every time.      
 
-**Dockerfile:** Dockerfile is a file where you provide the steps to build your Docker Image.  
+**Dockerfile:** A Dockerfile is a text file that contains commands or instructions to build a Docker image. It can specify the base image, the files to add to the container, the commands to run during the build process, and the command to run when the container starts.
 
 **Docker Registries:** Storage for images (like Docker Hub Docker Hub (*place where you share your docker images with external hub*) or private registries).  
 
@@ -103,12 +103,8 @@ Instead of running multiple docker run commands, you describe everything — con
 When your app has multiple services (like frontend, backend, and database), manually linking containers becomes messy.
 Docker Compose simplifies this — it manages dependencies, networking, and lifecycle (start, stop, rebuild) of all services together.
 
----
-services:
-  # ******************  
-  # Core Demo Services  
-  # ******************  
-  # Accounting service   
+```
+services:  
   accounting:    
     image: ${IMAGE_NAME}:${DEMO_VERSION}-accounting   
     container_name: accounting   
@@ -136,7 +132,7 @@ services:
       kafka:   
         condition: service_healthy   
     logging: *logging   
---- 
+```
 
 
 **ports**  
@@ -148,3 +144,6 @@ services:
 2. Container-to-container communication.  
 Inside docker-compose, all containers are in the same internal network. They communicate using service name + internal port, NOT the exposed port.  Even if we don’t write ports at all, other containers can still access it because Docker auto-connects containers using service name.  
 Note: If we dont want the contaierns to talk, just seperate the network.-
+
+
+POUCH
