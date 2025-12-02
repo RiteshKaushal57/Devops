@@ -145,3 +145,78 @@ services:
 Inside docker-compose, all containers are in the same internal network. They communicate using service name + internal port, NOT the exposed port.  Even if we don’t write ports at all, other containers can still access it because Docker auto-connects containers using service name.  
 Note: If we dont want the contaierns to talk, just seperate the network.-
 
+## 12. You're in charge of maintaining Docker environments in your company and You've noticed many stopped containers and unused networks taking up space. Describe how you would clean up these resources effectively to optimize the Docker environment?
+The `docker prune` command is used to clean up unused Docker resources, such as containers, volumes, networks, and images. It helps reclaim disk space and tidy up the Docker environment by removing objects that are not in use.
+
+There are different types of `docker prune` commands:
+
+- `docker container prune`: Removes stopped containers.
+- `docker volume prune`: Deletes unused volumes.
+- `docker network prune`: Cleans up unused networks.
+- `docker image prune`: Removes unused images.
+
+Running **`docker system prune`** combines these functionalities into one command, ensuring that Docker removes any resources not associated with a running container.
+
+- *Note: The **docker system prune** command should be used with caution as it permanently deletes unused resources. Any data associated with them will be lost.*
+
+
+## 13. A company wants to create thousands of Containers. Is there a limit on how many containers you can run in Docker?
+There is no fixed hard-coded limit inside Docker for how many containers you can run — Docker doesn’t say “maximum 1000 containers” or anything like that. The real limit comes from your machine’s resources such as CPU, RAM, storage speed, and network capacity, because each container consumes a bit of processing power and memory. So companies can run thousands (or even tens of thousands) of containers, but they don’t do it on a single computer — they use container orchestration systems like Kubernetes or Docker Swarm to distribute those containers across many servers. This works by creating a cluster of machines where containers are spread intelligently based on available resources, allowing large-scale deployment efficiently and without overloading a single host system.
+
+
+## 14. You're managing a Docker environment and need to ensure that each container operates within defined CPU and memory limits. How do you limit the CPU and memory usage of a Docker container?
+Docker allows you to limit the CPU and memory usage of a container using resource constraints. You can set the CPU limit with the --cpu option and the memory limit with the --memory option when running the container using the docker run command.
+
+For example, **`docker run --cpu 2 --memory 1g mycontainer`** limits the container to use a maximum of 2 CPU cores and 1GB of memory.
+
+
+## 15. What is the purpose of the CMD instruction in a Dockerfile?
+The `CMD` instruction in a Dockerfile specifies the default command to be executed when a container is started from the Docker image. It defines the primary functionality of the container, such as running an application or executing a script. If a Docker container is started without specifying a command, the command specified in the `CMD` instruction will be executed by default.
+
+
+## 16. You're part of a development team deploying a microservices architecture using Docker containers. One of the containers, critical to the system's functionality, has suddenly started failing without clear error messages. How do you debug issues in a failing Docker container?
+There are several techniques to debug issues in a Docker container:
+
+**Logging**: Docker captures the standard output and standard error streams of containers, making it easy to inspect logs using the **`docker logs`** command.  
+
+**Shell access**: You can access a running container's shell using the **`docker exec`** command with the -it option. This allows you to investigate and troubleshoot issues interactively.
+
+**Image inspection**: You can inspect the Docker image's contents and configuration using **`docker image inspect`**. This lets you check for potential misconfigurations or missing dependencies.
+
+**Health checks**: Docker supports defining health checks for containers, allowing you to monitor the health status and automatically restart or take action based on predefined conditions.
+
+
+
+## 17. You're working on a critical application running in Docker containers, and an update needs to be applied without risking data loss. How do you update a Docker container without losing data?
+The steps to update a Docker container without losing data are:
+
+- Store the data outside the container itself, using Docker volumes.    
+- Stop the container gracefully using the **`docker stop`** command.   
+- Pull the latest version of the container image using **`docker pull`.**   
+- Start a new container using the updated image, while attaching the same volume so the new container continues using the existing persistent data.   
+- Verify that the new container is functioning correctly and that the data is still intact. 
+
+
+## 18. You're responsible for securing the Docker containers hosting your organization's sensitive applications. How do you secure Docker containers?
+The way you do this is by using minimal base images (like Alpine or distroless), running containers as non-root users, only exposing necessary ports, limiting runtime permissions with flags like --read-only and --cap-drop, scanning images for vulnerabilities, and keeping images and dependencies updated. You also secure data access through volumes with correct permissions, restrict environment secrets using tools like Docker secrets or external secret managers, and use network segmentation so containers only communicate with services they actually need.
+
+## 19. ### How do you monitor Docker containers?
+There are various ways to monitor Docker containers, including:
+
+- Using Docker's built-in container monitoring commands, such as **docker stats** and **docker container stats**, to view resource usage statistics.  
+- Integrating with container monitoring and logging tools like Prometheus, Grafana, or ELK stack (Elasticsearch, Logstash, Kibana) to collect and analyze container metrics and logs.  
+- Leveraging container orchestration platforms that offer built-in monitoring capabilities such as Docker Swarm's service metrics or Kubernetes' metrics API.   
+- Using specialized monitoring agents or tools that provide container-level insights and integration with broader monitoring and alerting systems.   
+
+
+## 20. ### What are some best practices for using Docker in production environments?
+Some best practices for using Docker in production environments include:
+
+- Building and using lightweight container images to improve deployment speed and reduce the attack surface.    
+- Regularly updating Docker and the underlying host system with security patches.    
+- Implementing container orchestration platforms, such as Docker Swarm or Kubernetes, to manage containers at scale and provide features like load balancing and service discovery.   
+- Configuring resource limits for containers to prevent resource contention and ensure fair allocation.   
+- Monitoring container health, resource usage, and application metrics for performance optimization and troubleshooting.   
+- Implementing secure network configurations such as using private networks and encrypting container traffic.    
+- Backing up critical data and using volume or storage solutions that provide data persistence and redundancy.    
+- Implementing a comprehensive security strategy, including container vulnerability scanning, access controls, and least privilege principles.   
