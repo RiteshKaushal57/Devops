@@ -120,17 +120,14 @@ In Terraform, provisioners are used to run scripts or commands on a resource aft
 They’re mainly used for configuration tasks — for example, installing software, setting up environment variables, or copying files to a new server.
 
 There are different types like remote-exec (to run commands on the resource), local-exec (to run commands on your local system), and file (to copy files).
-Terraform connects to the instance via SSH or WinRM and executes these actions automatically after creation.
 
 However, provisioners are considered a last resort — HashiCorp recommends using tools like Ansible or Packer for configuration management instead.
 Provisioners are best for small setup steps that can’t be done directly through Terraform resources.
 
 ## What are Terraform Workspaces?
 Terraform Workspaces let us manage multiple environments — like dev, staging, and production — using the same codebase but with separate state files.
-This means we can reuse the same Terraform configuration and still keep each environment isolated.
 
 Each workspace maintains its own state file, so any changes in one workspace don’t affect the others.
-For example, if I create a resource in the “dev” workspace, it won’t exist in the “prod” workspace until I apply there separately.
 
 Workspaces are helpful for testing and environment separation, but for larger projects, teams often use separate backends or folders for even clearer isolation.
 Still, they’re great for small-to-medium setups or quick environment management.
@@ -141,8 +138,6 @@ Instead of hardcoding secrets inside Terraform files or variables, we store them
 
 Terraform then fetches these secrets dynamically and securely at runtime.
 This approach helps maintain security, compliance, and automation, ensuring that secrets are never exposed in version control or Terraform state files.
-
-In short, secrets management keeps your infrastructure safe from leaks and unauthorized access while letting Terraform work seamlessly.
 
 ## What is Terraform Vault Integration?
 Terraform integrates with HashiCorp Vault to securely manage and access secrets like API keys, passwords, or tokens during infrastructure deployment.
