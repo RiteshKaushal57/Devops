@@ -177,14 +177,13 @@ The `CMD` instruction in a Dockerfile specifies the default command to be execut
 ## 16. You're part of a development team deploying a microservices architecture using Docker containers. One of the containers, critical to the system's functionality, has suddenly started failing without clear error messages. How do you debug issues in a failing Docker container?
 There are several techniques to debug issues in a Docker container:
 
-**Logging**: Docker captures the standard output and standard error streams of containers, making it easy to inspect logs using the **`docker logs`** command.  
+**Logging**: Check the container logs using **`docker logs <container>`** because this shows what the application inside the container was outputting when it crashed.
 
-**Shell access**: You can access a running container's shell using the **`docker exec`** command with the -it option. This allows you to investigate and troubleshoot issues interactively.
+**Shell access**: Run the container in interactive mode or exec into it using **`docker exec-it <container> /bin/sh or /bin/bash`** to directly inspect files, processes, or configurations from inside.
 
 **Image inspection**: You can inspect the Docker image's contents and configuration using **`docker image inspect`**. This lets you check for potential misconfigurations or missing dependencies.
 
 **Health checks**: Docker supports defining health checks for containers, allowing you to monitor the health status and automatically restart or take action based on predefined conditions.
-
 
 
 ## 17. You're working on a critical application running in Docker containers, and an update needs to be applied without risking data loss. How do you update a Docker container without losing data?
