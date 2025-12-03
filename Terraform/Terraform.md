@@ -98,47 +98,20 @@ Terraform uses this state file to understand what exists on the cloud so it can 
 In short, the Terraform state file helps Terraform remember what it built, avoid mistakes, plan changes correctly, and keep infrastructure consistent.
 
 ## What is Terraform Statefile Management?  
-Terraform statefile management means handling the Terraform state file in a safe, secure, and organized way so Terraform always knows the correct condition of your infrastructure.
-
-Since the state file is Terraform’s “memory,” managing it properly becomes very important.
-Good statefile management ensures the file is stored safely, shared correctly among team members, and protected from corruption or accidental deletion.
-
-In real-world DevOps, we don’t keep the state file on our local laptop because it can get lost, go out of sync, or cause conflicts when multiple people work on the same project.
-Instead, we store it in a **remote backend** like AWS S3, along with **state locking** through DynamoDB to prevent two people from editing the state at the same time.
-
-We also make sure secrets inside the state file are encrypted, we take backups, and we avoid manually editing the file to prevent breaking the infrastructure.
-
-In short, Terraform statefile management keeps the state safe, synced, and secure—so Terraform can reliably track infrastructure without mistakes or conflicts.
+Terraform statefile management means handling the Terraform state file in a safe, secure, and organized way so Terraform always knows the correct condition of your infrastructure.Instead, we store it in a **remote backend** like AWS S3, along with **state locking** through DynamoDB to prevent two people from editing the state at the same time.
 
 ## What is Terraform remote backend using S3 bucket?
-A Terraform remote backend using an S3 bucket simply means storing your Terraform statefile in an AWS S3 bucket instead of keeping it on your local laptop.
-
-When Terraform runs, it needs a statefile to remember what resources it already created.
-If that statefile stays on your laptop, it becomes risky — it can get lost, corrupted, or become different from what your team members have.
-
-So, we move the statefile to an S3 bucket, which acts like a central storage location.
-Now everyone who works on the same infrastructure shares one single source of truth.
+A Terraform remote backend using an S3 bucket simply means storing your Terraform statefile in an AWS S3 bucket, which acts like a central storage location and one single source of truth for anyone who is working on a same infrastructure.
 Terraform reads from this S3 file, updates it, and keeps everything consistent.
-
 We usually combine S3 with DynamoDB for state locking, so only one person can modify the state at a time, preventing conflicts.
 
-In simple words:
-A remote backend using S3 makes your Terraform statefile safe, shared, backed up, and always in sync — which is essential for real DevOps teamwork and production environments.
-
 ## What is Terraform state locking using DynamoDB?
-erraform state locking using DynamoDB is a way to make sure that only one person or one process can modify the Terraform statefile at a time.
+Terraform state locking using DynamoDB is a way to make sure that only one person or one process can modify the Terraform statefile at a time.
 
-When multiple team members work on the same infrastructure, there’s a risk that two people may run terraform apply at the same moment.
-If that happens, both tries will update the same statefile — which can corrupt it and break the entire infrastructure.
-
-To avoid this, we use an AWS DynamoDB table as a “lock.”
 Whenever Terraform runs, it creates a lock entry in DynamoDB telling everyone else:
 “Someone is already working — please wait.”
 
 Once the apply/plan finishes, Terraform removes the lock, and others can continue safely.
-
-This prevents race conditions, state corruption, and accidental overwrites.
-It’s especially important in teams and production environments where many people or CI/CD pipelines manage the same state.
 
 In short, DynamoDB state locking protects the Terraform statefile from being changed by two people at the same time, ensuring safety, consistency, and reliability of your infrastructure.
 
