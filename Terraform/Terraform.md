@@ -149,6 +149,9 @@ For example, when provisioning a database, Terraform can directly pull the usern
 
 In short, Terraform + Vault is a powerful combination that brings security, compliance, and automation together in Infrastructure as Code.
 
+## 18. What is Idempotency?
+Idempotency means is that you can run the same Terraform command again and again, and the result will always stay the same — nothing extra will be created, destroyed, or changed if nothing in the code changed.
 
+You don’t want Terraform to create a new server every time you run terraform apply. Idempotency guarantees safety: if your code didn’t change, your infrastructure won’t change either.
 
-Idempotency
+Terraform checks your current state, compares it with your code, and only makes changes if something is different. If everything already matches, Terraform shows “No changes. Your infrastructure is up-to-date.” This makes Terraform reliable, repeatable, and safe to run multiple times.
