@@ -1,4 +1,4 @@
-## 1.What is IaC?
+## 1. What is IaC?
 Infrastructure as Code means setting up and managing infrastructure using code instead of doing it by hand. The reason it’s used is because it saves a lot of time, reduces mistakes, and keeps all environments consistent. It works by writing a configuration file that describes what kind of setup you want — like your servers or databases — and tools such as Terraform automatically create that setup for you. So, it makes managing infrastructure as easy and reliable as writing software code.
 
 ## 2. What is Terraform?
