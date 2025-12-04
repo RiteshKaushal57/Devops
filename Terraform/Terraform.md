@@ -12,7 +12,7 @@ Terraform lifecycle has three stages:
 ## 3. What are Providers?
 In Terraform, providers are like plugins that let Terraform connect and work with different platforms such as AWS, Azure, or Google Cloud. We use providers because Terraform itself can’t directly communicate with these platforms — the provider acts as a bridge that tells Terraform how to create and manage resources there. It works by declaring the provider in the configuration file, and when we run terraform init, Terraform automatically downloads and sets up that provider. After that, it can use the provider to manage the resources we define in our code.
 
-### What are different ways to configure providers in terraform?
+**What are different ways to configure providers in terraform?**  
 1. **Root Module:** Configuring providers in the root module gives global settings like region and authentication that apply to the whole Terraform project.  
 2. **Child Module:** Configuring providers inside a child module lets that module use its own provider settings or aliases — useful for multi-account or multi-region deployments.   
 3. **required_providers block:** Using the required_providers block declares which providers and versions Terraform should download, acting like dependency management, while the real configuration still happens in the provider blocks.
