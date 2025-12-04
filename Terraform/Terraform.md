@@ -5,9 +5,9 @@ Infrastructure as Code means setting up and managing infrastructure using code i
 Terraform is a tool that allows you to manage infrastructure using code rather than doing everything manually. It’s used because it automates the setup, reduces human errors, and ensures that the same infrastructure can be recreated easily across different environments. It works by writing configuration files that describe what resources you need, and Terraform reads those files to automatically create, update, or delete the infrastructure as needed. This makes managing cloud resources fast, consistent, and reliable.
 
 Terraform lifecycle has three stages:  
-- 1. Terraform init
-- 2. Terraform plan
-- 3. terraform apply
+1. Terraform init
+2. Terraform plan
+3. terraform apply
 
 ## What are Providers?
 In Terraform, providers are like plugins that let Terraform connect and work with different platforms such as AWS, Azure, or Google Cloud. We use providers because Terraform itself can’t directly communicate with these platforms — the provider acts as a bridge that tells Terraform how to create and manage resources there. It works by declaring the provider in the configuration file, and when we run terraform init, Terraform automatically downloads and sets up that provider. After that, it can use the provider to manage the resources we define in our code.
