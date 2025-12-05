@@ -1,3 +1,6 @@
+## 1. Why do we need to Orchestration tool?
+We need an orchestration tool because when an application grows and uses many containers, managing them manually becomes confusing and unreliable, so an orchestrator acts like an automatic manager. It is needed because without it, you would have to start, stop, restart, scale, and balance containers yourself, which becomes impossible as the number increases. It works by watching all containers, automatically restarting the ones that fail, adding more when traffic goes up, removing extras when traffic goes down, and keeping everything healthy so the system runs smoothly without manual effort.
+
 ## 1. What is the difference between Docker and Kubernetes?
 Docker is a containerization platform — it helps you build, package, and run applications inside containers. Kubernetes is a container orchestration tool — it helps you manage, scale, and automate the deployment of those containers.
 
