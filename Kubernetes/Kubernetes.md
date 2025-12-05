@@ -1,10 +1,13 @@
-## 1. Why do we need to Orchestration tool?
+## 1. What is Orchestration tool?
+An orchestration tool is software that automatically manages and controls multiple containers or services so they run smoothly without manual effort. We need this tool because once your application grows, manually starting, stopping, fixing, and scaling containers becomes difficult, slow, and risky. It works by continuously monitoring all containers, restarting the ones that fail, adding more when traffic increases, removing extras when traffic drops, and ensuring everything stays healthy and balanced—basically acting like an intelligent manager for your entire system.
+
+## 2. Why do we need Orchestration tool?
 We need an orchestration tool because when an application grows and uses many containers, managing them manually becomes confusing and unreliable, so an orchestrator acts like an automatic manager. It is needed because without it, you would have to start, stop, restart, scale, and balance containers yourself, which becomes impossible as the number increases. It works by watching all containers, automatically restarting the ones that fail, adding more when traffic goes up, removing extras when traffic goes down, and keeping everything healthy so the system runs smoothly without manual effort.
 
-## 1. What is the difference between Docker and Kubernetes?
+## 3. What is the difference between Docker and Kubernetes?
 Docker is a containerization platform — it helps you build, package, and run applications inside containers. Kubernetes is a container orchestration tool — it helps you manage, scale, and automate the deployment of those containers.
 
-## 2. Why Kubernetes is used?
+## 4. Why Kubernetes is used?
 Kubernetes is used because it solves limitations that Docker has. So basically, Docker can run only on a single host, cannot auto-scale or self-heal containers, and lacks enterprise-level features. But Kubernetes solves these limitations by running containers across multiple nodes in a cluster, automatically scaling applications based on demand using Horizontal Pod Autoscaler, self-healing failed containers by restarting or rescheduling them, and providing enterprise-grade features like load balancing, rolling updates, and persistent storage.  
 
 ## 3. Explain Kubernetes architecture.  
