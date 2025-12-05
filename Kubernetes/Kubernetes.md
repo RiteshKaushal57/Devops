@@ -7,7 +7,7 @@ Kubernetes is used because it solves limitations that Docker has. So basically, 
 ## 3. Explain Kubernetes architecture.  
 Kubernetes follows a master–worker architecture. The control plane (master) manages the cluster and includes components like API Server, etcd, Controller Manager, and Scheduler. The worker nodes actually run the containers and include Kubelet, Kube-Proxy, and a container runtime. This separation helps Kubernetes manage, schedule, and scale containers automatically while keeping the system reliable and self-healing.
 
-##### Control Plane Components (Master Node):
+### Control Plane Components (Master Node):
 
 **1. API Server**
 - Acts as the gateway for all communication.  
