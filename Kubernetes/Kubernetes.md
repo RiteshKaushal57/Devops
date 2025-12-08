@@ -151,7 +151,7 @@ Applying separate policies reduces blast radius in case of compromise.
 etcd stores cluster secrets and configuration — treat it like a database full of passwords.
 Enable TLS and restrict access to control-plane-only.
 
-**8. Use Logging and Monitoring Tools** 
+**8. Use Logging and Monitoring Tools**  
 Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
 Helps identify threats like resource abuse or compromised containers.
 
