@@ -125,80 +125,28 @@ An init container is a type of container in Kubernetes that runs before the main
 Examples of tasks that an init container might perform include downloading configuration files, setting up a network connection, or initializing a database schema.
 
 ## 19. Company is very concerned about Securing Clusters. List some security measures that you can take while using Kubernetes.
- **1. Enable Role-Based Access Control (RBAC)**
-
-Control who can access what in the cluster.
+ **1. Enable Role-Based Access Control (RBAC)**  Control who can access what in the cluster.
 RBAC ensures developers, admins, and services only get the permissions they actually need — preventing accidental or malicious access.
 
-**2. Use Network Policies**
-
-Network Policies control which Pods can talk to each other.
+**2. Use Network Policies**  Network Policies control which Pods can talk to each other.
 This prevents unauthorized internal communication and stops attackers from moving laterally inside the cluster.
 
-**3. Secure the API Server**
-
-Limit API access using authentication, authorization, and TLS.
+**3. Secure the API Server**  Limit API access using authentication, authorization, and TLS.
 Only trusted users and services should be allowed to reach the control plane.
 
-**4. Use Secrets for Sensitive Data**
-
-Store passwords, tokens, and keys in Kubernetes Secrets instead of hardcoding them in YAML files.
+**4. Use Secrets for Sensitive Data**  Store passwords, tokens, and keys in Kubernetes Secrets instead of hardcoding them in YAML files.
 Use encryption at rest so even the stored Secrets are protected.
 
-**5. Image Security (Scan and Verify)**
+**5. Image Security (Scan and Verify)**  Use trusted container images, regularly scan them for vulnerabilities, and enforce signing (e.g., Cosign). This prevents attackers from sneaking malicious code into your supply chain.
 
-Use trusted container images, regularly scan them for vulnerabilities, and enforce signing (e.g., Cosign).
-This prevents attackers from sneaking malicious code into your supply chain.
-
-**6. Limit Container Capabilities**
-
-Run containers with **least privilege**, disable root user inside containers, and use Security Contexts.
-This reduces the impact if a container is compromised.
-
-**7. Pod Security Standards / Admission Controllers**
-
-Use tools like Gatekeeper or Kyverno to enforce cluster-wide security rules.
-They block deployments that violate best practices (e.g., running as root).
-
-**8. Enable Audit Logging**
-
-Audit logs track who did what and when in the cluster.
-Helpful for incident analysis and detecting suspicious activity.
-
-**9. Use TLS Everywhere**
-
-Encrypt communication between components (API server, kubelets, etc.).
-This protects against man-in-the-middle attacks.
-
-**10. Isolate Workloads with Namespaces**
-
-Namespaces help separate teams or environments (dev, QA, prod).
+**6. Isolate Workloads with Namespaces**  Namespaces help separate teams or environments (dev, QA, prod).
 Applying separate policies reduces blast radius in case of compromise.
 
-**11. Keep Kubernetes and Node OS Up-to-date**
-
-Regularly patch vulnerabilities in Kubernetes, container runtime, and underlying OS.
-Unpatched clusters are high-risk targets.
-
-**12. Restrict Access to etcd**
-
-etcd stores cluster secrets and configuration — treat it like a database full of passwords.
+**7. Restrict Access to etcd**  etcd stores cluster secrets and configuration — treat it like a database full of passwords.
 Enable TLS and restrict access to control-plane-only.
 
-**13. Use Logging and Monitoring Tools**
-
-Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
+**8. Use Logging and Monitoring Tools** Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
 Helps identify threats like resource abuse or compromised containers.
-
-**14. Secure Ingress and API Gateways**
-
-Use HTTPS, WAF (Web Application Firewall), and proper authentication for external traffic.
-
-**15. Use Node Security**
-
-Use hardened OS (like Bottlerocket, Flatcar), disable unnecessary ports, and use host-level firewalls.
-Minimizes attack surface on the worker nodes.
-
 
 ## 20. You need to ensure that a specific pod remains operational at all times. How to make sure that pod is always running?
 We can use liveness probes. A liveness probe always checks if an application in a pod is running, if this check fails the container gets restarted. This is ideal in many scenarios where the container is running but somehow the application inside a container crashes.
