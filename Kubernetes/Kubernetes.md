@@ -70,6 +70,7 @@ The main reason we use namespaces is to provide isolation — meaning resources 
 
 ## 10. What are different types of services in Kubernetes?
 In Kubernetes, **services** are used to expose pods and allow communication between different parts of an application or even with the outside world. There are mainly **four types** of services.  
+
 **1. ClusterIP**  
 It is the default type. It allows communication between pods inside the cluster only and doesn’t expose anything outside. It’s mostly used for internal communication.
 
