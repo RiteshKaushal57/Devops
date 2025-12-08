@@ -125,8 +125,7 @@ An init container is a type of container in Kubernetes that runs before the main
 Examples of tasks that an init container might perform include downloading configuration files, setting up a network connection, or initializing a database schema.
 
 ## 19. Company is very concerned about Securing Clusters. List some security measures that you can take while using Kubernetes.
- **1. Enable Role-Based Access Control (RBAC)**  Control who can access what in the cluster.
-RBAC ensures developers, admins, and services only get the permissions they actually need — preventing accidental or malicious access.
+ **1. Enable Role-Based Access Control (RBAC)**  Control who can access what in the cluster. RBAC ensures developers, admins, and services only get the permissions they actually need — preventing accidental or malicious access.
 
 **2. Use Network Policies**  Network Policies control which Pods can talk to each other.
 This prevents unauthorized internal communication and stops attackers from moving laterally inside the cluster.
