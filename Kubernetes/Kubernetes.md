@@ -11,7 +11,9 @@ Docker is a containerization platform — it helps you build, package, and run a
 Kubernetes is used because it solves limitations that Docker has. So basically, Docker can run only on a single host, cannot auto-scale or self-heal containers, and lacks enterprise-level features. But Kubernetes solves these limitations by running containers across multiple nodes in a cluster, automatically scaling applications based on demand using Horizontal Pod Autoscaler, self-healing failed containers by restarting or rescheduling them, and providing enterprise-grade features like load balancing, rolling updates, and persistent storage.  
 
 ## 5. Explain Kubernetes architecture.  
-Kubernetes follows a master–worker architecture. The control plane (master) manages the cluster and includes components like API Server, etcd, Controller Manager, and Scheduler. The worker nodes actually run the containers and include Kubelet, Kube-Proxy, and a container runtime. This separation helps Kubernetes manage, schedule, and scale containers automatically while keeping the system reliable and self-healing.
+Kubernetes follows a master–worker architecture. The *control plane* is like the brain of the cluster. It decides what runs where, monitors the health of Pods, schedules them onto nodes, and handles updates or rollbacks.
+
+The worker nodes are the muscles of the cluster. They actually run your application Pods using a container runtime and report their status back to the control plane. Each node has a kubelet agent to communicate with the control plane and a kube-proxy to handle networking so Pods can talk to each other. Together, the control plane and nodes keep your apps running reliably and automatically handle failures, scaling, and traffic.
 
 ### Control Plane Components (Master Node):
 
@@ -75,7 +77,7 @@ In Kubernetes, **services** are used to expose pods and allow communication betw
 It is the default type. It allows communication between pods inside the cluster only and doesn’t expose anything outside. It’s mostly used for internal communication.
 
 **2. NodePort**   
-NodePort makes your application accessible outside the cluster by opening a specific port on each worker node. You can access your app using the node’s IP and that port number.
+A NodePort is a type of Kubernetes service that exposes your application Pods to the outside world using a fixed port on every worker node. 
 
 **3. LoadBalancer**   
 LoadBalancer is commonly used in cloud environments. It automatically creates an external load balancer to distribute incoming traffic across multiple pods for better performance and reliability.
@@ -84,7 +86,7 @@ LoadBalancer is commonly used in cloud environments. It automatically creates an
 ExternalName connects a Kubernetes service to an external resource outside the cluster, like an external database or API, using a DNS name instead of an IP.  
 
 ## 11. What is kubernetes ingress?  
-In Kubernetes, Ingress acts like the main entry point for all the applications running inside the cluster. Normally, each service in Kubernetes has its own IP and port, which makes it hard to access applications from outside. Ingress solves this by providing a single gateway that manages external access to different services. It uses routing rules to decide where to send the traffic — for example, it can route users to different apps based on the URL or domain name.
+A **Kubernetes Ingress** is a way to manage external access to services in a cluster, usually HTTP or HTTPS traffic, with more control than a simple NodePort or LoadBalancer. We need Ingress because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service, often with features like SSL termination, load balancing, and name-based routing.
 
 ## 12. Kubernetes RBAC
 RBAC means Role-Based Access Control. It’s used to manage who can access the cluster and what actions they can perform.  
