@@ -70,20 +70,22 @@ In simple terms:
 A **namespace** in Kubernetes is a way to divide a single cluster into multiple virtual spaces so that different teams or projects can work without interfering with each other.
 The main reason we use namespaces is to provide isolation — meaning resources in one namespace won’t clash or affect resources in another. This is especially useful when multiple environments like development, testing, and production share the same cluster.
 
-## 10. What are different types of services in Kubernetes?
-In Kubernetes, **services** are used to expose pods and allow communication between different parts of an application or even with the outside world. There are mainly **four types** of services.  
+## 10. What is Service?
+Kubernetes Service allows Pods to communicate with each other or with the outside world. Since Pods are ephemeral and can restart, their IP addresses can change, which would break direct communication. Services solve this by not relying on IPs; instead, they act as a proxy and load balancer using labels and selectors. Each Pod has a label, and the Service routes traffic to the correct Pods based on these labels. This way, communication works reliably even if Pod IPs change.
 
-**1. ClusterIP**  
-It is the default type. It allows communication between pods inside the cluster only and doesn’t expose anything outside. It’s mostly used for internal communication.
+There are four main types of Services:
 
-**2. NodePort**   
-A NodePort is a type of Kubernetes service that exposes your application Pods to the outside world using a fixed port on every worker node. 
+**1. ClusterIP (default):**   
+Exposes the service internally within the cluster for Pod-to-Pod communication.
 
-**3. LoadBalancer**   
-LoadBalancer is commonly used in cloud environments. It automatically creates an external load balancer to distribute incoming traffic across multiple pods for better performance and reliability.
+**2. NodePort**:  
+ Opens a fixed port on all worker nodes to allow external traffic to reach the Pods.
 
-**4. ExternalName**   
-ExternalName connects a Kubernetes service to an external resource outside the cluster, like an external database or API, using a DNS name instead of an IP.  
+**3. LoadBalancer:**   
+Creates an external cloud load balancer that distributes incoming traffic across Pods, commonly used in production.
+
+**4. ExternalName:**  
+ Maps the service to an external DNS name, allowing Pods to access resources outside the cluster.
 
 ## 11. What is kubernetes ingress?  
 A **Kubernetes Ingress** is a way to manage how services in a cluster can be accessed by the internet. Ingress is used because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service allowing clean, secure, and organized access to your applications from outside the cluster.
@@ -116,7 +118,7 @@ So in general there are two things. One is user account and one is service accou
 
 In Kubernetes it is not possible to run pod without service account. In case you don't assign your pod a service account, Kubernetes does will assign default service account to your pod. If Kubernetes is creating a default service account, it comes with default permissions like that pod can run on Kubernetes cluster.
 
-But if you want to create permissions, then service account should be assigned with a role or cluster role and  and this assigning hppens due to *bindng role*. So basically inside role or cluster role, you define permissions and using a binding role or cluster role binding, you just bind the service account to the role.
+But if you want to create permissions, then service account should be assigned with a role or cluster role and and this assigning hppens due to *bindng role*. So basically inside role or cluster role, you define permissions and using a binding role or cluster role binding, you just bind the service account to the role.
 
 ## 16. What is deployment resource?
 *Scaling and healing* is provided by deployment resource.
@@ -131,4 +133,4 @@ Lets assume two contiainers are connected and one of them gets down. You restart
 
 So, basically you create a deployment, which will create replica set and which in turns creates a service. So, all these resources are created by deployment file only.
 
-So, Kubernetes has service resource where two pods won't communicate directly, instead they talk to proxy or a simple load balancer. So, this proxy is a service with which pods communicate. This service does not operate with the IP addresses at all. It operates with a concept called as **labels** and **selectors**. So a service looks at a particular label on the pod. So it doesn't matter if the IP address is changed. So this label has to be unique across your different services of organization. So that when any pod goes down it might come up, come up with a new IP address, but still the label will be the same.
+So, Kubernetes has service resource where two pods won't communicate directly, instead they talk to proxy or a load balancer. So, this proxy is a service with which pods communicate. This service does not operate with the IP addresses at all. It operates with a concept called as **labels** and **selectors**. So a service looks at a particular label on the pod. So it doesn't matter if the IP address is changed. So this label has to be unique across your different services of organization. So that when any pod goes down it might come up, come up with a new IP address, but still the label will be the same.
