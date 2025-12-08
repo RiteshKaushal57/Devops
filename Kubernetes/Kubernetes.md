@@ -17,27 +17,27 @@ The worker nodes are the muscles of the cluster. They actually run your applicat
 
 ### Control Plane Components (Master Node):
 
-**1. API Server**
+**1. API Server**  
 The API Server is the front door of the entire Kubernetes cluster. Every request — whether from kubectl, dashboards, controllers, or even internal components — passes through it. You never talk to Kubernetes directly; you talk to the API Server, and it talks to everything else. It validates requests, updates the cluster state in etcd, and acts as the communication hub that all components rely on.
 
-**2. etcd**
+**2. etcd**  
 etcd is the cluster’s memory. It stores every single piece of information about your Kubernetes system — what Pods exist, which Deployments are running, ConfigMaps, Secrets, node status, and more. If something fails and needs to be restored, Kubernetes reads the desired state from etcd and rebuilds the system. Since etcd is the source of truth, it must be highly available and consistent. 
 
-**3. Controller Manager**
+**3. Controller Manager**  
 The Controller Manager is the “watchdog” that constantly monitors the cluster and fixes anything that drifts from the desired state. It watches over components like ReplicaSets, Nodes, Deployments, and more. If a Pod disappears, if a node goes down, or if a replica count doesn’t match what you asked for, the Controller Manager immediately takes action to correct it.
 
-**4. Scheduler**
+**4. Scheduler**  
 The Scheduler decides where each Pod should run. When a Pod is created but not yet assigned to a node, the Scheduler looks at all available nodes, checks factors like CPU, RAM, taints, tolerations, and affinity rules, and selects the best node for running that Pod. It ensures optimal resource usage and balances the workload across the cluster.
 
 ### Worker Node Components:
 
-**1. Kubelet**
+**1. Kubelet**  
 Kubelet is the node’s personal manager. It receives instructions from the API Server — such as “run this Pod” or “restart this container” — and ensures they happen. It constantly checks if containers are healthy and reports their status back to the control plane. Its job is simple: whatever is supposed to be running on the node should be running properly.
 
-**2. Kube-Proxy**
+**2. Kube-Proxy**  
 Kube-Proxy is responsible for networking inside the cluster. It ensures Pods can talk to each other, and Services can route traffic to Pods. It creates the necessary forwarding rules, does basic load balancing, and manages how requests move across nodes. Without kube-proxy, pod-to-pod and service-to-pod communication would fail.
 
-**3. Container Runtime**
+**3. Container Runtime**  
 The container runtime is the engine that actually runs your containers. Kubernetes itself does not run containers — it delegates the work to a runtime like Docker, containerd, or CRI-O. The runtime pulls container images, starts containers, stops them, and reports their status to the Kubelet.
 
 ## 6. What is Kubernetes Production System?
@@ -128,24 +128,31 @@ Examples of tasks that an init container might perform include downloading confi
 **1. Enable Role-Based Access Control (RBAC)**  
 Control who can access what in the cluster. RBAC ensures developers, admins, and services only get the permissions they actually need — preventing accidental or malicious access.
 
-**2. Use Network Policies**  Network Policies control which Pods can talk to each other.
+**2. Use Network Policies**  
+Network Policies control which Pods can talk to each other.
 This prevents unauthorized internal communication and stops attackers from moving laterally inside the cluster.
 
-**3. Secure the API Server**  Limit API access using authentication, authorization, and TLS.
+**3. Secure the API Server**  
+Limit API access using authentication, authorization, and TLS.
 Only trusted users and services should be allowed to reach the control plane.
 
-**4. Use Secrets for Sensitive Data**  Store passwords, tokens, and keys in Kubernetes Secrets instead of hardcoding them in YAML files.
+**4. Use Secrets for Sensitive Data**  
+Store passwords, tokens, and keys in Kubernetes Secrets instead of hardcoding them in YAML files.
 Use encryption at rest so even the stored Secrets are protected.
 
-**5. Image Security (Scan and Verify)**  Use trusted container images, regularly scan them for vulnerabilities, and enforce signing (e.g., Cosign). This prevents attackers from sneaking malicious code into your supply chain.
+**5. Image Security (Scan and Verify)**  
+Use trusted container images, regularly scan them for vulnerabilities, and enforce signing (e.g., Cosign). This prevents attackers from sneaking malicious code into your supply chain.
 
-**6. Isolate Workloads with Namespaces**  Namespaces help separate teams or environments (dev, QA, prod).
+**6. Isolate Workloads with Namespaces**  
+Namespaces help separate teams or environments (dev, QA, prod).
 Applying separate policies reduces blast radius in case of compromise.
 
-**7. Restrict Access to etcd**  etcd stores cluster secrets and configuration — treat it like a database full of passwords.
+**7. Restrict Access to etcd**  
+etcd stores cluster secrets and configuration — treat it like a database full of passwords.
 Enable TLS and restrict access to control-plane-only.
 
-**8. Use Logging and Monitoring Tools** Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
+**8. Use Logging and Monitoring Tools** 
+Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
 Helps identify threats like resource abuse or compromised containers.
 
 ## 20. You need to ensure that a specific pod remains operational at all times. How to make sure that pod is always running?
