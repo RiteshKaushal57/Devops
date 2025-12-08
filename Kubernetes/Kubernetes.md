@@ -18,34 +18,27 @@ The worker nodes are the muscles of the cluster. They actually run your applicat
 ### Control Plane Components (Master Node):
 
 **1. API Server**
-- Acts as the gateway for all communication.  
-- You (or kubectl) talk to the API Server.  
-*Example: kubectl get pods → goes to API Server.*  
+The API Server is the front door of the entire Kubernetes cluster. Every request — whether from kubectl, dashboards, controllers, or even internal components — passes through it. You never talk to Kubernetes directly; you talk to the API Server, and it talks to everything else. It validates requests, updates the cluster state in etcd, and acts as the communication hub that all components rely on.
 
 **2. etcd**
-- A key-value database that stores all cluster data (state, config, secrets, etc.).  
-*Example: if a pod crashes, etcd helps restore its desired state.*
+etcd is the cluster’s memory. It stores every single piece of information about your Kubernetes system — what Pods exist, which Deployments are running, ConfigMaps, Secrets, node status, and more. If something fails and needs to be restored, Kubernetes reads the desired state from etcd and rebuilds the system. Since etcd is the source of truth, it must be highly available and consistent. 
 
 **3. Controller Manager**
-- Ensures the cluster is always in the desired state.  
-*Example: if a pod dies, Controller Manager creates a new one.*
+The Controller Manager is the “watchdog” that constantly monitors the cluster and fixes anything that drifts from the desired state. It watches over components like ReplicaSets, Nodes, Deployments, and more. If a Pod disappears, if a node goes down, or if a replica count doesn’t match what you asked for, the Controller Manager immediately takes action to correct it.
 
 **4. Scheduler**
-- Decides which node should run a new pod.  
-- Checks resource availability (CPU, RAM, etc.).
+The Scheduler decides where each Pod should run. When a Pod is created but not yet assigned to a node, the Scheduler looks at all available nodes, checks factors like CPU, RAM, taints, tolerations, and affinity rules, and selects the best node for running that Pod. It ensures optimal resource usage and balances the workload across the cluster.
 
 ### Worker Node Components:
 
 **1. Kubelet**
-- The agent on each node that talks to the Control Plane.  
-- Ensures the pods are running as instructed.
+Kubelet is the node’s personal manager. It receives instructions from the API Server — such as “run this Pod” or “restart this container” — and ensures they happen. It constantly checks if containers are healthy and reports their status back to the control plane. Its job is simple: whatever is supposed to be running on the node should be running properly.
 
 **2. Kube-Proxy**
-- Handles networking and load balancing inside the cluster.  
-- Ensures communication between pods and services.
+Kube-Proxy is responsible for networking inside the cluster. It ensures Pods can talk to each other, and Services can route traffic to Pods. It creates the necessary forwarding rules, does basic load balancing, and manages how requests move across nodes. Without kube-proxy, pod-to-pod and service-to-pod communication would fail.
 
 **3. Container Runtime**
-- Actually runs containers (e.g., Docker, containerd, CRI-O).
+The container runtime is the engine that actually runs your containers. Kubernetes itself does not run containers — it delegates the work to a runtime like Docker, containerd, or CRI-O. The runtime pulls container images, starts containers, stops them, and reports their status to the Kubelet.
 
 ## 6. What is Kubernetes Production System?
 A Kubernetes Production System means a fully set up and managed Kubernetes environment that’s ready to run real business applications — not just for testing or learning. It’s a complete system designed for scalability, reliability, security, and automation.
@@ -121,16 +114,106 @@ In Kubernetes it is not possible to run pod without service account. In case you
 But if you want to create permissions, then service account should be assigned with a role or cluster role and and this assigning hppens due to *bindng role*. So basically inside role or cluster role, you define permissions and using a binding role or cluster role binding, you just bind the service account to the role.
 
 ## 16. What is deployment resource?
-*Scaling and healing* is provided by deployment resource.
+A **Deployment** in Kubernetes is a resource that manages how your application should run and stay healthy. We use a Deployment because running containers directly is risky — if one fails, nothing brings it back, and updating the app manually is messy. A Deployment solves this by automatically creating and managing ReplicaSets, which in turn maintain the correct number of Pods. It also handles rolling updates, rollbacks, and ensures your app always stays available.
 
-So pod handles containers. So Kubernetes use a deployment resource called **deployment** to handle pod. So when deploying a service as a deployment, an intermediate resource called **replica set** is created by deployment resource and this replica set spin up the containers or the pods in Kubrenetes world in this deployment YAML file.
+## 17. How does Kubernetes auto-scale?
+Kubernetes **auto-scales** your applications by automatically adjusting the number of Pods based on demand. It works using the **Horizontal Pod Autoscaler (HPA)**, which monitors metrics like CPU, memory, or custom metrics, and increases or decreases the number of Pods to match the workload. This ensures your application stays responsive, efficient, and cost-effective without manual intervention.
 
-If you say replica count as three, then this replica set is going to make sure that all the time the pod count is three. That means for some reason, if this pod goes down, replica set will immediately create a new pod. So it will always make sure that the count is as mentioned in the deployment. Thus, it is solving the problem of auto healing.
+## 18. What is the init container?
+An init container is a type of container in Kubernetes that runs before the main application containers in a pod. The purpose of an init container is to perform initialization tasks or setup procedures that are not present in the application container images.
 
-## 17. What is service?
-It solves the problem of service discovery. 
-Lets assume two contiainers are connected and one of them gets down. You restarted it again but now this time, the IP address of conatiner will change and due to that the two containers wont be connected again because another container will look for old IP address of the downed container. So this problem is called service discovery problem and Kubernetes address this problem using **services**. 
+Examples of tasks that an init container might perform include downloading configuration files, setting up a network connection, or initializing a database schema.
 
-So, basically you create a deployment, which will create replica set and which in turns creates a service. So, all these resources are created by deployment file only.
+## 19. Company is very concerned about Securing Clusters. List some security measures that you can take while using Kubernetes.
+ **1. Enable Role-Based Access Control (RBAC)**
 
-So, Kubernetes has service resource where two pods won't communicate directly, instead they talk to proxy or a load balancer. So, this proxy is a service with which pods communicate. This service does not operate with the IP addresses at all. It operates with a concept called as **labels** and **selectors**. So a service looks at a particular label on the pod. So it doesn't matter if the IP address is changed. So this label has to be unique across your different services of organization. So that when any pod goes down it might come up, come up with a new IP address, but still the label will be the same.
+Control who can access what in the cluster.
+RBAC ensures developers, admins, and services only get the permissions they actually need — preventing accidental or malicious access.
+
+**2. Use Network Policies**
+
+Network Policies control which Pods can talk to each other.
+This prevents unauthorized internal communication and stops attackers from moving laterally inside the cluster.
+
+**3. Secure the API Server**
+
+Limit API access using authentication, authorization, and TLS.
+Only trusted users and services should be allowed to reach the control plane.
+
+**4. Use Secrets for Sensitive Data**
+
+Store passwords, tokens, and keys in Kubernetes Secrets instead of hardcoding them in YAML files.
+Use encryption at rest so even the stored Secrets are protected.
+
+**5. Image Security (Scan and Verify)**
+
+Use trusted container images, regularly scan them for vulnerabilities, and enforce signing (e.g., Cosign).
+This prevents attackers from sneaking malicious code into your supply chain.
+
+**6. Limit Container Capabilities**
+
+Run containers with **least privilege**, disable root user inside containers, and use Security Contexts.
+This reduces the impact if a container is compromised.
+
+**7. Pod Security Standards / Admission Controllers**
+
+Use tools like Gatekeeper or Kyverno to enforce cluster-wide security rules.
+They block deployments that violate best practices (e.g., running as root).
+
+**8. Enable Audit Logging**
+
+Audit logs track who did what and when in the cluster.
+Helpful for incident analysis and detecting suspicious activity.
+
+**9. Use TLS Everywhere**
+
+Encrypt communication between components (API server, kubelets, etc.).
+This protects against man-in-the-middle attacks.
+
+**10. Isolate Workloads with Namespaces**
+
+Namespaces help separate teams or environments (dev, QA, prod).
+Applying separate policies reduces blast radius in case of compromise.
+
+**11. Keep Kubernetes and Node OS Up-to-date**
+
+Regularly patch vulnerabilities in Kubernetes, container runtime, and underlying OS.
+Unpatched clusters are high-risk targets.
+
+**12. Restrict Access to etcd**
+
+etcd stores cluster secrets and configuration — treat it like a database full of passwords.
+Enable TLS and restrict access to control-plane-only.
+
+**13. Use Logging and Monitoring Tools**
+
+Use Prometheus, Grafana, ELK/EFK, or Datadog to detect unusual Pod behavior.
+Helps identify threats like resource abuse or compromised containers.
+
+**14. Secure Ingress and API Gateways**
+
+Use HTTPS, WAF (Web Application Firewall), and proper authentication for external traffic.
+
+**15. Use Node Security**
+
+Use hardened OS (like Bottlerocket, Flatcar), disable unnecessary ports, and use host-level firewalls.
+Minimizes attack surface on the worker nodes.
+
+
+## 20. You need to ensure that a specific pod remains operational at all times. How to make sure that pod is always running?
+We can use liveness probes. A liveness probe always checks if an application in a pod is running, if this check fails the container gets restarted. This is ideal in many scenarios where the container is running but somehow the application inside a container crashes.
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: liveness
+    image: k8s.gcr.io/liveness
+    args: 
+    - /server
+    livenessProbe:
+      httpGet:
+        path: /healthz
+```
