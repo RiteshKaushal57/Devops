@@ -86,7 +86,7 @@ LoadBalancer is commonly used in cloud environments. It automatically creates an
 ExternalName connects a Kubernetes service to an external resource outside the cluster, like an external database or API, using a DNS name instead of an IP.  
 
 ## 11. What is kubernetes ingress?  
-A **Kubernetes Ingress** is a way to manage external access to services in a cluster, usually HTTP or HTTPS traffic, with more control than a simple NodePort or LoadBalancer. We need Ingress because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service, often with features like SSL termination, load balancing, and name-based routing.
+A **Kubernetes Ingress** is a way to manage how services in a cluster can be accessed by the internet. Ingress is used because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service allowing clean, secure, and organized access to your applications from outside the cluster.
 
 ## 12. Kubernetes RBAC
 RBAC means Role-Based Access Control. It’s used to manage who can access the cluster and what actions they can perform.  
@@ -107,7 +107,7 @@ In Kubernetes, **ConfigMaps** and **Secrets** are used to manage configuration a
 
 **Secrets**, on the other hand, are designed to hold sensitive information such as passwords, API keys, or certificates. Kubernetes stores them in a way that’s more secure than plain text, and they can be injected into pods when needed.
 
-The reason we use them is to **separate configuration and sensitive data from application code**, making apps more secure, portable, and easier to manage. You create them with YAML files or `kubectl` commands and then attach them to pods via environment variables, volumes, or command arguments. In short, ConfigMaps and Secrets let Kubernetes handle app configuration and secrets safely and flexibly, keeping your containers clean and secure.
+The reason we use them is to *separate configuration and sensitive data from application code*, making apps more secure, portable, and easier to manage. You create them with YAML files or `kubectl` commands and then attach them to pods via environment variables, volumes, or command arguments.
 
 ## 15. What exactly is a service account?
 So in general there are two things. One is user account and one is service account.
