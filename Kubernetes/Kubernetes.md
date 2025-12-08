@@ -69,7 +69,7 @@ A **namespace** in Kubernetes is a way to divide a single cluster into multiple 
 The main reason we use namespaces is to provide isolation — meaning resources in one namespace won’t clash or affect resources in another. This is especially useful when multiple environments like development, testing, and production share the same cluster.
 
 ## 10. What are different types of services in Kubernetes?
-In Kubernetes, **services** are used to expose pods and allow communication between different parts of an application or even with the outside world. There are mainly **four types** of services.
+In Kubernetes, **services** are used to expose pods and allow communication between different parts of an application or even with the outside world. There are mainly **four types** of services.  
 **1. ClusterIP**  
 It is the default type. It allows communication between pods inside the cluster only and doesn’t expose anything outside. It’s mostly used for internal communication.
 
