@@ -80,6 +80,22 @@ Creates an external cloud load balancer that distributes incoming traffic across
 **4. ExternalName:**  
  Maps the service to an external DNS name, allowing Pods to access resources outside the cluster.
 
+**How to write service resources in Kubernetes?**   
+``` 
+It starts with:  
+`api version: /v1`
+`kind: service`
+- metadata:  
+`name*`
+`labels*`
+
+- spec:  
+`type`: Defines the type of service i.e ClusterIp/Nodeport/LB.  
+- ports:  
+`port`: It is not a container port. It is port for the service so that pod and service can communicate with each other. Ex: nameofservice:portofservice  
+`targetport`: port of the container. Pod for which you are creating service.  
+`selector`:
+```
 ## 11. What is kubernetes ingress?  
 A **Kubernetes Ingress** is a way to manage how services in a cluster can be accessed by the internet. Ingress is used because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service allowing clean, secure, and organized access to your applications from outside the cluster.
 
@@ -115,6 +131,31 @@ But if you want to create permissions, then service account should be assigned w
 
 ## 16. What is deployment resource?
 A **Deployment** in Kubernetes is a resource that manages how your application should run and stay healthy. We use a Deployment because running containers directly is risky — if one fails, nothing brings it back, and updating the app manually is messy. A Deployment solves this by automatically creating and managing ReplicaSets, which in turn maintain the correct number of Pods. It also handles rolling updates, rollbacks, and ensures your app always stays available.
+
+**How to write deployment resources in Kubernetes?**    
+```
+It starts with:  
+`api version: app/v1`
+`kind: deployment`
+- Due to api version and kind, Kubernetes understands what kind of resource it is.  
+- metadata:  
+`name*`: Name of the deployment.  
+`labels*`: Use to identify the microservice. Will be used as selecter.   
+
+- spec:  Differs from section to section. It writes deployment related stuff.  
+`replicas*`: Replica set needs this information.  
+`template`:- Below this defines pod related configuration.  
+`metadata`: Useful for service discovery.
+`labels`: Again it is useful for service discovery. 
+`spec`:-  
+`serviceaccountname`: Name the service or it will choose default one.  
+`containers`  
+`   -name`: Name of service.   
+`   -image`:  
+`   -port`:  *written in targetport.   
+`env`:  
+`volumes`:
+```
 
 ## 17. How does Kubernetes auto-scale?
 Kubernetes **auto-scales** your applications by automatically adjusting the number of Pods based on demand. It works using the **Horizontal Pod Autoscaler (HPA)**, which monitors metrics like CPU, memory, or custom metrics, and increases or decreases the number of Pods to match the workload. This ensures your application stays responsive, efficient, and cost-effective without manual intervention.
@@ -172,3 +213,46 @@ spec:
       httpGet:
         path: /healthz
 ```
+
+## 21. What is Helm?
+Helm is a package manager for  Kubernetes the allows you to install Kubernetes contollers (Prometheus, Grafana) or third party applications, update their version, uninstall these too. Helm also allows us to bundle or package the application as Helm charts so that any people outside your organization can use the helm command to install your application.  
+1st step: Add the repository (chart).  
+2nd step: Run the helm install command.  
+
+## 22. Components of Helm
+- **1. Helm Chart:**  
+A Helm Chart is a package that contains all the Kubernetes manifests needed to deploy an application. Instead of writing multiple YAML files for pods, services, deployments, config maps, etc., a Helm Chart groups them together and makes them reusable.
+
+### Components of a Chart:
+**1. Chart.yaml**   
+This file contains metadata about the chart — basically the identity card of the chart.
+It includes things like the chart name, version, description, and the app version.
+
+**2. values.yaml**    
+This file contains the default configuration values for the chart.
+Whatever you want to make configurable (image name, port, replicas, resource limits, etc.) goes here.
+Users can override these values during installation to customize the deployment.
+
+**3. templates/ folder**    
+This folder contains all the Kubernetes YAML templates (Deployment, Service, Ingress, ConfigMaps, etc.).
+These templates read the values from values.yaml and generate the final manifest that gets applied to the cluster.
+Basically, these are the actual “blueprints” for Kubernetes objects.
+
+**4. charts/ folder**     
+This folder contains dependency charts.
+If your application depends on other charts (like a database, cache, or another service), those packaged charts are stored here.
+It’s not used in simple applications but becomes important for large systems.
+
+- **2. Helm Repositories:**  
+A Helm repository is a place where Helm charts are stored and shared. It’s similar to a package repository in Linux (like APT or YUM repos).
+
+- **3. Helm release**  
+A Helm Release is simply an installed and running instance of a Helm Chart inside your Kubernetes cluster.  
+*Helm Chart = packaged blueprint of your application (like a Docker image). Helm Release = actual running installation of that chart (like a Docker container).*
+
+## 23. What is Stateless and Stateful applications?
+- **Stateless application**  
+Stateless applications are those that do not store any client or session data on the server, meaning each request is independent and can be handled by any pod of the application. This makes them easy to scale and recover, as any pod can serve any request. Examples include web servers serving static pages or API servers where session data is stored externally in a database or cache.
+
+- **Stateful application**  
+Stateful applications keep data or session information inside the application or pod, giving each pod a unique identity and state that clients may depend on. These are harder to scale and manage because you cannot replace pods randomly without losing data. Examples include databases like MySQL, PostgreSQL, or messaging systems like Kafka.
