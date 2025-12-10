@@ -199,20 +199,38 @@ Helps identify threats like resource abuse or compromised containers.
 ## 20. You need to ensure that a specific pod remains operational at all times. How to make sure that pod is always running?
 We can use liveness probes. A liveness probe always checks if an application in a pod is running, if this check fails the container gets restarted. This is ideal in many scenarios where the container is running but somehow the application inside a container crashes.
 ```
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: my-pod
+  name: crashloop-example
+  labels:
+    app: crashlooplearning
 spec:
-  containers:
-  - name: liveness
-    image: k8s.gcr.io/liveness
-    args: 
-    - /server
-    livenessProbe:
-      httpGet:
-        path: /healthz
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crashlooplearning
+  template:
+    metadata:
+      labels:
+        app: crashlooplearning
+    spec:
+      containers:
+      - name: crashlooplearning
+        image: abhishekf5/crashlooptest:v2
+        ports:
+        - containerPort: 8000
+        livenessProbe:
+         exec:
+          command:
+           - cat
+           - /tmp/healthy
+         initialDelaySeconds: 0
+         periodSeconds: 1
 ```
+
+- periodSeconds: It tells kubelet how frequently it has to check the health of the pod.
+
 
 ## 21. What is Helm?
 Helm is a package manager for  Kubernetes the allows you to install Kubernetes contollers (Prometheus, Grafana) or third party applications, update their version, uninstall these too. Helm also allows us to bundle or package the application as Helm charts so that any people outside your organization can use the helm command to install your application.  
@@ -256,3 +274,126 @@ Stateless applications are those that do not store any client or session data on
 
 - **Stateful application**  
 Stateful applications keep data or session information inside the application or pod, giving each pod a unique identity and state that clients may depend on. These are harder to scale and manage because you cannot replace pods randomly without losing data. Examples include databases like MySQL, PostgreSQL, or messaging systems like Kafka.
+
+## 24. What is headless service?
+A Headless Service in Kubernetes is a special type of service that does not get a cluster IP, so it doesn’t load-balance traffic automatically. Instead, it allows clients to directly access the individual pods that match its selector.
+
+This is useful for stateful applications where each pod has a unique identity, like databases (MySQL, PostgreSQL), Kafka, or Cassandra. With a normal Service, traffic is distributed among pods randomly, but with a Headless Service, DNS resolves the service name to the IP addresses of all pods, allowing clients to connect to specific pods directly.
+
+## Kubernetes Troubleshooting
+
+### 1. ImagePullBackOff
+It is error related to pulling the container image onto the Kubernetes cluster. There are two scenerios for this image:  
+1. When image name is invalid or image is non-existent.  
+2. When the image is private. (Put imagePullSecret: <docker credentials> so that private image is pulled.)
+
+### 2. CrashLoopBackOff
+When you see "CrashLoopBackOff," it means that kubelet is trying to run the container, but it keeps failing and crashing. After crashing, Kubernetes tries to restart the container automatically, but if the container keeps failing repeatedly, you end up in a loop of crashes and restarts, thus the term "CrashLoopBackOff."
+
+- **Misconfigurations**    
+Misconfigurations can encompass a wide range of issues, from incorrect environment variables to improper setup of service ports or volumes. These misconfigurations can prevent the application from starting correctly, leading to crashes. For example, if an application expects a certain environment variable to connect to a database and that variable is not set or is incorrect, the application might crash as it cannot establish a database connection.
+
+- **Errors in the Liveness Probes**  
+Liveness probes in Kubernetes are used to check the health of a container. If a liveness probe is incorrectly configured, it might falsely report that the container is unhealthy, causing Kubernetes to kill and restart the container repeatedly. For example, if the liveness probe checks a URL or port that the application does not expose or checks too soon before the application is ready, the container will be repeatedly terminated and restarted.
+```
+livenessProbe:
+         exec:
+          command:
+           - cat
+           - /tmp/healthy
+         initialDelaySeconds: 0
+         periodSeconds: 1
+```
+
+- **The Memory Limits Are Too Low**    
+If the memory limits set for a container are too low, the application might exceed this limit, especially under load, leading to the container being killed by Kubernetes. This can happen repeatedly if the workload does not decrease, causing a cycle of crashing and restarting. Kubernetes uses these limits to ensure that containers do not consume all available resources on a node, which can affect other containers.
+```
+resources:
+         limits:
+          cpu: "25m"
+          memory: "25Mi"
+```
+*Note: Don't increase the CPU or memory. It is not the solution and very bad practice. Instead find pod is using so much resources then expected.*
+- **Wrong Command Line Arguments**    
+Containers might be configured to start with specific command-line arguments. If these arguments are wrong or lead to the application exiting (for example, passing an invalid option to a command), the container will exit immediately. Kubernetes will then attempt to restart it, leading to the CrashLoopBackOff status. An example would be passing a configuration file path that does not exist or is inaccessible.
+
+- **Bugs & Exceptions**    
+Bugs in the application code, such as unhandled exceptions or segmentation faults, can cause the application to crash. For instance, if the application tries to access a null pointer or fails to catch and handle an exception correctly, it might terminate unexpectedly. Kubernetes, detecting the crash, will restart the container, but if the bug is triggered each time the application runs, this leads to a repetitive crash loop.
+
+### 3. What is Node Selector?
+A **Node Selector** in Kubernetes is a simple way to **tell Kubernetes where a pod should run**. You use it **when** you want a particular application to run only on specific nodes, **why** because not all nodes are the same (some may have more CPU, GPU, SSD, or be in a specific zone), and **how** by labeling nodes and then asking Kubernetes to place pods only on nodes with matching labels. In simple terms, you first add a label to a node (for example, `type=high-memory`), and then in the pod or deployment YAML you specify a node selector with the same label. Kubernetes checks all worker nodes, finds the ones with that label, and schedules the pod only on those nodes. If no node matches, the pod will stay pending. So, Node Selector is a basic scheduling rule that gives you control over *which kind of node* runs your application.
+```
+spec:
+    containers:
+    - name: my-app
+    image: my-image
+    nodeSelector:
+    disktype: ssd
+```
+
+### 4. What is Node Affinity?
+**Node Affinity** is a more advanced and flexible way to control **where pods are scheduled** in a Kubernetes cluster. You use it **when** you want stronger or more expressive placement rules than nodeSelector, **why** because real clusters have many nodes with different capabilities and constraints, and **how** by defining rules that tell Kubernetes which nodes a pod *must* run on or *should preferably* run on. Node Affinity works by matching pod rules with node labels and supports two main types:    **requiredDuringSchedulingIgnoredDuringExecution**, which is a hard rule where the pod will only be scheduled on matching nodes,  **preferredDuringSchedulingIgnoredDuringExecution**, which is a soft rule where Kubernetes tries to place the pod on preferred nodes but can fall back to others if needed. In simple terms, Node Affinity lets you precisely guide the scheduler to place pods on the right nodes using mandatory or preferred conditions, giving much more control than nodeSelector.
+```
+spec:
+    containers:
+    - name: my-app
+    image: my-image
+    affinity:
+    nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: disktype
+            operator: In
+            values:
+            - ssd
+```
+
+### 5. What is Taints and Tolerations?
+**Taints and Tolerations** are a Kubernetes mechanism used to **control which pods can run on which nodes**. By default, Kubernetes allows any pod to run on any worker node if resources are available. Taints and tolerations change this behavior by letting **nodes repel pods**, unless a pod explicitly says it can tolerate that node.
+
+- **Taints** are applied to nodes to repel certain pods. They allow nodes to refuse pods unless the pods have a matching toleration.  
+- **Tolerations** are applied to pods and allow them to schedule onto nodes with matching taints. They override the effect of taints.
+
+**Example**  
+Suppose you have a node reserved only for **database workloads**, and you don’t want normal application pods to run on it.  
+**Step 1. Add a taint to the node**  
+```
+kubectl taint nodes node-1 dedicated=database:NoSchedule
+```
+This means:  
+* `dedicated=database` → identifies the purpose of the node  
+* `NoSchedule` → no pod can be scheduled here unless it tolerates this taint
+
+Now the node is saying: *“Only database pods are allowed.”*
+
+**Step 2. Pod without toleration (will NOT be scheduled)**
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+spec:
+  containers:
+  - name: app
+    image: nginx
+```
+This pod has **no toleration**, so Kubernetes will **not** place it on `node-1`.
+
+**Step 3. Pod with toleration (will be scheduled)**  
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-pod
+spec:
+  tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "database"
+    effect: "NoSchedule"
+  containers:
+  - name: mysql
+    image: mysql
+```
+This pod **tolerates the taint**, so Kubernetes allows it to run on `node-1`.
