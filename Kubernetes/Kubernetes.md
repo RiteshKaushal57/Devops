@@ -265,8 +265,10 @@ It’s not used in simple applications but becomes important for large systems.
 A Helm repository is a place where Helm charts are stored and shared. It’s similar to a package repository in Linux (like APT or YUM repos).
 
 - **3. Helm release**  
-A Helm Release is simply an installed and running instance of a Helm Chart inside your Kubernetes cluster.  
-*Helm Chart = packaged blueprint of your application (like a Docker image). Helm Release = actual running installation of that chart (like a Docker container).*
+A Helm Release is simply an installed and running instance of a Helm Chart inside your Kubernetes cluster.   
+
+*Helm Chart = packaged blueprint of your application (like a Docker image).*    
+*Helm Release = actual running installation of that chart (like a Docker container).*
 
 ## 23. What is Stateless and Stateful applications?
 - **Stateless application**  
@@ -314,6 +316,7 @@ resources:
           memory: "25Mi"
 ```
 *Note: Don't increase the CPU or memory. It is not the solution and very bad practice. Instead find pod is using so much resources then expected.*
+
 - **Wrong Command Line Arguments**    
 Containers might be configured to start with specific command-line arguments. If these arguments are wrong or lead to the application exiting (for example, passing an invalid option to a command), the container will exit immediately. Kubernetes will then attempt to restart it, leading to the CrashLoopBackOff status. An example would be passing a configuration file path that does not exist or is inaccessible.
 
@@ -356,7 +359,8 @@ spec:
 - **Tolerations** are applied to pods and allow them to schedule onto nodes with matching taints. They override the effect of taints.
 
 **Example**  
-Suppose you have a node reserved only for **database workloads**, and you don’t want normal application pods to run on it.  
+Suppose you have a node reserved only for **database workloads**, and you don’t want normal application pods to run on it.
+
 **Step 1. Add a taint to the node**  
 ```
 kubectl taint nodes node-1 dedicated=database:NoSchedule
