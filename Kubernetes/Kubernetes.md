@@ -358,8 +358,7 @@ spec:
 - **Taints** are applied to nodes to repel certain pods. They allow nodes to refuse pods unless the pods have a matching toleration.  
 - **Tolerations** are applied to pods and allow them to schedule onto nodes with matching taints. They override the effect of taints.
 
-**Example**  
-Suppose you have a node reserved only for **database workloads**, and you don’t want normal application pods to run on it.
+**Example:** Suppose you have a node reserved only for **database workloads**, and you don’t want normal application pods to run on it.
 
 **Step 1. Add a taint to the node**  
 ```
