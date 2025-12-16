@@ -31,7 +31,9 @@ We have a Git repository where our application’s source code is stored. Let’
 
 We’re using **declarative Jenkins pipelines** because they are easier to write, maintain, and collaborate on. As part of this declarative Jenkins pipeline, we run multiple stages.
 
-The first stage is the **build stage**. Using Maven as our build tool, we build the application and execute unit tests. Unit testing means running small tests that check individual pieces of your application’s code to make sure they work correctly before moving forward. It is done to catch bugs early, so broken code does not get packaged, deployed, or reach users, which saves time and avoids bigger failures later in the pipeline. If the build stage is successful, the next stage is **static code analysis** and **security scanning**. For this we use tool such as SonarQube to ensure code quality and safety.
+The first stage is the **build stage**. Using Maven as our build tool, we build the application and execute unit tests. Unit testing means running small tests that check individual pieces of your application’s code to make sure they work correctly before moving forward. It is done to catch bugs early, so broken code does not get packaged, deployed, or reach users, which saves time and avoids bigger failures later in the pipeline.
+
+If the build stage is successful, the next stage is **static code analysis** and **security scanning**. For this we use tool such as SonarQube to ensure code quality and safety.
 
 After that, we use **SAST and DAST tools** to verify the application’s security — to check whether any new changes introduced by the developer cause security vulnerabilities. If any of these checks fail, Jenkins sends **email or Slack notifications** that we’ve configured.
 
