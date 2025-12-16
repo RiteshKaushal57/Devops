@@ -31,7 +31,7 @@ We have a Git repository where our application’s source code is stored. Let’
 
 We’re using **declarative Jenkins pipelines** because they are easier to write, maintain, and collaborate on. As part of this declarative Jenkins pipeline, we run multiple stages.
 
-The first stage is the **build stage**. Using Maven as our build tool, we build the application and execute unit tests. If the build stage is successful, the next stage is **static code analysis**. This step ensures the application isn’t exposed to any code quality or security issues.
+The first stage is the **build stage**. Using Maven as our build tool, we build the application and execute unit tests. If the build stage is successful, the next stage is **static code analysis** and **security scanning**. For this we use tool such as SonarQube to ensure code quality and safety.
 
 After that, we use **SAST and DAST tools** to verify the application’s security — to check whether any new changes introduced by the developer cause security vulnerabilities. If any of these checks fail, Jenkins sends **email or Slack notifications** that we’ve configured.
 
@@ -47,14 +47,3 @@ Here’s how they work together:
 * Once this Git repository is updated with the new image, **Argo CD** automatically detects the change, pulls the updated manifests, and deploys the new version of the application to the Kubernetes cluster.
 
 This is our **Continuous Delivery process**, and together, this is how we’ve implemented **Continuous Integration and Continuous Delivery (CI/CD)** in our organization.
-
-
-
-
-
-
-
-
-
-I/O: What type of Jenkins file are using.? Declarative Jenkins file.
-I/O: What type of agents are you using in Jenkins? Docker agent 
