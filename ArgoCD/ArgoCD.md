@@ -120,9 +120,7 @@ User pushes a change to Git → Repository server fetches it → Application con
 ### 9. What are ArgoCD Features?
 
 ### 1. Projects
-An Argo CD Project is a logical boundary that defines a set of policies and constraints applied to applications.
-It controls which Git repositories an application can source manifests from, which Kubernetes clusters and namespaces it can deploy to, what cluster-scoped resources it is allowed to manage, and which users or teams have access through RBAC.
-Applications assigned to a project must comply with these rules, making Projects a governance and security mechanism rather than a runtime or execution unit.
+An Argo CD Project is a policy container that controls, which Git repos a team can use, which namespaces they can deploy to, which clusters they can access, what they are NOT allowed to touch and which users or teams have access through RBAC.
 
 ```
 apiVersion: argoproj.io/v1alpha1  # Which Argo CD API rules we’re following
