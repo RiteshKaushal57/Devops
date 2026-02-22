@@ -219,3 +219,25 @@ Some best practices for using Docker in production environments include:
 - Implementing secure network configurations such as using private networks and encrypting container traffic.    
 - Backing up critical data and using volume or storage solutions that provide data persistence and redundancy.    
 - Implementing a comprehensive security strategy, including container vulnerability scanning, access controls, and least privilege principles.   
+
+## How to write Dockerfile?
+
+1. `FROM`: Mention base image here. To decide the right base image, use these signals:   
+
+**a. Runtime requirement:**    
+If app needs Node.js and npm, then the base image must provide exactly that runtime. Like `CMD` runs `npm start` and `npm` belongs to Node.js. So base image must already contain Node.js + npm
+
+**b. Image size and purpose:**   
+i. Is this image used for development or running?   
+ii. Do we need build tools inside this image?   
+
+**c. Compatibility with app:**   
+Node version mentioned in `package.json` or README must match with the base image.
+
+2. `WORKDIR /app`:   Creates an app folder inside container where all the code will be copied and build tools are installed.
+
+3. `COPY package*.json ./`    Copies the file that list the depedencies. So mostly it is package.json.
+4. `RUN npm install`    Reads the copied package.json and install the depedencies.
+5. `COPY . .`    Copy the application code.
+6. `EXPOSE 3000`    Port that container listens on
+7. `CMD ["npm", "start"]`     Command required to run the application (check package.json for this command).
