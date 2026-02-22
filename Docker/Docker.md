@@ -199,7 +199,7 @@ The steps to update a Docker container without losing data are:
 ## 18. You're responsible for securing the Docker containers hosting your organization's sensitive applications. How do you secure Docker containers?
 The way you do this is by using minimal base images (like Alpine or distroless), running containers as non-root users, only exposing necessary ports, limiting runtime permissions with flags like --read-only and --cap-drop, scanning images for vulnerabilities, and keeping images and dependencies updated. You also secure data access through volumes with correct permissions, restrict environment secrets using tools like Docker secrets or external secret managers, and use network segmentation so containers only communicate with services they actually need.
 
-## 19. ### How do you monitor Docker containers?
+## 19. How do you monitor Docker containers?
 There are various ways to monitor Docker containers, including:
 
 - Using Docker's built-in container monitoring commands, such as **docker stats** and **docker container stats**, to view resource usage statistics.  
@@ -208,7 +208,7 @@ There are various ways to monitor Docker containers, including:
 - Using specialized monitoring agents or tools that provide container-level insights and integration with broader monitoring and alerting systems.   
 
 
-## 20. ### What are some best practices for using Docker in production environments?
+## 20. What are some best practices for using Docker in production environments?
 Some best practices for using Docker in production environments include:
 
 - Building and using lightweight container images to improve deployment speed and reduce the attack surface.    
