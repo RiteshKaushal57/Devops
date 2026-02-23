@@ -238,6 +238,8 @@ Node version mentioned in `package.json` or README must match with the base imag
 
 3. `COPY package*.json ./`    Copies the file that list the depedencies. So mostly it is package.json.
 4. `RUN npm install`    Reads the copied package.json and install the depedencies.
-5. `COPY . .`    Copy the application code.
-6. `EXPOSE 3000`    Port that container listens on
+5. `COPY . .`    Copy the application code.    
+6. `RUN npm run build`    React creates files HTML/CSS/JS and save them into folder `/app/build`. So this folder contains complete website.   
+7. `COPY --from=builder /app/build /usr/share/nginx/html`    The final built files are copied from `/app/build` and stored in this Nginx directory to server these files in production.     
+6. `EXPOSE 3000`    Port that container listens on.     
 7. `CMD ["npm", "start"]`     Command required to run the application (check package.json for this command).
