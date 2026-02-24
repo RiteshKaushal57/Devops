@@ -277,7 +277,28 @@ Stateless applications are those that do not store any client or session data on
 - **Stateful application**  
 Stateful applications keep data or session information inside the application or pod, giving each pod a unique identity and state that clients may depend on. These are harder to scale and manage because you cannot replace pods randomly without losing data. Examples include databases like MySQL, PostgreSQL, or messaging systems like Kafka.
 
-## 24. What is headless service?
+## 24. How do you manage Stateful applications?
+Stateful applications in Kubernetes are managed differently from stateless ones because they store data and require stable identity. You use special Kubernetes resources and design patterns to ensure data safety, stable networking, and controlled scaling.
+
+To manage stateful applications, Kubernetes provides a **StatefulSet**, which is similar to a Deployment but designed for apps that need stable pod names and persistent storage. Each pod in a StatefulSet gets a unique and stable identity like `db-0`, `db-1`, `db-2`, and these names do not change even if the pod restarts. This is important for databases and clustered systems.
+
+Stateful applications also require **Persistent Volumes (PV) and Persistent Volume Claims (PVC)** so that data is not lost when a pod restarts or is rescheduled to another node. Kubernetes ensures that each pod keeps its own dedicated storage.
+
+Additionally, a **Headless Service** is usually used with StatefulSets. Unlike a normal service, it does not load balance traffic. Instead, it gives direct DNS access to each pod, which allows databases and clustered systems to communicate properly with specific nodes.
+
+Scaling is done carefully. When you scale up, new pods are created in order (e.g., `db-3` after `db-2`). When scaling down, pods are terminated in reverse order to protect data consistency. Updates also happen one pod at a time to avoid disrupting the entire cluster.
+
+In summary, stateful applications are managed using:
+
+* StatefulSet (for stable identity and ordered deployment)
+* Persistent storage (to retain data)
+* Headless Service (for direct pod access)
+* Careful scaling and rolling updates
+
+This ensures reliability, data safety, and proper cluster behavior for databases and other stateful systems.
+
+
+## 25. What is headless service?
 A Headless Service in Kubernetes is a special type of service that does not get a cluster IP, so it doesn’t load-balance traffic automatically. Instead, it allows clients to directly access the individual pods that match its selector.
 
 This is useful for stateful applications where each pod has a unique identity, like databases (MySQL, PostgreSQL), Kafka, or Cassandra. With a normal Service, traffic is distributed among pods randomly, but with a Headless Service, DNS resolves the service name to the IP addresses of all pods, allowing clients to connect to specific pods directly.
