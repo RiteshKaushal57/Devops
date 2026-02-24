@@ -243,3 +243,17 @@ Node version mentioned in `package.json` or README must match with the base imag
 7. `COPY --from=builder /app/build /usr/share/nginx/html`    The final built files are copied from `/app/build` and stored in this Nginx directory to server these files in production.     
 6. `EXPOSE 3000`    Port that container listens on.     
 7. `CMD ["npm", "start"]`     Command required to run the application (check package.json for this command).
+
+
+Application Question(s):
+
+1. How would you set up Dev, Staging, and Prod on AWS with low cost but proper isolation and reliability?
+2. Describe a CI/CD pipeline you built using GitHub/GitLab for frontend and backend deployment.
+3. If a prod deploy fails, how do you roll back quickly using Docker images stored in ECR?
+4. How do you tag and version Docker images in ECR, and which tagging strategy do you prefer?
+5. How would you configure VPC, Security Groups, IAM, and SSL/TLS for a web app on AWS?
+6. Why use Postgres in Docker for Dev/Staging and RDS for Prod? What risks do you handle?
+7. Why use Nginx as a reverse proxy when ALB exists? When do you use both together?
+8. How do you set up CloudWatch logs, metrics, and alerts to catch issues early?
+9. How do you manage secrets securely and test backup and restore in AWS?
+10. What are your current CTC, expected CTC, notice period, and do you have laptop + internet?
