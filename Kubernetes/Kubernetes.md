@@ -297,6 +297,10 @@ In summary, stateful applications are managed using:
 
 This ensures reliability, data safety, and proper cluster behavior for databases and other stateful systems.
 
+## 25. What is  Persistent Volumes (PV) and Persistent Volume Claims (PVC)?
+A **Persistent Volume (PV)** is a piece of storage in the cluster that has been provisioned either manually by an administrator or dynamically by a storage class. It represents actual storage from systems like AWS EBS, Azure Disk, NFS, or local storage. A PV exists independently of pods, meaning it does not get deleted when a pod is deleted.
+
+**Persistent Volume Claim (PVC)** is a request for storage made by a pod. Instead of directly using a disk, the pod requests storage by specifying requirements like size and access mode. Kubernetes then matches the PVC with an available Persistent Volume and binds them together.
 
 ### 25. What is headless service?
 A Headless Service in Kubernetes is a special type of service that does not get a cluster IP, so it doesn’t load-balance traffic automatically. Instead, it allows clients to directly access the individual pods that match its selector.
@@ -427,4 +431,3 @@ spec:
     image: mysql
 ```
 This pod **tolerates the taint**, so Kubernetes allows it to run on `node-1`.
-
