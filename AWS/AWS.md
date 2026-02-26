@@ -170,5 +170,3 @@ What it does is take away the operational burden of setting up and maintaining y
 Why it’s used is because managing Kubernetes manually is complicated — you’d need to configure networking, handle upgrades, monitor master nodes, and ensure security. EKS simplifies all of that. You just focus on running your applications inside pods and AWS handles the backend cluster management, scalability, and reliability.
 
 How it works is that you define your application as containers (using Docker or any container runtime), deploy them as pods through Kubernetes, and EKS runs them on EC2 instances or Fargate (serverless compute). AWS automatically distributes, scales, and keeps your containers healthy — while integrating with services like IAM (for security), CloudWatch (for monitoring), and Load Balancers (for traffic).
-
-## ECS vs EKS vs Kubernetes
