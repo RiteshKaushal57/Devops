@@ -115,7 +115,7 @@ We use S3 because it’s highly durable (99.999999999%), scalable, and cost-effe
 Data is always safe because AWS follows S3 replication mechanism.
 
 **Versioning**  
-If versioning is disabled, and you tried to upload a file 2nd time with updated content, then the old old file will get uploaded and replaces the old one. But if versioning is enabled, then the different version of same file can be seen in version tab of same file.
+If versioning is disabled, and you tried to upload a file 2nd time with updated content, then the old file will get deleted and replaces the old one. But if versioning is enabled, then the different version of same file can be seen in version tab of same file.
 
 ## What is AWS CLI?
 AWS CLI, or Command Line Interface, is a tool that lets you control and manage AWS services directly from your terminal using simple commands instead of relying on the AWS Console.
