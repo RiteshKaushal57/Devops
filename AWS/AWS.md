@@ -16,7 +16,7 @@ No, I don’t use the root user for daily operations. I create IAM users with sp
 *Some services in AWS have elastic as a prefix which shows this particular service can be scaled down or scaled up.*
 
 ## What is Virtual Private Cloud (VPC)?
-VPC (Virtual Private Cloud) is a logically isolated virtual network in AWS where you can launch and manage your resources like EC2 instances, databases, and load balancers. When a user on the Internet tries to access an application, traffic enters the VPC through the Internet Gateway into the public subnet, where components like a Load Balancer are placed. The Load Balancer then forwards requests to application servers inside the private subnet. Route Tables control traffic flow, Security Groups act as firewalls at the instance level, and NACLs provide subnet-level security.
+A VPC (Virtual Private Cloud) is basically your own private network inside AWS where you can launch servers, databases, and other resources. We use it because in real-world projects we don’t want everything exposed to the internet; we need security, control, and proper network structure. VPC helps us isolate our resources and decide which ones should be public and which should stay private. When we create a VPC, we define an IP address range, divide it into subnets (like public and private), attach an Internet Gateway if we want internet access, and use route tables and security groups to control traffic flow. So in simple terms, VPC gives us a secure and customizable network environment in the cloud, just like setting up a private network inside a company, but on AWS.
 
 ## What is Internet Gateway?
 An Internet Gateway (IGW) in AWS is a network component that enables communication between your VPC and the internet. It allows resources inside your VPC — such as EC2 instances in a public subnet — to send and receive traffic from the internet. Without an Internet Gateway, your instances remain isolated within the VPC and can’t be accessed externally.
@@ -55,7 +55,7 @@ Route Tables make sure traffic flows in the right direction, whether it’s betw
 Security Groups are used to protect our resources by controlling which traffic is allowed to reach them and which traffic can leave them. Without Security Groups, anyone on the internet could attempt to connect to your instances, creating security risks. They work by letting you define rules based on protocols, ports, and source/destination IP addresses. AWS automatically enforces these rules, allowing only the traffic you permit and blocking everything else.
 
 ## What are NACL?
-Network Access Control Lists (NACLs) in AWS are another layer of security for your VPC subnets. They are used to control inbound and outbound traffic at the subnet level. Unlike Security Groups, which are attached to individual instances, NACLs apply to the entire subnet and evaluate rules in order, allowing or denying traffic based on IP addresses, protocols, and ports. They provide an extra layer of defense, especially for controlling traffic entering or leaving a private subnet.
+A NACL (Network Access Control List) is a security layer in AWS that controls traffic at the subnet level inside a VPC. Unlike security groups that work at the instance level, NACL works at the subnet level and acts like a firewall for the entire subnet. It works using rules where we explicitly allow or deny inbound and outbound traffic, and it is stateless, meaning if you allow incoming traffic, you must also separately allow outgoing traffic. In simple terms, NACL is like a security guard at the subnet gate that checks traffic rules before letting data enter or leave.
 
 ## What are Nat Gateways?
 NAT Gateways (Network Address Translation Gateways) allows resources in a private subnet to access the internet without exposing their private IP addresses.
@@ -115,7 +115,7 @@ We use S3 because it’s highly durable (99.999999999%), scalable, and cost-effe
 Data is always safe because AWS follows S3 replication mechanism.
 
 **Versioning**  
-If versioning is disabled, and you tried to upload a file 2nd time with updated content, then the old old file will get uploaded and replaces the old one. But if versioning is enabled, then the different version of same file can be seen in version tab of same file.
+If versioning is disabled, and you tried to upload a file 2nd time with updated content, then the old file will get deleted and replaces the old one. But if versioning is enabled, then the different version of same file can be seen in version tab of same file.
 
 ## What is AWS CLI?
 AWS CLI, or Command Line Interface, is a tool that lets you control and manage AWS services directly from your terminal using simple commands instead of relying on the AWS Console.
