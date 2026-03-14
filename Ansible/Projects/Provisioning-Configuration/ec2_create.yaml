@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Create EC2 instances
+    amazon.aws.ec2_instance:
+     name: "ansible-instance-{{ ansible_loop.index }}"
+     key_name: "AWS"
+     vpc_subnet_id: subnet-09118cfe7d7f702a7
+     instance_type: t2.micro
+     security_groups: default
+     region: ap-south-1
+     aws_access_key: "{{ ec2_access_key }}"
+     aws_secret_key: "{{ ec2_secret_key }}"
+     network:
+       assign_public_ip: true
+     image_id: "{{ item }}"
+    loop:
+     - ami-0f559c3642608c138
+     - ami-019715e0d74f695be
+     - ami-019715e0d74f695be
+    loop_control:
+     extended: yes
+
+
+# The ec2_instance module in Ansible is idempotent, which means it checks the existing state before creating resources. In my playbook, all loop iterations were trying to create instances with the same name. Since Ansible detected that an instance with that configuration already existed, it didn’t create additional ones. The solution is to give each instance a unique name, for example using name: ansible-instance-{{ ansible_loop.index }}.
