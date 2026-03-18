@@ -38,3 +38,17 @@ If traffic suddenly increases 5x, in a well-designed architecture the system sho
 5. Static files such as images, CSS, and JavaScript would be stored in **S3 and delivered through a CDN** to improve performance and reduce load on application servers.   
 6. Finally, I would implement **monitoring, alerting, automated backups, and tested failover procedures** so the team can quickly detect issues and recover the system while keeping the application highly available for users.
 
+### 6. How would you migrate an on-prem application to cloud?
+1. To migrate an on-prem application to the cloud, I would first **understand the existing application setup**, including its architecture, dependencies, data size, and performance needs, because this helps decide the right migration approach.   
+2. Based on that, I would choose a strategy like **lift-and-shift if I need quick migration**, or re-platforming if I want some optimization during the move.   
+3. Then I would **set up the required cloud infrastructure in advance**, such as servers, networking, and storage, so everything is ready before moving the application.   
+4. After that, I would **migrate the data using secure and reliable methods** and deploy the application in a staging environment to test whether everything is working as expected.   
+5. Once I am confident, I would **plan a controlled cutover**, either phased or with minimal downtime, along with a rollback plan in case something goes wrong.   
+6. Finally, after the migration is complete, I would **optimize the application for scalability, security, and cost in the cloud environment** to fully utilize cloud benefits.
+
+### 7. Database is slow. How do you identify the bottleneck? 
+1. If the database becomes slow, I would first **check key performance metrics like CPU usage, memory, disk I/O, and number of connections** to understand if the issue is due to resource limits, because high usage in any of these can directly impact performance.     
+2. Once I have that view, I would **analyze slow query logs to identify long-running or inefficient queries**, since poorly written queries are one of the most common reasons for database slowness.    
+3. Then I would **look deeper into possible causes like missing indexes, table locking, or sudden increase in traffic**, as well as check if the application is making too many unnecessary database calls.   
+4. I would also **evaluate network latency and whether caching is being used effectively**, because frequent direct hits to the database can overload it. Based on what I find, I would **optimize queries, add proper indexes, introduce or improve caching, or scale the database resources**, so that performance improves and the system can handle the load efficiently. 🚀
+
