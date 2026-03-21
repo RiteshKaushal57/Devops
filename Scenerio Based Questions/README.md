@@ -196,4 +196,131 @@ If traffic suddenly increases 5x, in a well-designed architecture the system sho
 
 5. Finally, I would **confirm that the CIDR blocks of both VPCs do not overlap**, because overlapping IP ranges break routing and prevent proper communication. 
 
+### 21. Route tables look correct but traffic still not flowing. What next? 
+1. First, I would **move beyond routing and check security groups**, to ensure the required ports and protocols are allowed, because even with correct routes, blocked SG rules can stop traffic.
+
+2. Then, I would **review NACL rules carefully**, checking both inbound and outbound rules, since NACLs are stateless and can silently block traffic in either direction.
+
+3. Next, I would **verify DNS resolution**, to make sure the service is resolving to the correct IP address, because wrong DNS can look like a connectivity issue.
+
+4. After that, I would **test connectivity from the instance using tools like ping, telnet, or curl**, to identify whether the issue is network-level or application-level.
+
+5. Finally, I would **analyze VPC flow logs and monitoring data**, to see exactly where traffic is being dropped, which helps pinpoint the root cause quickly. 
+
+### 22. Application slows down during peak hours. How will you investigate? 
+1. First, I would **correlate the slowdown with traffic patterns**, to confirm whether the issue happens during peak hours, because that indicates a load-related problem.
+
+2. Then, I would **analyze metrics across all layers like load balancer latency, application response time, CPU, memory, and database performance**, to identify which layer is becoming the bottleneck.
+
+3. Next, I would **check whether Auto Scaling or pod scaling is triggering properly**, and verify if the newly added instances are actually handling traffic, because scaling issues can cause slowdowns during high load.
+
+4. After that, I would **review database performance and slow queries**, to see if the database is unable to handle increased requests and causing delays.
+
+5. Finally, I would **check caching efficiency, connection limits, and third-party services**, because poor caching or slow external dependencies can also degrade performance under heavy traffic. 
+
+### 23. Auto Scaling is configured but instances are not scaling. Why? 
+1. First, I would **check whether scaling policies are correctly configured and attached to the Auto Scaling Group**, because if policies are missing or misconfigured, scaling will not trigger at all.
+
+2. Then, I would **verify the metrics like CPU, memory, or request count**, to see if they are actually crossing the defined thresholds, since scaling only happens when conditions are met.
+
+3. Next, I would **review cooldown periods and min/max limits**, because long cooldowns or restrictive limits can prevent new instances from launching.
+
+4. After that, I would **check permissions and capacity issues**, ensuring the Auto Scaling Group has the right IAM role and there are no problems like instance type unavailability or subnet IP exhaustion.
+
+5. Finally, I would **analyze Auto Scaling activity logs**, to identify any failed scaling attempts or errors, which helps understand exactly why scaling is not happening. 
+
+### 24. CPU is low but response time is high. What might be the issue? 
+1. First, I would **understand that low CPU but high response time usually means the bottleneck is not compute**, so scaling instances may not fix the issue.
+
+2. Then, I would **check database performance**, including latency, slow queries, and connection pool limits, because the application might be waiting on the database.
+
+3. Next, I would **look at network-related factors like load balancer latency, request queues, or delays in external API calls**, since waiting on network responses can increase response time.
+
+4. After that, I would **analyze application-level issues such as thread pool limits, locks, or blocking operations**, because the system might be idle in CPU but waiting internally.
+
+5. I would also **check caching efficiency and I/O operations**, since missing cache or slow disk/network I/O can cause delays.
+
+6. Finally, I would **focus on application profiling instead of just infrastructure scaling**, to identify exactly where time is being spent and fix the root cause. 
+
+### 25. One Availability Zone goes down. What should happen in a properly designed system? 
+1. First, the system should **automatically detect that the Availability Zone is unhealthy**, and the load balancer should stop sending traffic to instances in that AZ, so users are not routed to failed resources.
+
+2. Then, **traffic should be redirected to healthy instances in other AZs**, ensuring the application remains accessible without manual intervention.
+
+3. Next, **Auto Scaling should launch new instances in the remaining healthy AZs**, to replace the lost capacity and handle the load.
+
+4. For the database layer, **Multi-AZ or replicated databases should automatically fail over to a standby instance**, so data access continues with minimal disruption.
+
+5. Finally, users might experience **slight latency or temporary degradation**, but the application should continue running because it is designed across multiple AZs with no single point of failure. 
+
+### 26. Users from another country complain about latency. How do you reduce it? 
+1. First, I would **analyze where the latency is happening by checking request paths and geographic traffic patterns**, because this helps identify whether the delay is due to distance, network, or backend processing.
+
+2. Then, I would **use a CDN to cache content closer to users**, so static and even some dynamic content is served from nearby locations, reducing response time significantly.
+
+3. Next, I would **deploy the application in multiple regions and use geo-based routing**, so users are directed to the nearest region instead of a far-away server.
+
+4. After that, I would **optimize APIs by enabling compression and reducing payload size**, because smaller responses travel faster over the network.
+
+5. Finally, I would **use database read replicas closer to users if needed**, so read requests don’t have to travel long distances, improving overall performance. 
+
+### 27. Design a highly available 3-tier architecture. 
+1. First, I would **design the architecture in three layers: presentation (web), application, and database**, so responsibilities are clearly separated and easier to scale and manage.
+
+2. Then, I would **place a load balancer in front of the web layer across multiple Availability Zones**, so incoming traffic is distributed only to healthy servers and there is no single point of failure.
+
+3. Next, I would **run the application layer in an Auto Scaling setup across multiple AZs**, keeping it stateless so instances can be added or removed easily based on traffic.
+
+4. For the database layer, I would **use a managed database with Multi-AZ replication or clustering**, so if one instance fails, another can take over automatically.
+
+5. I would also **store static content in object storage and serve it via a CDN**, to reduce load on application servers and improve performance.
+
+6. Finally, I would **implement monitoring, alerting, backups, and automated recovery across all layers**, so the system remains highly available and can recover quickly from failures. 
+
+### 28. How would you eliminate single points of failure in a setup? 
+1. First, I would **identify all components that exist as a single instance**, like one server, database, or NAT Gateway, because these are potential single points of failure.
+
+2. Then, I would **replicate or distribute these components across multiple Availability Zones**, so if one fails, others can continue handling the workload.
+
+3. Next, I would **use load balancers to distribute traffic across multiple instances**, ensuring that no single server is responsible for all requests.
+
+4. I would also **enable Auto Scaling to automatically replace failed instances and handle traffic changes**, so the system can recover without manual intervention.
+
+5. For the database layer, I would **use replication and automatic failover mechanisms**, so data remains available even if the primary database fails.
+
+6. Finally, I would **ensure supporting components like DNS, networking, and authentication systems are highly available and monitored**, so the entire system remains resilient without hidden failure points. 
+
+### 29. How would you design a system that can handle sudden traffic spikes? 
+1. First, I would **design the application to be stateless**, so it can scale horizontally by adding more instances without worrying about session data.
+
+2. Then, I would **configure Auto Scaling or container-based scaling to respond quickly to traffic spikes**, using metrics like CPU, memory, or request count, so capacity increases automatically.
+
+3. Next, I would **use a load balancer to distribute traffic evenly across instances**, preventing any single server from getting overloaded.
+
+4. I would also **introduce caching layers (like Redis or CDN)** to handle repeated requests, reducing load on backend services during spikes.
+
+5. After that, I would **implement rate limiting and throttling**, to protect the system from sudden excessive traffic or abuse.
+
+6. For the database, I would **use read replicas or partitioning**, so it can handle increased load without becoming a bottleneck.
+
+7. Finally, I would **set up monitoring and alerting**, so the team is aware of sudden spikes and can take action if needed. 
+
+### 30. How would you design backup and restore strategy for critical data? 
+1. First, I would **classify the data based on its criticality and define RPO and RTO**, because this decides how frequently backups are needed and how quickly data must be restored.
+
+2. Then, I would **automate backups and ensure they are encrypted**, so data is protected and consistently backed up without manual effort.
+
+3. Next, I would **store backups in multiple locations or regions**, to protect against regional failures and ensure data availability.
+
+4. For databases, I would **enable point-in-time recovery along with regular full snapshots**, so data can be restored to a specific moment if needed.
+
+5. After that, I would **regularly test backups by restoring them in a non-production environment**, to make sure they actually work during real incidents.
+
+6. Finally, I would **document the restore process and restrict access to backups with proper auditing**, so recovery is fast, secure, and reliable. 🚀
+
+
+
+
+
+
 
