@@ -318,9 +318,127 @@ If traffic suddenly increases 5x, in a well-designed architecture the system sho
 
 6. Finally, I would **document the restore process and restrict access to backups with proper auditing**, so recovery is fast, secure, and reliable. 🚀
 
+### 31. How would you ensure minimal downtime during maintenance? 
+1. First, I would **use deployment strategies like rolling updates or blue-green deployments**, so maintenance happens gradually and the application remains available to users.
 
+2. Then, I would **use a load balancer with health checks**, to ensure traffic is only sent to healthy instances and not to ones under maintenance.
 
+3. Next, I would **validate new or updated instances before routing traffic to them**, so users are not affected by unstable or partially configured systems.
 
+4. For the database, I would **use managed services with maintenance windows and automatic failover**, so updates happen with minimal impact on availability.
 
+5. I would also **monitor the system closely during maintenance**, to quickly detect and fix any issues that arise.
 
+6. Finally, I would **keep rollback plans ready**, so if anything goes wrong, I can quickly revert to a stable state and minimize downtime. 
+
+### 32. How would you design secure access for internal employees? 
+1. First, I would **use centralized identity management with SSO and MFA**, so all employees authenticate securely using a single system with strong verification.
+
+2. Then, I would **follow least-privilege access by assigning roles instead of individual permissions**, so users only get access to what they actually need.
+
+3. Next, I would **keep sensitive systems in private networks**, so they are not directly exposed to the internet and reduce the attack surface.
+
+4. To access these systems, I would **use secure methods like VPN or identity-aware proxies**, ensuring only authorized employees can connect safely.
+
+5. After that, I would **enable logging and auditing of all access**, so any activity can be tracked and monitored for security purposes.
+
+6. Finally, I would **regularly review and update permissions**, to remove unnecessary access and prevent privilege creep over time. 
+
+### 33. A developer accidentally made an S3 bucket public. What will you do? 
+1. First, I would **immediately block public access at the bucket level**, to stop any further exposure of data and secure the system quickly.
+
+2. Then, I would **review and fix bucket policies and ACLs**, to understand what was changed and revert it back to a secure configuration.
+
+3. Next, I would **analyze access logs to assess the impact**, checking if any sensitive data was accessed or downloaded during the exposure.
+
+4. After that, I would **rotate any exposed credentials and invalidate cached data if needed**, to prevent misuse of potentially compromised information.
+
+5. Finally, I would **implement preventive measures like SCPs, automated checks, and alerts**, so similar incidents can be avoided in the future. 
+
+### 34. How would you implement least privilege access across teams? 
+1. First, I would **understand each team’s responsibilities and map the exact permissions they need**, so access is given only based on actual work requirements.
+
+2. Then, I would **use IAM roles instead of assigning permissions directly to users**, so access is managed centrally and consistently across teams.
+
+3. Next, I would **create fine-grained policies with specific services, actions, and resources**, avoiding wildcards or broad permissions to reduce security risks.
+
+4. I would also **use permission boundaries where teams need flexibility**, so they can operate within controlled limits without getting full access.
+
+5. For higher privileges, I would **provide temporary access instead of permanent permissions**, so sensitive access is limited in time and scope.
+
+6. Finally, I would **perform regular audits and access reviews**, to remove unused permissions and prevent privilege creep over time. 
+
+### 35. An EC2 was compromised. What immediate steps will you take? 
+1. First, I would **isolate the EC2 instance immediately**, by removing it from the load balancer and restricting its network access, so the attack cannot spread to other systems.
+
+2. Then, I would **preserve evidence by taking snapshots of the instance and attached volumes**, so forensic analysis can be done later to understand what happened.
+
+3. Next, I would **rotate all credentials and revoke any compromised keys**, including IAM roles or access keys, to prevent further unauthorized access.
+
+4. After that, I would **analyze logs and monitoring data**, to identify how the compromise occurred and check if any other systems are affected.
+
+5. Finally, I would **terminate and rebuild the instance from a trusted, clean image**, instead of trying to fix the compromised one, to ensure the environment is fully secure again. 
+
+### 36. How would you securely allow application to access database credentials? 
+1. First, I would **store database credentials in a managed secrets service instead of hardcoding them**, so sensitive data is not exposed in code or configuration files.
+
+2. Then, I would **allow the application to access secrets using IAM roles with least privilege**, so it can securely fetch credentials at runtime without storing them locally.
+
+3. Next, I would **ensure credentials are encrypted both at rest and in transit**, to protect them from unauthorized access during storage and communication.
+
+4. I would also **enable automatic credential rotation**, so passwords are updated regularly without manual intervention, reducing the risk of compromise.
+
+5. After that, I would **design the application to handle credential rotation smoothly**, so it can continue working without downtime when credentials change.
+
+6. Finally, I would **enable logging and monitoring for secret access**, to detect any unusual or unauthorized usage. 
+
+### 37. How would you audit who accessed sensitive resources? 
+1. First, I would **enable centralized logging and auditing across all services and accounts**, so every access event is captured in one place.
+
+2. Then, I would **use audit logs to track who accessed which resource, when, and from where**, because this gives complete visibility into user activity.
+
+3. Next, I would **store these logs in a secure and immutable location**, so they cannot be modified or deleted, ensuring reliable auditing.
+
+4. After that, I would **use monitoring and querying tools to analyze access patterns**, to identify normal behavior and detect anomalies.
+
+5. I would also **set up alerts for suspicious or unauthorized access attempts**, so the team can respond quickly to potential security issues.
+
+6. Finally, I would **perform regular reviews and generate audit reports**, to meet compliance requirements and maintain strong security governance. 
+
+### 38. Database storage is full. What are your options? 
+1. First, I would **assess how critical the situation is**, checking whether the database is still writable or has become read-only, because that decides how urgent the fix needs to be.
+
+2. Then, I would **take immediate actions like increasing storage size or freeing up space**, by deleting unused data, logs, or temporary files to quickly restore normal operation.
+
+3. Next, I would **archive old or infrequently used data to cheaper storage**, so the database only holds active data and performance improves.
+
+4. After that, I would **optimize data usage by cleaning logs, improving indexing, or using partitioning**, to manage storage more efficiently.
+
+5. I would also **evaluate scaling options**, either vertically (bigger instance) or horizontally (sharding or read replicas), depending on the workload.
+
+6. Finally, I would **set up monitoring and alerts on storage usage**, so the issue is detected early and does not happen again. 
+
+### 39. How would you migrate data from one region to another safely? 
+1. First, I would **assess data size, consistency requirements, and acceptable downtime**, because this helps decide the right migration approach and tools.
+
+2. Then, I would **transfer data using secure and encrypted methods**, ensuring data is protected during migration and not exposed.
+
+3. Next, I would **validate data integrity after transfer**, to confirm that no data is lost or corrupted before moving forward.
+
+4. For databases, I would **use replication or snapshot-based migration**, so data stays in sync between source and target regions until the final switch.
+
+5. After that, I would **test the migrated data in the target region**, to ensure applications work correctly with the new setup.
+
+6. Finally, I would **perform a controlled cutover and monitor closely**, so any issues can be detected and resolved quickly during the transition. 
+
+### 40. How would you handle backup failure alerts? 
+1. First, I would **verify whether the alert is a real failure or just a temporary issue**, because sometimes backups fail due to transient network or service glitches.
+
+2. Then, I would **identify which backup failed and check the reason**, such as permission issues, storage limits, or service errors, to understand the root cause.
+
+3. Next, I would **immediately rerun the backup or trigger a manual backup**, so data protection is restored as quickly as possible.
+
+4. After that, I would **fix the underlying issue causing the failure**, and test both backup and restore to ensure everything is working correctly.
+
+5. Finally, I would **review and improve alerting, monitoring, and redundancy**, so future backup failures are detected early and handled proactively. 
 
