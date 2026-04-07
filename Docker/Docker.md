@@ -145,7 +145,7 @@ services:
 Inside docker-compose, all containers are in the same internal network. They communicate using service name + internal port, NOT the exposed port.  Even if we don’t write ports at all, other containers can still access it because Docker auto-connects containers using service name.  
 Note: If we dont want the contaierns to talk, just seperate the network.-
 
-## 12. You're in charge of maintaining Docker environments in your company and You've noticed many stopped containers and unused networks taking up space. Describe how you would clean up these resources effectively to optimize the Docker environment?
+## 12. You're in charge of maintaining Docker environments in your company and you've noticed many stopped containers and unused networks taking up space. Describe how you would clean up these resources effectively to optimize the Docker environment?
 The `docker prune` command is used to clean up unused Docker resources, such as containers, volumes, networks, and images. It helps reclaim disk space and tidy up the Docker environment by removing objects that are not in use.
 
 There are different types of `docker prune` commands:
@@ -156,8 +156,6 @@ There are different types of `docker prune` commands:
 - `docker image prune`: Removes unused images.
 
 Running **`docker system prune`** combines these functionalities into one command, ensuring that Docker removes any resources not associated with a running container.
-
-- *Note: The **docker system prune** command should be used with caution as it permanently deletes unused resources. Any data associated with them will be lost.*
 
 
 ## 13. A company wants to create thousands of Containers. Is there a limit on how many containers you can run in Docker?
@@ -220,7 +218,7 @@ Some best practices for using Docker in production environments include:
 - Backing up critical data and using volume or storage solutions that provide data persistence and redundancy.    
 - Implementing a comprehensive security strategy, including container vulnerability scanning, access controls, and least privilege principles.   
 
-## How to write Dockerfile?
+## 21. How to write Dockerfile?
 
 1. `FROM`: Mention base image here. To decide the right base image, use these signals:   
 
@@ -244,16 +242,42 @@ Node version mentioned in `package.json` or README must match with the base imag
 6. `EXPOSE 3000`    Port that container listens on.     
 7. `CMD ["npm", "start"]`     Command required to run the application (check package.json for this command).
 
+## 22. What will you do if container keeps restarting?
+If a container is restarting repeatedly, it usually means the main process inside the container is failing. Docker containers are designed to run a single main process, and if that process exits, the container stops or restarts depending on the restart policy. The first step is to check logs using docker logs to understand why the application is crashing. Then I inspect the container using docker inspect to check configuration, environment variables, and commands. Common causes include incorrect commands, missing dependencies, or configuration issues. Fixing the root cause inside the image or runtime config resolves the issue.
 
-Application Question(s):
+## 23. How Docker fits in CI/CD pipeline?
+In a CI/CD pipeline, Docker is used to ensure consistency from development to production. When code is pushed, a pipeline builds a Docker image using a Dockerfile, runs tests inside a container, and then pushes the image to a registry. The reason this is powerful is that the same image is deployed across environments, eliminating inconsistencies. In production, orchestration tools like Kubernetes use these images to run scalable and reliable services.
 
-1. How would you set up Dev, Staging, and Prod on AWS with low cost but proper isolation and reliability?
-2. Describe a CI/CD pipeline you built using GitHub/GitLab for frontend and backend deployment.
-3. If a prod deploy fails, how do you roll back quickly using Docker images stored in ECR?
-4. How do you tag and version Docker images in ECR, and which tagging strategy do you prefer?
-5. How would you configure VPC, Security Groups, IAM, and SSL/TLS for a web app on AWS?
-6. Why use Postgres in Docker for Dev/Staging and RDS for Prod? What risks do you handle?
-7. Why use Nginx as a reverse proxy when ALB exists? When do you use both together?
-8. How do you set up CloudWatch logs, metrics, and alerts to catch issues early?
-9. How do you manage secrets securely and test backup and restore in AWS?
-10. What are your current CTC, expected CTC, notice period, and do you have laptop + internet?
+## 23. A container is continuously restarting in production. How would you troubleshoot this issue?
+A Docker container is running but the application inside is not accessible. What steps would you take to debug the issue?
+A container is consuming very high CPU usage. How would you identify the root cause and resolve it?
+Disk space on the Docker host is suddenly full. How would you identify what is consuming space and fix it?
+A container fails to start due to a port conflict. How would you troubleshoot and resolve this issue?
+Docker image builds are taking too long in CI/CD pipelines. How would you optimize the build time?
+After deploying a new container version, the application stops working. How would you roll back to the previous version?
+Containers are not able to communicate with each other across hosts. What could be the possible reasons?
+A Docker container cannot connect to an external database. How would you debug the network connectivity issue?
+A container runs fine locally but fails in production. What could be the possible reasons and troubleshooting steps?
+Logs are not visible for a running container. How would you debug logging issues in Docker?
+A Docker container is running out of memory frequently. How would you troubleshoot and fix this issue?
+Sensitive credentials are exposed inside a Docker image. How would you prevent this issue?
+Docker containers are running as root in production. What risks does this create and how would you fix it?
+After system reboot, Docker containers are not starting automatically. How would you resolve this issue?
+Docker daemon fails to start on the host. How would you troubleshoot this issue?
+Docker registry authentication is failing during image pull. How would you debug it?
+A containerized application becomes slow over time. What possible causes would you investigate?
+Docker image size becomes too large and slows down deployments. How would you optimize it?
+Container logs are growing very large and consuming disk space. How would you manage log rotation?
+A container needs persistent storage but data is lost after restart. How would you fix this issue?
+Multiple containers need to share the same data volume. How would you configure this?
+Docker network is not working after host restart. How would you troubleshoot it?
+A container health check keeps failing even though the app is running. What could be the issue?
+Security vulnerabilities are detected in Docker images. How would you fix and prevent this?
+A container fails due to missing dependencies even though Dockerfile seems correct. How would you debug this?
+
+
+
+
+
+
+

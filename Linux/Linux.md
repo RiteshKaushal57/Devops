@@ -178,3 +178,22 @@ Permissions are represented as:
 ```
 ls -l filename
 ```
+
+## How do you troubleshoot a slow Linux server?
+When a Linux server becomes slow, the goal is to identify which resource is the bottleneck—CPU, memory, disk, or network—because performance issues always tie back to resource contention.   
+1. First, I check CPU usage using `top` or `htop` to see if any process is consuming excessive resources.   
+2. If CPU is fine, I check memory using `free -m` to detect memory exhaustion or swapping, which can severely degrade performance.    
+3. Then I check disk usage with `df -h` and disk activity using tools like `iostat` because high disk I/O can slow down applications.   
+4. After that, I inspect running processes using `ps aux` to identify abnormal behavior.   
+5. Finally check logs in `/var/log` to correlate system activity with errors.   
+This structured approach ensures that I can quickly narrow down the issue and take corrective action, such as killing a process, freeing disk space, or restarting services.
+
+## Application is not accessible — how do you debug?
+If an application is not accessible, the goal is to trace the request path from the user to the application and identify where it is breaking.   
+1. First, I check whether the application service is running using `systemctl status` because if the service itself is down, nothing else matters.    
+2. If it is running, I verify whether the application is listening on the expected port using `ss -tulnp` or `netstat`.    
+3. Then I test connectivity using `curl` or `ping` to see if the service responds locally.    
+4. If that works, I check firewall rules or security groups that might be blocking external access.    
+5. Finally, I inspect logs to understand errors at the application level.    
+This layered debugging ensures I don’t miss any component in the request flow.
+

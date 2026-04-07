@@ -431,3 +431,34 @@ spec:
     image: mysql
 ```
 This pod **tolerates the taint**, so Kubernetes allows it to run on `node-1`.
+
+A Pod is stuck in Pending state — how do you troubleshoot it?
+A Pod is in CrashLoopBackOff — what steps will you take to debug?
+A Pod is running but the application is not accessible — how will you investigate?
+Pods are not getting scheduled on any node — what could be the reasons?
+A node shows NotReady status — how do you troubleshoot it?
+Application is not accessible through Service — what checks will you perform?
+Service is working but Ingress is not routing traffic — how do you debug?
+DNS resolution is failing inside Pods — how will you fix it?
+Pods cannot communicate with each other — what networking checks will you perform?
+External users cannot access the application — how will you troubleshoot?
+A Deployment rollout failed — how do you rollback safely?
+New Pods are not getting updated image after deployment — what could be wrong?
+Rolling update caused downtime — how do you prevent it?
+Multiple Pods are restarting frequently — how will you find the root cause?
+Health probes are failing — how do you debug liveness/readiness issues?
+High CPU usage observed in cluster — how do you identify the root cause?
+Memory usage is continuously increasing in Pods — what could be the issue?
+Cluster autoscaling is not working — how do you debug it?
+Horizontal Pod Autoscaler (HPA) is not scaling Pods — what could be wrong?
+Resource limits are not being enforced — how do you troubleshoot?
+Persistent Volume (PV) is not getting attached to Pod — how do you debug?
+Data is lost after Pod restart — what could be the reason?
+Storage mounting errors occurring in Pods — how do you fix them?
+Volume permissions issue inside container — how do you resolve it?
+StatefulSet Pods are not coming up in order — how do you troubleshoot?
+Kubernetes secrets are not accessible inside Pod — what could be wrong?
+RBAC permission errors occurring — how do you debug access issues?
+Cluster API server is slow or not responding — what steps will you take?
+etcd storage is full — how do you handle this situation?
+How do you troubleshoot a complete application outage in a Kubernetes cluster?
