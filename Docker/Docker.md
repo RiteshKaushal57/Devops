@@ -243,7 +243,17 @@ Node version mentioned in `package.json` or README must match with the base imag
 7. `CMD ["npm", "start"]`     Command required to run the application (check package.json for this command).
 
 ## 22. What will you do if container keeps restarting?
-If a container is restarting repeatedly, it usually means the main process inside the container is failing. Docker containers are designed to run a single main process, and if that process exits, the container stops or restarts depending on the restart policy. The first step is to check logs using docker logs to understand why the application is crashing. Then I inspect the container using docker inspect to check configuration, environment variables, and commands. Common causes include incorrect commands, missing dependencies, or configuration issues. Fixing the root cause inside the image or runtime config resolves the issue.
+1. First, I would **check the container status and restart reason**, because states like CrashLoopBackOff or exit codes indicate why it is restarting.
+
+2. Then, I would **inspect container logs**, to identify errors such as application crashes, missing dependencies, or configuration issues.
+
+3. Next, I would **verify environment variables, secrets, and configuration**, since incorrect setup is a common cause of continuous restarts.
+
+4. After that, I would **check resource limits like CPU and memory**, to see if the container is getting killed due to OOM or insufficient resources.
+
+5. I would also **review health checks (liveness/readiness probes)**, because misconfigured probes can cause unnecessary restarts even if the app is running.
+
+6. Finally, I would **reproduce the issue in a staging or test environment**, so I can safely debug and fix the root cause before applying changes in production. 
 
 ## 23. A container is continuously restarting in production. How would you troubleshoot this issue?
 1. First, I would **check the container/pod status and restart reason**, because states like CrashLoopBackOff or exit codes give the first hint about why it is restarting.
