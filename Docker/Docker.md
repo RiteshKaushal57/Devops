@@ -269,18 +269,18 @@ Node version mentioned in `package.json` or README must match with the base imag
 6. Finally, if needed, I would **reproduce the issue in a staging environment**, so I can debug safely and fix the root cause before applying changes in production. 
 
 ## 24. A Docker container is running but the application inside is not accessible. What steps would you take to debug the issue?
-1. First, I would **verify that the container is actually running and mapped to the correct port**, because even if the container is up, the application won’t be accessible if ports are not exposed or mapped properly.
+1. First, I would **check container logs using `docker logs <container>`**, to confirm whether the application started properly or failed silently, because a running container doesn’t guarantee the app inside is healthy.
 
-2. Then, I would **check if the application inside the container is running and listening on the expected port**, since sometimes the container runs but the app inside has crashed or is not started.
+2. Then, I would **verify container status and port mapping using `docker ps`**, to ensure the correct port is exposed and mapped (e.g., `0.0.0.0:3000->3000`), since wrong mapping can block access.
 
-3. Next, I would **inspect container logs**, to identify errors related to application startup, configuration, or runtime issues.
+3. Next, I would **exec into the container (`docker exec -it <container> /bin/sh`) and check if the application process is running**, because the container might be up but the app inside may have crashed.
 
-4. After that, I would **check Docker port mapping and networking**, to ensure the host port is correctly mapped to the container port and there are no conflicts.
+4. After that, I would **check if the application is listening on the correct port using tools like `netstat` or `ss`**, to ensure it is actually accepting connections.
 
-5. I would also **verify firewall or security group rules**, to confirm that incoming traffic to that port is allowed.
+5. I would also **verify that the application is bound to `0.0.0.0` and not `localhost`**, because binding to localhost makes it inaccessible from outside the container.
 
-6. Finally, I would **exec into the container and test locally (like curl localhost)**, to isolate whether the issue is inside the container or related to external access. 
-
+6. Finally, I would **check firewall rules, Docker network settings, and overall configuration**, to ensure there is no external restriction or mismatch preventing access.
+7. 
 ## 25. A container is consuming very high CPU usage. How would you identify the root cause and resolve it?
 1. First, I would **confirm the CPU spike using monitoring tools**, to check if it is temporary or sustained and identify when it started.
 
