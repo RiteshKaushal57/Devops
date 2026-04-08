@@ -259,30 +259,30 @@ If a container is restarting repeatedly, it usually means the main process insid
 6. Finally, if needed, I would **reproduce the issue in a staging environment**, so I can debug safely and fix the root cause before applying changes in production. 
 
 ## 24. A Docker container is running but the application inside is not accessible. What steps would you take to debug the issue?
-1. First, I would **verify that the container is actually running and mapped to the correct port**, because even if the container is up, the application won’t be accessible if ports are not exposed or mapped properly.
+1. First, I would **check container logs using `docker logs <container>`**, to confirm whether the application started properly or failed silently, because a running container doesn’t guarantee the app inside is healthy.
 
-2. Then, I would **check if the application inside the container is running and listening on the expected port**, since sometimes the container runs but the app inside has crashed or is not started.
+2. Then, I would **verify container status and port mapping using `docker ps`**, to ensure the correct port is exposed and mapped (e.g., `0.0.0.0:3000->3000`), since wrong mapping can block access.
 
-3. Next, I would **inspect container logs**, to identify errors related to application startup, configuration, or runtime issues.
+3. Next, I would **exec into the container (`docker exec -it <container> /bin/sh`) and check if the application process is running**, because the container might be up but the app inside may have crashed.
 
-4. After that, I would **check Docker port mapping and networking**, to ensure the host port is correctly mapped to the container port and there are no conflicts.
+4. After that, I would **check if the application is listening on the correct port using tools like `netstat` or `ss`**, to ensure it is actually accepting connections.
 
-5. I would also **verify firewall or security group rules**, to confirm that incoming traffic to that port is allowed.
+5. I would also **verify that the application is bound to `0.0.0.0` and not `localhost`**, because binding to localhost makes it inaccessible from outside the container.
 
-6. Finally, I would **exec into the container and test locally (like curl localhost)**, to isolate whether the issue is inside the container or related to external access. 
+6. Finally, I would **check firewall rules, Docker network settings, and overall configuration**, to ensure there is no external restriction or mismatch preventing access. 
 
 ## 25. A container is consuming very high CPU usage. How would you identify the root cause and resolve it?
-1. First, I would **confirm the CPU spike using monitoring tools**, to check if it is temporary or sustained and identify when it started.
+1. First, I would **confirm the CPU spike using tools like `docker stats`, `kubectl top pods`, or `top`**, to check if it is temporary or sustained and identify when it started.
 
-2. Then, I would **identify which container and process is consuming high CPU**, using tools like `docker stats`, `kubectl top`, or inside the container with `top/ps`, to pinpoint the exact source.
+2. Then, I would **identify which container and process is consuming high CPU using `docker stats`, `docker exec -it <container> top`, or `ps aux --sort=-%cpu`**, to pinpoint the exact source of the issue.
 
-3. Next, I would **check application logs and recent changes**, because high CPU is often caused by bugs, infinite loops, or inefficient code paths introduced recently.
+3. Next, I would **check application logs using `docker logs <container>` or `kubectl logs <pod>`**, because high CPU is often caused by bugs, infinite loops, or inefficient code paths.
 
-4. After that, I would **analyze workload patterns**, to see if the spike is due to increased traffic or background jobs, which may require scaling instead of fixing code.
+4. After that, I would **analyze workload and traffic patterns using `kubectl describe pod <pod>` or monitoring tools**, to determine if the spike is due to increased load instead of a code issue.
 
-5. I would also **check resource limits and throttling**, to ensure the container is not misconfigured or competing for resources.
+5. I would also **check resource limits and throttling using `docker inspect <container>` or `kubectl describe pod <pod>`**, to ensure CPU limits are not misconfigured or causing throttling.
 
-6. Finally, based on findings, I would **optimize the application, fix inefficient logic, or scale the system**, and add proper monitoring and alerts to prevent similar issues in the future. 
+6. Finally, based on findings, I would **optimize the application, fix inefficient logic, or scale the system using autoscaling (`kubectl autoscale`)**, and add monitoring/alerts to prevent future issues.  
 
 ## 26. Disk space on the Docker host is suddenly full. How would you identify what is consuming space and fix it?
 1. First, I would **confirm disk usage on the host using commands like `df -h`**, to see which partition is full and how critical the situation is.
