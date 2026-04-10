@@ -313,6 +313,394 @@ A **Liveness Probe** is used to determine whether a container is still running p
 
 A **Readiness Probe**, on the other hand, checks whether the application is ready to receive traffic. If the readiness probe fails, Kubernetes temporarily removes the pod from the service endpoints, meaning no traffic is sent to it until it becomes ready again. Unlike liveness probes, readiness probes do not restart the container.
 
+## 27. A Pod is stuck in Pending state — how do you troubleshoot it?
+1. First, I would **describe the pod using `kubectl describe pod <pod_name>`**, to check events and see why it is stuck in Pending, because Kubernetes usually shows scheduling issues clearly.
+
+2. Then, I would **check node availability and resources using `kubectl get nodes` and `kubectl describe nodes`**, to verify if there are enough CPU/memory resources to schedule the pod.
+
+3. Next, I would **look for resource requests/limits issues in the pod spec using `kubectl describe pod <pod_name>`**, because high resource requests can prevent scheduling.
+
+4. After that, I would **check for node selectors, taints, and tolerations using `kubectl describe pod <pod_name>`**, since mismatched labels or taints can block scheduling.
+
+5. I would also **verify if Persistent Volume Claims are pending using `kubectl get pvc`**, because unbound storage can keep the pod in Pending state.
+
+6. Finally, I would **check scheduler logs or events and fix the root cause**, such as adding more nodes, adjusting resources, or correcting configuration. 
+
+
+## 28. A Pod is in CrashLoopBackOff — what steps will you take to debug?
+1. First, I would **describe the pod using `kubectl describe pod <pod_name>`**, to check events and see the restart reason (exit codes, probe failures), because Kubernetes usually shows why the container is crashing.
+
+2. Then, I would **check container logs using `kubectl logs <pod_name>` or `kubectl logs <pod_name> --previous`**, to identify application errors from the current or last failed run.
+
+3. Next, I would **verify configuration like environment variables, secrets, and config maps using `kubectl describe pod <pod_name>`**, because wrong or missing config is a common cause of crashes.
+
+4. After that, I would **exec into the pod using `kubectl exec -it <pod_name> -- /bin/sh`**, to inspect the environment and validate files, dependencies, or runtime behavior.
+
+5. I would also **check resource limits and OOM issues using `kubectl describe pod <pod_name>`**, to see if the container is being killed due to memory/CPU constraints.
+
+6. Finally, I would **review liveness/readiness probes and recent deployments using `kubectl rollout history deployment/<name>`**, to ensure probes are correct and recent changes didn’t introduce the issue. 
+
+## 29. A Pod is running but the application is not accessible — how will you investigate?
+1. First, I would **check pod status and logs using `kubectl get pods` and `kubectl logs <pod_name>`**, to confirm the application started correctly and there are no runtime errors.
+
+2. Then, I would **exec into the pod using `kubectl exec -it <pod_name> -- /bin/sh` and test locally with `curl localhost:<port>`**, to verify if the app is running and reachable inside the pod.
+
+3. Next, I would **check if the application is listening on the correct port using `netstat -tulnp` or `ss -tulnp` inside the pod**, because if it’s not listening, external access won’t work.
+
+4. After that, I would **verify the Service configuration using `kubectl get svc` and `kubectl describe svc <service_name>`**, to ensure correct port, targetPort, and selector are defined.
+
+5. I would also **check endpoints using `kubectl get endpoints <service_name>`**, to confirm the service is correctly mapped to the pod IPs.
+
+6. Finally, I would **test connectivity via service or ingress using `kubectl port-forward <pod_name> <local_port>:<container_port>` or check ingress rules**, to ensure there are no networking or routing issues. 
+
+## 30. Pods are not getting scheduled on any node — what could be the reasons?
+1. First, I would **describe the pod using `kubectl describe pod <pod_name>`**, to check scheduling events and errors (like “0/3 nodes available”), because Kubernetes clearly states why scheduling failed.
+
+2. Then, I would **check node status using `kubectl get nodes` and `kubectl describe nodes`**, to verify nodes are Ready and have sufficient CPU/memory resources.
+
+3. Next, I would **review resource requests and limits in the pod using `kubectl describe pod <pod_name>`**, because high requests can prevent scheduling if nodes don’t have enough capacity.
+
+4. After that, I would **check node selectors, affinity/anti-affinity rules, and labels using `kubectl describe pod <pod_name>` and `kubectl get nodes --show-labels`**, since mismatches can block scheduling.
+
+5. I would also **inspect taints and tolerations using `kubectl describe nodes` and `kubectl describe pod <pod_name>`**, because pods without proper tolerations cannot be scheduled on tainted nodes.
+
+6. Finally, I would **check Persistent Volume Claims using `kubectl get pvc`**, since unbound PVCs or storage issues can keep pods unscheduled. 
+
+## 31. A node shows NotReady status — how do you troubleshoot it?
+1. First, I would **check node status and details using `kubectl get nodes` and `kubectl describe node <node_name>`**, to see conditions (MemoryPressure, DiskPressure, NetworkUnavailable) and recent events.
+
+2. Then, I would **log into the node and check kubelet status using `systemctl status kubelet`**, because kubelet issues are a common reason for a node becoming NotReady.
+
+3. Next, I would **review kubelet logs using `journalctl -u kubelet -f`**, to identify errors related to networking, certificates, or resource issues.
+
+4. After that, I would **check container runtime status (Docker/containerd) using `systemctl status docker` or `systemctl status containerd`**, since kubelet depends on the runtime to manage pods.
+
+5. I would also **verify node resources like CPU, memory, and disk using `top`, `free -m`, and `df -h`**, because resource exhaustion can make the node unhealthy.
+
+6. Finally, I would **check networking (CNI) and connectivity to the control plane using tools like `ping` or `curl`**, and fix the issue or restart services (`systemctl restart kubelet`) to bring the node back to Ready. 
+
+## 32. Application is not accessible through Service — what checks will you perform?
+1. First, I would **check if the pods are running and healthy using `kubectl get pods` and `kubectl logs <pod_name>`**, because if pods are not working, the Service won’t have anything to route traffic to.
+
+2. Then, I would **verify the Service configuration using `kubectl get svc` and `kubectl describe svc <service_name>`**, to ensure correct `port`, `targetPort`, and selector are defined.
+
+3. Next, I would **check endpoints using `kubectl get endpoints <service_name>`**, because if endpoints are empty, the Service is not linked to any pods.
+
+4. After that, I would **validate label matching between pods and Service using `kubectl get pods --show-labels`**, since mismatched labels prevent the Service from selecting pods.
+
+5. I would also **test connectivity from inside the cluster using `kubectl exec -it <pod_name> -- curl <service_name>:<port>`**, to confirm internal networking is working.
+
+6. Finally, I would **check kube-proxy, network policies, or firewall rules using `kubectl get networkpolicy`**, to ensure nothing is blocking traffic between Service and pods. 
+
+## 33. Service is working but Ingress is not routing traffic — how do you debug?
+1. First, I would **check Ingress resource configuration using `kubectl get ingress` and `kubectl describe ingress <ingress_name>`**, to verify host, path, and backend service mapping are correct.
+
+2. Then, I would **verify that the Ingress controller is running using `kubectl get pods -n <ingress-namespace>`**, because without a controller (like NGINX), Ingress won’t work.
+
+3. Next, I would **check if the service behind Ingress is working using `kubectl get svc` and `kubectl get endpoints <service_name>`**, since Ingress depends on a healthy service.
+
+4. After that, I would **inspect Ingress controller logs using `kubectl logs <ingress-controller-pod> -n <namespace>`**, to identify routing errors or misconfigurations.
+
+5. I would also **verify DNS and host mapping using `nslookup <domain>` or `curl -H "Host: <domain>" <ingress_ip>`**, because incorrect DNS can prevent traffic from reaching Ingress.
+
+6. Finally, I would **check TLS configuration, annotations, and path rules**, ensuring no mismatch in paths, certificates, or rewrite rules is blocking routing. 
+
+## 34. DNS resolution is failing inside Pods — how will you fix it?
+1. First, I would **verify DNS resolution inside the pod using `kubectl exec -it <pod_name> -- nslookup kubernetes.default` or `dig kubernetes.default`**, to confirm whether DNS is actually failing.
+
+2. Then, I would **check CoreDNS pods using `kubectl get pods -n kube-system -l k8s-app=kube-dns`**, because DNS in Kubernetes is handled by CoreDNS.
+
+3. Next, I would **inspect CoreDNS logs using `kubectl logs -n kube-system <coredns-pod>`**, to identify errors like upstream DNS issues or configuration problems.
+
+4. After that, I would **verify the CoreDNS service using `kubectl get svc -n kube-system`**, ensuring the ClusterIP is correct and accessible.
+
+5. I would also **check `/etc/resolv.conf` inside the pod using `kubectl exec -it <pod_name> -- cat /etc/resolv.conf`**, to confirm it is pointing to the correct DNS service IP.
+
+6. Finally, I would **restart CoreDNS or fix its configuration (`kubectl rollout restart deployment coredns -n kube-system`)**, and verify networking (CNI) if DNS traffic is being blocked. 
+
+
+## 35. Pods cannot communicate with each other — what networking checks will you perform?
+1. First, I would **verify pod-to-pod connectivity using `kubectl exec -it <pod_name> -- ping <other_pod_ip>` or `curl <service_name>`**, to confirm whether communication is actually failing at network level.
+
+2. Then, I would **check pod IPs and node distribution using `kubectl get pods -o wide`**, because cross-node communication depends on proper CNI networking.
+
+3. Next, I would **verify Services and endpoints using `kubectl get svc` and `kubectl get endpoints <service_name>`**, to ensure pods are correctly exposed and discoverable.
+
+4. After that, I would **check Network Policies using `kubectl get networkpolicy`**, because restrictive policies can block traffic between pods.
+
+5. I would also **inspect CNI plugin status and logs (like Calico/Flannel) using `kubectl get pods -n kube-system` and `kubectl logs <cni-pod>`**, since networking issues often come from CNI failures.
+
+6. Finally, I would **check node-level networking and firewall rules (iptables) and verify routes**, to ensure there is no host-level restriction blocking pod communication. 
+
+## 36. External users cannot access the application — how will you troubleshoot?
+1. First, I would **check if the application and pods are running using `kubectl get pods` and `kubectl logs <pod_name>`**, because if the app itself is down, external access will obviously fail.
+
+2. Then, I would **verify the Service configuration using `kubectl get svc` and `kubectl describe svc <service_name>`**, to ensure the correct type (NodePort/LoadBalancer) and ports are exposed.
+
+3. Next, I would **check Ingress configuration using `kubectl get ingress` and `kubectl describe ingress <ingress_name>`**, to confirm proper routing rules and backend service mapping.
+
+4. After that, I would **validate DNS resolution using `nslookup <domain>` or `dig <domain>`**, to ensure the domain is pointing to the correct Load Balancer or Ingress IP.
+
+5. I would also **test connectivity using `curl <external_ip>` or `curl -H "Host: <domain>" <ingress_ip>`**, to isolate whether the issue is DNS, Ingress, or backend.
+
+6. Finally, I would **check firewall rules, security groups, and network policies**, to ensure external traffic is allowed and not being blocked before reaching the cluster. 
+
+## 37. A Deployment rollout failed — how do you rollback safely?
+1. First, I would **check rollout status using `kubectl rollout status deployment/<deployment_name>`**, to confirm the failure and understand if it’s stuck or partially rolled out.
+
+2. Then, I would **inspect the Deployment and pod errors using `kubectl describe deployment <deployment_name>` and `kubectl get pods`**, to quickly understand what went wrong.
+
+3. Next, I would **view rollout history using `kubectl rollout history deployment/<deployment_name>`**, to identify available previous stable revisions.
+
+4. After that, I would **rollback to the previous version using `kubectl rollout undo deployment/<deployment_name>`**, to restore the last known stable state immediately.
+
+5. If needed, I would **rollback to a specific revision using `kubectl rollout undo deployment/<deployment_name> --to-revision=<revision_number>`**, for precise control.
+
+6. Finally, I would **verify application health using `kubectl get pods` and `kubectl logs`**, and monitor traffic to ensure the rollback is successful and users are no longer impacted. 
+
+## 38. New Pods are not getting updated image after deployment — what could be wrong?
+1. First, I would **check the image configured in the Deployment using `kubectl get deployment <deployment_name> -o yaml`**, to confirm whether the new image tag is actually updated.
+
+2. Then, I would **verify rollout status using `kubectl rollout status deployment/<deployment_name>`**, because the deployment might not have triggered a new rollout.
+
+3. Next, I would **check if the image tag is static like `latest` and imagePullPolicy using `kubectl describe pod <pod_name>`**, since Kubernetes may reuse cached images if `imagePullPolicy` is not set to `Always`.
+
+4. After that, I would **force a rollout restart using `kubectl rollout restart deployment/<deployment_name>`**, to ensure new pods pull the updated image.
+
+5. I would also **check node-level image cache using `crictl images` or `docker images`**, because nodes might still be using old cached images.
+
+6. Finally, I would **verify CI/CD pipeline and image registry**, to ensure the new image was actually built, pushed, and tagged correctly. 
+
+## 39. Rolling update caused downtime — how do you prevent it?
+1. First, I would **check the Deployment strategy using `kubectl get deployment <deployment_name> -o yaml`**, to ensure it is set to RollingUpdate and not Recreate, because Recreate causes downtime.
+
+2. Then, I would **configure `maxUnavailable=0` and `maxSurge>0` in the deployment spec**, so no pods are taken down before new ones are ready.
+
+3. Next, I would **ensure readiness probes are correctly configured using `kubectl describe pod <pod_name>`**, because traffic should only go to pods that are fully ready.
+
+4. After that, I would **verify liveness probes and startup time**, to ensure pods are not restarted or marked ready too early.
+
+5. I would also **check resource availability using `kubectl describe nodes`**, because insufficient CPU/memory can delay new pods and cause downtime.
+
+6. Finally, I would **use strategies like canary or blue-green deployments and test with `kubectl rollout status deployment/<deployment_name>`**, to ensure zero downtime during future updates. 
+
+## 40. Multiple Pods are restarting frequently — how will you find the root cause?
+1. First, I would **check pod status and restart count using `kubectl get pods`**, to identify which pods are restarting and how frequently, because high restart count indicates instability.
+
+2. Then, I would **describe the pod using `kubectl describe pod <pod_name>`**, to check events and reasons like CrashLoopBackOff, OOMKilled, or probe failures.
+
+3. Next, I would **check container logs using `kubectl logs <pod_name>` and `kubectl logs <pod_name> --previous`**, to capture errors from both current and previous crashes.
+
+4. After that, I would **verify configuration like environment variables, secrets, and config maps using `kubectl describe pod <pod_name>`**, since misconfiguration is a common cause.
+
+5. I would also **check resource limits and usage using `kubectl top pod <pod_name>`**, to see if pods are being killed due to memory/CPU constraints.
+
+6. Finally, I would **review health checks and recent deployments using `kubectl rollout history deployment/<deployment_name>`**, to identify if probe misconfiguration or recent changes triggered the restarts. 
+
+## 41. Health probes are failing — how do you debug liveness/readiness issues?
+1. First, I would **check probe configuration using `kubectl describe pod <pod_name>`**, to verify the correct path, port, and type (HTTP/TCP/exec), because wrong configuration is a common cause of failures.
+
+2. Then, I would **test the probe manually inside the pod using `kubectl exec -it <pod_name> -- curl localhost:<port>/<path>`**, to confirm whether the application is actually responding.
+
+3. Next, I would **check container logs using `kubectl logs <pod_name>`**, because probe failures often correlate with application errors or startup issues.
+
+4. After that, I would **review timing parameters like `initialDelaySeconds`, `timeoutSeconds`, and `failureThreshold` in the deployment YAML**, since strict timings can cause premature failures.
+
+5. I would also **check resource usage using `kubectl top pod <pod_name>`**, because CPU/memory pressure can delay responses and fail probes.
+
+6. Finally, I would **verify dependencies and startup behavior**, ensuring the app is fully initialized before probes run, and adjust probe settings accordingly to prevent unnecessary restarts. 
+
+## 42. High CPU usage observed in cluster — how do you identify the root cause?
+1. First, I would **confirm high CPU usage at cluster and node level using `kubectl top nodes`**, to identify which nodes are under pressure and whether the issue is widespread or localized.
+
+2. Then, I would **identify high CPU-consuming pods using `kubectl top pods -A --sort-by=cpu`**, to pinpoint which workloads are causing the spike.
+
+3. Next, I would **inspect the specific pods using `kubectl describe pod <pod_name>`**, to check resource limits, requests, and any abnormal behavior.
+
+4. After that, I would **check container-level processes using `kubectl exec -it <pod_name> -- top` or `ps aux --sort=-%cpu`**, to find the exact process consuming CPU.
+
+5. I would also **review application logs using `kubectl logs <pod_name>`**, because high CPU is often caused by bugs, loops, or inefficient code paths.
+
+6. Finally, I would **correlate with traffic and recent deployments using `kubectl rollout history deployment/<deployment_name>`**, and then fix the root cause (optimize code, scale pods, or adjust resources). 
+
+## 43. Memory usage is continuously increasing in Pods — what could be the issue?
+1. First, I would **confirm the memory trend using `kubectl top pods -A`**, to verify that memory usage is continuously increasing and not just a temporary spike.
+
+2. Then, I would **check pod details using `kubectl describe pod <pod_name>`**, to see if containers are getting OOMKilled or hitting memory limits.
+
+3. Next, I would **inspect container-level processes using `kubectl exec -it <pod_name> -- top` or `ps aux --sort=-%mem`**, to identify which process is consuming memory.
+
+4. After that, I would **analyze application logs using `kubectl logs <pod_name>`**, because memory leaks or improper resource handling in code are common causes.
+
+5. I would also **check resource limits and requests in the deployment YAML**, to ensure they are properly set and not too low or missing.
+
+6. Finally, I would **correlate with workload and recent changes using `kubectl rollout history deployment/<deployment_name>`**, and fix the root cause (like memory leaks), or scale resources if required. 
+
+## 44. Cluster autoscaling is not working — how do you debug it?
+1. First, I would **check Cluster Autoscaler pods using `kubectl get pods -n kube-system`**, to confirm the autoscaler is running and not in a failed state.
+
+2. Then, I would **inspect autoscaler logs using `kubectl logs -n kube-system <cluster-autoscaler-pod>`**, to identify errors like insufficient permissions, scaling limits, or node group issues.
+
+3. Next, I would **verify pending pods using `kubectl get pods --field-selector=status.phase=Pending`**, because autoscaling only triggers when pods cannot be scheduled due to lack of resources.
+
+4. After that, I would **describe pending pods using `kubectl describe pod <pod_name>`**, to confirm they are unschedulable due to resource constraints and not due to config issues like taints or affinity.
+
+5. I would also **check node group configuration and limits (min/max size)** in the cloud provider, to ensure scaling is allowed and not restricted.
+
+6. Finally, I would **verify IAM roles/permissions and resource quotas**, ensuring the autoscaler has permission to create nodes and that there are no quota or capacity issues blocking scaling. 
+
+## 45. Horizontal Pod Autoscaler (HPA) is not scaling Pods — what could be wrong?
+1. First, I would **check HPA status using `kubectl get hpa` and `kubectl describe hpa <hpa_name>`**, to see current metrics, desired replicas, and any errors.
+
+2. Then, I would **verify metrics availability using `kubectl top pods`**, because HPA depends on metrics-server; if metrics are missing, scaling won’t work.
+
+3. Next, I would **check if metrics are crossing thresholds defined in HPA (like CPU%) using `kubectl describe hpa <hpa_name>`**, since scaling only triggers when thresholds are exceeded.
+
+4. After that, I would **verify resource requests are set in the pod spec using `kubectl describe pod <pod_name>`**, because HPA requires CPU/memory requests to calculate utilization.
+
+5. I would also **check min/max replica limits using `kubectl describe hpa <hpa_name>`**, to ensure scaling is not restricted by configuration.
+
+6. Finally, I would **review events and logs of metrics-server using `kubectl get pods -n kube-system` and `kubectl logs <metrics-server-pod> -n kube-system`**, to fix any underlying metrics or configuration issues. 
+
+## 46. Resource limits are not being enforced — how do you troubleshoot?
+1. First, I would **verify that resource limits are actually defined in the pod spec using `kubectl get pod <pod_name> -o yaml`**, because if limits are missing, Kubernetes cannot enforce them.
+
+2. Then, I would **describe the pod using `kubectl describe pod <pod_name>`**, to confirm the applied requests and limits and check for any related warnings or events.
+
+3. Next, I would **check actual resource usage using `kubectl top pod <pod_name>`**, to see if the container is exceeding expected usage and whether throttling or OOM kills are happening.
+
+4. After that, I would **verify the container runtime and node configuration (cgroups) on the node using `docker inspect <container_id>` or `crictl inspect <container_id>`**, because limits are enforced at the runtime level.
+
+5. I would also **check for LimitRange or ResourceQuota using `kubectl get limitrange` and `kubectl get resourcequota`**, since cluster policies can override or affect resource behavior.
+
+6. Finally, I would **inspect kubelet and node logs using `journalctl -u kubelet`**, to ensure there are no issues with enforcement, and fix any misconfiguration or missing limits. 
+
+## 47. Persistent Volume (PV) is not getting attached to Pod — how do you debug?
+1. First, I would **check PVC status using `kubectl get pvc`**, to see if it is `Pending` or `Bound`, because if it’s not bound, the Pod cannot use the volume.
+
+2. Then, I would **describe the PVC using `kubectl describe pvc <pvc_name>`**, to identify issues like no matching PV, storage class problems, or provisioning errors.
+
+3. Next, I would **check available PVs using `kubectl get pv`**, to ensure a suitable volume exists and matches size, access modes, and storage class.
+
+4. After that, I would **verify StorageClass configuration using `kubectl get sc` and `kubectl describe sc <sc_name>`**, since dynamic provisioning depends on correct storage class settings.
+
+5. I would also **describe the Pod using `kubectl describe pod <pod_name>`**, to check events for volume attachment errors (like permission issues or attach failures).
+
+6. Finally, I would **check cloud provider or CSI driver logs using `kubectl get pods -n kube-system` and `kubectl logs <csi-pod>`**, to identify underlying issues with volume provisioning or attachment. 
+
+## 48. Data is lost after Pod restart — what could be the reason?
+1. First, I would **check if the application is writing data to the container filesystem using `kubectl exec -it <pod_name> -- ls <path>`**, because container storage is ephemeral and data is lost on restart.
+
+2. Then, I would **verify if a volume is configured in the pod using `kubectl get pod <pod_name> -o yaml`**, to ensure persistent storage is actually attached.
+
+3. Next, I would **check if the correct volume type (like PVC) is used instead of `emptyDir`**, because `emptyDir` is temporary and gets deleted when the pod restarts.
+
+4. After that, I would **inspect PVC and PV status using `kubectl get pvc` and `kubectl get pv`**, to confirm that storage is properly bound and available.
+
+5. I would also **verify volume mount paths using `kubectl describe pod <pod_name>`**, to ensure the application is writing data to the mounted persistent path.
+
+6. Finally, I would **fix the configuration by using Persistent Volumes and correct mount paths**, and test by restarting the pod to confirm data persists. 
+
+## 49. Storage mounting errors occurring in Pods — how do you fix them?
+1. First, I would **check pod events using `kubectl describe pod <pod_name>`**, to see exact mount error messages (like “volume not found”, “permission denied”, or “attach failed”), because events give the root clue.
+
+2. Then, I would **verify PVC status using `kubectl get pvc` and `kubectl describe pvc <pvc_name>`**, to ensure it is `Bound` and not stuck in `Pending`.
+
+3. Next, I would **check PV details using `kubectl get pv` and `kubectl describe pv <pv_name>`**, to confirm it matches size, access modes, and storage class required by the PVC.
+
+4. After that, I would **verify StorageClass configuration using `kubectl get sc` and `kubectl describe sc <sc_name>`**, since incorrect provisioner or parameters can cause mounting failures.
+
+5. I would also **check CSI driver or cloud provider logs using `kubectl get pods -n kube-system` and `kubectl logs <csi-pod>`**, because storage plugins often fail during attach/mount operations.
+
+6. Finally, I would **check permissions and mount paths inside the pod using `kubectl exec -it <pod_name> -- ls -l <mount_path>`**, and fix any configuration, access mode, or permission issues before retrying. 
+
+## 50. Volume permissions issue inside container — how do you resolve it?
+1. First, I would **verify the permission error by exec-ing into the pod using `kubectl exec -it <pod_name> -- ls -l <mount_path>`**, to confirm whether the application user lacks read/write access.
+
+2. Then, I would **check the user running inside the container using `kubectl exec -it <pod_name> -- id`**, because mismatched UID/GID between container and volume often causes permission issues.
+
+3. Next, I would **inspect the pod security context using `kubectl get pod <pod_name> -o yaml`**, to see if `runAsUser`, `runAsGroup`, or `fsGroup` are set correctly.
+
+4. After that, I would **fix permissions by setting `fsGroup` in the pod spec**, so Kubernetes automatically adjusts volume ownership for the container user.
+
+## 51. StatefulSet Pods are not coming up in order — how do you troubleshoot?
+1. First, I would **check StatefulSet status using `kubectl get statefulset` and `kubectl describe statefulset <name>`**, to see current replicas and any errors, because StatefulSets follow strict ordered startup.
+
+2. Then, I would **check pods with `kubectl get pods -l app=<label> -o wide`**, to verify which pod (like `pod-0`, `pod-1`) is stuck, since higher index pods won’t start until lower ones are ready.
+
+3. Next, I would **inspect the first failing pod using `kubectl describe pod <pod_name>`**, because if `pod-0` fails, others will not be created.
+
+4. After that, I would **check logs using `kubectl logs <pod_name>`**, to identify application or startup issues preventing readiness.
+
+5. I would also **verify Persistent Volume Claims using `kubectl get pvc`**, since StatefulSets depend on stable storage and pending PVCs can block pod startup.
+
+6. Finally, I would **check readiness probes and configuration**, ensuring the pod becomes Ready (`kubectl describe pod <pod_name>`), because StatefulSets only proceed to the next pod when the previous one is fully ready. 
+
+## 52. Kubernetes secrets are not accessible inside Pod — what could be wrong?
+1. First, I would **verify the Secret exists using `kubectl get secrets`**, to ensure it is created in the same namespace as the Pod, because cross-namespace access is not allowed.
+
+2. Then, I would **check pod configuration using `kubectl describe pod <pod_name>`**, to confirm the Secret is correctly referenced (as env or volume).
+
+3. Next, I would **validate the Secret keys using `kubectl get secret <secret_name> -o yaml`**, to ensure the key names match what the Pod is trying to access.
+
+4. After that, I would **exec into the pod using `kubectl exec -it <pod_name> -- env` or `kubectl exec -it <pod_name> -- ls /path/to/secret`**, to verify if the Secret is actually mounted or injected.
+
+5. I would also **check for typos or wrong references in the Deployment YAML**, since incorrect secret names or keys will result in missing values.
+
+6. Finally, I would **check RBAC permissions and restart the pod using `kubectl delete pod <pod_name>`**, to ensure the Secret is properly loaded and accessible after fix. 
+
+## 53. RBAC permission errors occurring — how do you debug access issues?
+1. First, I would **reproduce and identify the exact permission error using the failing command (e.g., `kubectl get pods`) and note the “forbidden” message**, because it tells which user/service account and resource is denied.
+
+2. Then, I would **check which ServiceAccount is being used using `kubectl describe pod <pod_name>` or `kubectl config view`**, to confirm the identity making the request.
+
+3. Next, I would **verify permissions using `kubectl auth can-i <verb> <resource> --as=<user_or_sa> -n <namespace>`**, to quickly test whether access is allowed or denied.
+
+4. After that, I would **inspect Roles and ClusterRoles using `kubectl get roles,clusterroles` and `kubectl describe role <role_name>`**, to ensure required permissions are defined.
+
+5. I would also **check RoleBindings and ClusterRoleBindings using `kubectl get rolebindings,clusterrolebindings`**, to confirm the role is correctly attached to the user or ServiceAccount.
+
+6. Finally, I would **fix the RBAC configuration (update role/rolebinding) and re-test access using `kubectl auth can-i`**, ensuring proper least-privilege access is granted. 
+
+## 54. Cluster API server is slow or not responding — what steps will you take?
+1. First, I would **check API server health and latency using `kubectl get --raw='/healthz'` and `kubectl get --raw='/metrics'`**, to confirm if it’s responsive and identify delays.
+
+2. Then, I would **check API server pod status using `kubectl get pods -n kube-system | grep apiserver`**, to ensure it is running and not restarting.
+
+3. Next, I would **inspect API server logs using `kubectl logs -n kube-system <apiserver-pod>`**, to identify errors like timeouts, etcd issues, or authentication problems.
+
+4. After that, I would **check etcd health using `kubectl get pods -n kube-system | grep etcd` and `kubectl logs <etcd-pod> -n kube-system`**, because API server depends heavily on etcd performance.
+
+5. I would also **verify node resource usage using `kubectl top nodes`**, since high CPU/memory on control plane nodes can slow down the API server.
+
+6. Finally, I would **check network latency and connectivity (`ping`, `curl`) and restart components if needed**, ensuring the control plane is stable and responsive. 
+
+## 55. etcd storage is full — how do you handle this situation?
+1. First, I would **confirm etcd is full by checking logs using `kubectl logs -n kube-system <etcd-pod>` and disk usage using `df -h` on the control plane node**, because etcd becomes unavailable when storage quota is exceeded.
+
+2. Then, I would **check etcd database size using `ETCDCTL_API=3 etcdctl endpoint status --write-out=table`**, to see how large the DB is and confirm it needs cleanup.
+
+3. Next, I would **remove unnecessary or stale Kubernetes objects (like old resources, events) using `kubectl get events --all-namespaces` and cleanup if needed**, because excessive objects increase etcd size.
+
+4. After that, I would **compact the etcd database using `ETCDCTL_API=3 etcdctl compact <revision>`**, to remove old versions of data.
+
+5. I would also **defragment etcd using `ETCDCTL_API=3 etcdctl defrag`**, to reclaim disk space after compaction.
+
+6. Finally, I would **increase disk size or configure monitoring/alerts**, ensuring etcd has enough capacity and future issues are prevented. 
+
+## 56. How do you troubleshoot a complete application outage in a Kubernetes cluster?
+1. First, I would **confirm the outage and check cluster health using `kubectl get nodes` and `kubectl get pods -A`**, to see if nodes or multiple pods are down, because this tells whether it’s cluster-wide or app-specific.
+
+2. Then, I would **check recent changes using `kubectl rollout history deployment/<deployment_name>`**, because outages are often caused by recent deployments or configuration changes.
+
+3. Next, I would **inspect failing pods using `kubectl describe pod <pod_name>` and `kubectl logs <pod_name>`**, to identify errors like crashes, misconfigurations, or dependency failures.
+
+4. After that, I would **verify Service and Ingress using `kubectl get svc`, `kubectl describe svc <service_name>`, and `kubectl get ingress`**, to ensure traffic routing is working correctly.
+
+5. I would also **check DNS and networking using `kubectl exec -it <pod_name> -- nslookup <service>` or `curl <service_name>`**, because networking or DNS issues can break communication.
+
+6. Finally, I would **check infrastructure components like API server, etcd, and nodes (`kubectl top nodes`, logs)**, and take action such as rollback (`kubectl rollout undo deployment/<deployment_name>`) or scaling to restore service quickly. 
+
 ## Kubernetes Troubleshooting
 
 ### 1. ImagePullBackOff
@@ -432,33 +820,3 @@ spec:
 ```
 This pod **tolerates the taint**, so Kubernetes allows it to run on `node-1`.
 
-A Pod is stuck in Pending state — how do you troubleshoot it?
-A Pod is in CrashLoopBackOff — what steps will you take to debug?
-A Pod is running but the application is not accessible — how will you investigate?
-Pods are not getting scheduled on any node — what could be the reasons?
-A node shows NotReady status — how do you troubleshoot it?
-Application is not accessible through Service — what checks will you perform?
-Service is working but Ingress is not routing traffic — how do you debug?
-DNS resolution is failing inside Pods — how will you fix it?
-Pods cannot communicate with each other — what networking checks will you perform?
-External users cannot access the application — how will you troubleshoot?
-A Deployment rollout failed — how do you rollback safely?
-New Pods are not getting updated image after deployment — what could be wrong?
-Rolling update caused downtime — how do you prevent it?
-Multiple Pods are restarting frequently — how will you find the root cause?
-Health probes are failing — how do you debug liveness/readiness issues?
-High CPU usage observed in cluster — how do you identify the root cause?
-Memory usage is continuously increasing in Pods — what could be the issue?
-Cluster autoscaling is not working — how do you debug it?
-Horizontal Pod Autoscaler (HPA) is not scaling Pods — what could be wrong?
-Resource limits are not being enforced — how do you troubleshoot?
-Persistent Volume (PV) is not getting attached to Pod — how do you debug?
-Data is lost after Pod restart — what could be the reason?
-Storage mounting errors occurring in Pods — how do you fix them?
-Volume permissions issue inside container — how do you resolve it?
-StatefulSet Pods are not coming up in order — how do you troubleshoot?
-Kubernetes secrets are not accessible inside Pod — what could be wrong?
-RBAC permission errors occurring — how do you debug access issues?
-Cluster API server is slow or not responding — what steps will you take?
-etcd storage is full — how do you handle this situation?
-How do you troubleshoot a complete application outage in a Kubernetes cluster?

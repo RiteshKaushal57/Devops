@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ritesh57/application-code-frontend
-          tags: 6
+          image: ritesh57/application-code-frontend:6
           ports:
             - containerPort: 80
