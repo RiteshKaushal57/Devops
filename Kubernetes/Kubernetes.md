@@ -99,6 +99,16 @@ It starts with:
 ### 11. What is kubernetes ingress?  
 A **Kubernetes Ingress** is a way to manage how services in a cluster can be accessed by the internet. Ingress is used because if you have multiple services, exposing each one separately to the internet can be messy and inefficient. It works by using an **Ingress resource** that defines rules (like URL paths or hostnames) and an **Ingress controller** that reads these rules and routes incoming traffic to the correct service allowing clean, secure, and organized access to your applications from outside the cluster.
 
+**Ingress Controller Setup**
+
+1. Install controller → `kubectl apply -f <ingress-nginx-yaml>`   
+2. Verify pods/services → `kubectl get pods,svc -n ingress-nginx`    
+3. Expose app → `kubectl expose deployment my-app --port=80 --type=ClusterIP`   
+4. Create Ingress YAML (host/path → service)   
+5. Apply Ingress → `kubectl apply -f ingress.yaml`    
+6. Get external IP → `kubectl get svc -n ingress-nginx`    
+7. Access app via domain or `curl`
+
 ### 12. Kubernetes RBAC
 RBAC means Role-Based Access Control. It’s used to manage who can access the cluster and what actions they can perform.  
 RBAC works through four main components:  
@@ -114,7 +124,14 @@ RBAC works through four main components:
 ### 14. Kubernetes CONFIGMAPS & SECRETS
 In Kubernetes, **ConfigMaps** and **Secrets** are used to manage configuration and sensitive data for your applications without hardcoding them inside containers.
 
-**ConfigMaps** store non-sensitive configuration data, like environment variables, configuration files, or command-line arguments. They allow you to change your app’s behavior without rebuilding the container.
+A Kubernetes **ConfigMap** is used to store non-sensitive configuration data separately from your application code, such as environment variables, configuration files, or command-line arguments.
+
+It is useful because it allows you to change configuration without rebuilding or redeploying the application image, making your application more flexible and easier to manage.
+
+You can use a ConfigMap in mainly two ways:
+
+**1. As environment variables:** The values stored in the ConfigMap are injected into the container as environment variables.
+**2. As a volume (file):** The ConfigMap is mounted inside the container as a file, which the application can read.
 
 **Secrets**, on the other hand, are designed to hold sensitive information such as passwords, API keys, or certificates. Kubernetes stores them in a way that’s more secure than plain text, and they can be injected into pods when needed.
 
@@ -700,6 +717,111 @@ A **Readiness Probe**, on the other hand, checks whether the application is read
 5. I would also **check DNS and networking using `kubectl exec -it <pod_name> -- nslookup <service>` or `curl <service_name>`**, because networking or DNS issues can break communication.
 
 6. Finally, I would **check infrastructure components like API server, etcd, and nodes (`kubectl top nodes`, logs)**, and take action such as rollback (`kubectl rollout undo deployment/<deployment_name>`) or scaling to restore service quickly. 
+
+## 57. How does Kubernetes handle container scaling?
+1. First, Kubernetes handles scaling using **Horizontal Pod Autoscaler (HPA) with `kubectl autoscale deployment <name> --cpu-percent=70 --min=2 --max=10`**, which automatically increases or decreases the number of pods based on metrics like CPU or memory.
+
+2. Then, it also supports **manual scaling using `kubectl scale deployment <deployment_name> --replicas=5`**, allowing you to quickly adjust the number of running pods based on demand.
+
+3. Next, Kubernetes uses **Cluster Autoscaler (configured in cloud provider)** to add or remove nodes when there are not enough resources to schedule pods, ensuring capacity is available.
+
+4. After that, scaling works because applications are designed to be **stateless and distributed**, so new pods can start serving traffic immediately when created.
+
+5. Kubernetes also integrates with **metrics-server (`kubectl top pods`)**, which provides real-time metrics required for autoscaling decisions.
+
+6. Finally, the system ensures **load balancing via Services**, so traffic is automatically distributed across scaled pods without any manual intervention. 
+
+## 58. What are labels and selectors in Kubernetes?
+Labels and selectors in Kubernetes are used to identify, group, and connect resources like Pods, Services, and Deployments. Labels are simple key-value pairs attached to resources, such as app=payments or env=prod, and they act like tags to describe and organize them. Selectors are used by Kubernetes components to find and match resources based on these labels. For example, a Service uses a selector to find all Pods with a specific label and then routes traffic to them. This mechanism allows Kubernetes to dynamically connect resources without relying on fixed IP addresses, making the system flexible and scalable even when Pods are created, deleted, or restarted.
+
+## 59. How does Kubernetes manage secrets and configuration data?
+1. First, Kubernetes manages configuration data using **ConfigMaps and Secrets created with commands like `kubectl create configmap <name> --from-literal=key=value` and `kubectl create secret generic <name> --from-literal=key=value`**, so application configuration and sensitive data are stored separately from code.
+
+2. Then, **ConfigMaps are used for non-sensitive data (like URLs, configs)** while **Secrets are used for sensitive data (like passwords, API keys)**, ensuring better security practices.
+
+3. Next, these values are **injected into Pods as environment variables or mounted as volumes using `kubectl describe pod <pod_name>`**, so applications can access them at runtime.
+
+4. After that, Kubernetes **stores Secrets in base64-encoded format and can encrypt them at rest**, providing an additional layer of protection.
+
+5. I would also **verify access using `kubectl get secret <name> -o yaml` or `kubectl exec -it <pod_name> -- env`**, to confirm that data is correctly injected into the container.
+
+6. Finally, Kubernetes ensures that **configuration and secrets are decoupled from application code**, making deployments secure, flexible, and easier to manage. 
+
+## 60. How can you perform rolling restarts for pods in a Kubernetes deployment?
+
+1. **Use `kubectl rollout restart` (Recommended)**
+
+   * This triggers a rolling restart without changing the deployment spec.
+   * Command:
+
+     * `kubectl rollout restart deployment <deployment-name>`
+
+2. **Verify the rollout status**
+
+   * Ensure pods are restarting gradually (zero downtime if configured properly).
+   * Command:
+
+     * `kubectl rollout status deployment <deployment-name>`
+
+3. **Check updated pods**
+
+   * Confirm new pods are created and old ones are terminated.
+   * Command:
+
+     * `kubectl get pods -l app=<label>`
+
+4. **Alternative: Update a dummy annotation**
+
+   * Any change in pod template triggers a rolling restart.
+   * Command:
+
+     * `kubectl patch deployment <deployment-name> -p '{"spec":{"template":{"metadata":{"annotations":{"date":"'$(date +%s)'"}}}}}'`
+
+5. **Alternative: Change image version**
+
+   * Updating the container image forces new pods to be created.
+   * Command:
+
+     * `kubectl set image deployment/<deployment-name> <container-name>=<image>:<new-tag>`
+
+6. **Understand rolling update strategy**
+
+   * Kubernetes replaces pods gradually based on:
+
+     * `maxUnavailable`
+     * `maxSurge`
+   * Check using:
+
+     * `kubectl describe deployment <deployment-name>`
+
+7. **Rollback if something fails**
+
+   * Revert to previous version if restart causes issues.
+   * Command:
+
+     * `kubectl rollout undo deployment <deployment-name>`
+
+## 61. Explain the concept of a Kubernetes replica set.
+
+A ReplicaSet in Kubernetes is a controller that ensures a specified number of identical Pods are always running in the cluster. It works by continuously monitoring the current number of Pods and comparing it with the desired number defined by you. If a Pod crashes or gets deleted, the ReplicaSet automatically creates a new one to maintain the required count, providing self-healing. Similarly, if there are more Pods than needed, it terminates the extra ones.
+
+ReplicaSet uses labels and selectors to identify which Pods it should manage. It does not create Pods randomly; it only manages Pods that match its selector.
+
+In practice, ReplicaSets are usually not created directly. Instead, they are managed by a Deployment, which provides additional features like rolling updates and rollbacks while internally using ReplicaSets to maintain the desired number of Pods.
+
+## 62.  How can you secure communication between Kubernetes components?
+- First, TLS encryption is used to secure all communication between components like the API server, kubelet, etcd, and clients, preventing data from being intercepted (man-in-the-middle attacks). Kubernetes uses certificates to encrypt traffic by default.
+
+- Second, authentication and authorization are enforced. Authentication verifies who is making the request (using certificates, tokens, or OIDC), and authorization (using RBAC) ensures that users and services only have the permissions they need.
+
+- Third, Network Policies are used to control which Pods can communicate with each other, acting like a firewall inside the cluster and preventing unauthorized internal traffic.
+
+- Additionally, Secrets management is used to securely store sensitive data like passwords and API keys, and encryption at rest can be enabled to protect this data in etcd.
+
+- Finally, securing access to critical components like etcd and limiting exposure of the API server (e.g., private endpoints, restricted access) further strengthens cluster security.
+
+
+
 
 ## Kubernetes Troubleshooting
 

@@ -51,6 +51,8 @@ The Prometheus Web UI allows users to explore the collected metrics data, run ad
 ### 7. Grafana
 Grafana is a powerful dashboard and visualization tool that integrates with Prometheus to provide rich, customizable visualizations of the metrics data.
 
+What you explained is mostly correct, but let me refine it slightly so it becomes crystal clear and interview-ready: Prometheus is a monitoring system that collects metrics from different sources like Node Exporter (for system metrics), kube-state-metrics (which runs as a pod and fetches Kubernetes object states from the API server), and custom application metrics. This is important because in a distributed environment like Kubernetes, you need visibility at multiple levels—infra, cluster, and application—to understand system health. It works by Prometheus pulling (scraping) these metrics at regular intervals from exposed endpoints, storing them as time-series data in its database, and then allowing you to query and analyze this data using PromQL; based on defined conditions, Prometheus sends alerts to Alertmanager, which handles notifications like email or Slack.
+
 ### 8. API Clients
 API clients interact with Prometheus through its HTTP API to fetch data, query metrics, and integrate Prometheus with other systems or custom applications.
 
@@ -60,3 +62,5 @@ Exporters in Prometheus are small tools or agents that collect metrics from syst
 ## 6. What is Node exporter?
 Node Exporter is a type of Prometheus exporter specifically used to collect hardware and operating system level metrics from a machine like CPU usage, memory usage, disk I/O, and network statistics. It is important because it helps you monitor the health and performance of your servers, which is the foundation of any application running on top of them. It works by running as a lightweight agent on each node (server or VM), collecting system-level data directly from the OS, and exposing it on an HTTP endpoint (like /metrics), from where the Prometheus server regularly scrapes the data and uses it for monitoring, visualization, and alerting.
 
+## 7. What is PromQL?
+PromQL (Prometheus Query Language) is the query language used in Prometheus to retrieve and analyze metrics data stored as time-series. It is important because just collecting metrics is not enough—you need a way to filter, aggregate, and analyze that data to understand system behavior, create dashboards, and trigger alerts. It works by allowing you to write queries that can select specific metrics, apply operations like sum, average, rate, or filtering based on labels, and even perform calculations across multiple metrics; for example, you can calculate request rate, error percentage, or CPU usage trends over time, which helps in debugging issues and monitoring performance effectively.
