@@ -293,10 +293,3 @@ In Argo CD Image Updater, aliases act as friendly names for container images. In
 
 ### 2. Canary Deployment
 **Canary Deployment** is a deployment strategy where a new version of an application is released **gradually to a small percentage of users** before being rolled out to everyone. Instead of switching all traffic at once, the new version runs alongside the old stable version, and only a fraction of traffic is sent to it initially, such as 5% or 10%. If the application performs well based on metrics like error rate, latency, or user behavior, traffic is slowly increased in steps until the new version serves 100% of users. If any problem is detected at any stage, the rollout is paused or rolled back, limiting the impact. In **Argo Rollouts**, canary deployments are automated and controlled using rollout steps, services, and real-time metrics, making this approach safer than traditional rolling updates and ideal for high-risk or high-traffic production applications.
-
-
-
-
-ssh -i ~/.ssh/devops.pem ubuntu@34.207.243.103
-
-VxYaIiZJyuDxwM1s
