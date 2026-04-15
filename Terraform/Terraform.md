@@ -87,8 +87,8 @@ In Terraform, variables are used to store values like region names, instance typ
 ## 8. What are conditions?
 Conditions in Terraform are used to make decisions within our code, similar to an if–else statement. They help us choose different values or configurations based on certain situations. For example, we can say — if the environment is production, use a bigger instance type; otherwise, use a smaller one. Terraform uses a simple ternary operator to do this, which looks like a short if–else expression. This makes the setup smarter, because Terraform automatically adjusts the configuration based on the condition we define.
 
-## 9. What are Modules?
-In Terraform, modules are like reusable blocks of code that help organize and simplify your setup. Instead of writing the same Terraform configuration multiple times, you can define it once as a module and use it anywhere. It’s mainly used to make the code cleaner, more modular, and easier to maintain. A module usually contains files like main.tf, variables.tf, and outputs.tf. We can then call that module from our main Terraform file using a module block. This approach saves time, avoids duplication, and keeps the infrastructure setup more consistent and manageable.
+## 9. What are Terraform modules and how can they be used to manage reusable infrastructure components?
+Terraform modules are basically a way to group and organize your infrastructure code into reusable building blocks, meaning instead of writing the same code again and again for things like servers, networks, or databases, you define it once inside a module and reuse it wherever needed. This is useful because in real projects you often need similar infrastructure across environments like dev, staging, and production, and repeating code can lead to errors and inconsistency, so modules help maintain standardization and reduce duplication. They work by creating a separate folder with Terraform configuration files where you define resources along with input variables and outputs, and then you call this module from your main configuration by passing values like instance size or region, which makes the module flexible and reusable. This way, teams can manage infrastructure in a clean, scalable, and consistent manner while also making updates easier since changes in one module can reflect wherever it is used.
 
 ## 10. What is Terraform statefile?  
 A Terraform state file is basically Terraform’s memory.
@@ -155,3 +155,33 @@ Idempotency means is that you can run the same Terraform command again and again
 You don’t want Terraform to create a new server every time you run terraform apply. Idempotency guarantees safety: if your code didn’t change, your infrastructure won’t change either.
 
 Terraform checks your current state, compares it with your code, and only makes changes if something is different. If everything already matches, Terraform shows “No changes. Your infrastructure is up-to-date.” This makes Terraform reliable, repeatable, and safe to run multiple times.
+
+## 19.Describe your understanding of infrastructure drift and how you would prevent it using Terraform tools and practices.
+Infrastructure drift happens when the actual infrastructure in the cloud becomes different from what is defined in your Terraform code, usually because someone made manual changes outside Terraform, meaning Terraform’s state and real resources no longer match. This is important because it breaks consistency, can cause unexpected failures during deployment, and makes your infrastructure unreliable since Terraform may try to overwrite or mis-handle those changes. To prevent this, the main approach is to ensure all changes go through Terraform only by restricting manual access, and regularly checking for drift using commands like terraform plan which compares the current state with real infrastructure and shows differences. Additionally, using remote state with locking, integrating Terraform into CI/CD pipelines, enabling proper access controls, and occasionally running refresh or drift detection processes help maintain alignment. By enforcing automation and avoiding manual changes, you keep infrastructure predictable, version-controlled, and consistent.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
