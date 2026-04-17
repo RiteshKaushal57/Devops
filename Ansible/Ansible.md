@@ -66,6 +66,9 @@ Ansible Play is a set of tasks in a playbook that are executed on a specific gro
 ### 3. Modules
 Ansible modules are small programs or tools that Ansible uses to perform specific tasks on managed servers. They are needed because when we automate server management, we perform many types of actions such as installing packages, creating users, copying files, or starting services, and instead of writing complex scripts for each task, Ansible provides ready-made modules to handle them. These modules make automation simpler, consistent, and easier to understand. When we write tasks in an Ansible playbook or run an adhoc command, we call these modules to perform the required action. During execution, Ansible connects to the target servers through SSH, temporarily sends the required module to the server, runs it to complete the task, and then removes it after execution, which allows Ansible to automate tasks efficiently without needing any agent installed on the servers.
 
+**What are some common Ansible modules you've used or come across?**
+In Ansible, there are many commonly used modules that help automate day-to-day tasks, such as the command and shell modules for running commands on remote machines, the copy and file modules for managing files and permissions, the apt and yum modules for installing or removing packages depending on the operating system, the service module for starting or stopping services, and the user module for managing users; we use these modules because they simplify repetitive system administration work and provide a standard, reliable way to manage infrastructure without writing custom scripts; in practice, we include these modules inside playbooks as tasks, pass required parameters like package name or file path, and Ansible executes them on target nodes while ensuring the system reaches the desired state in an efficient and idempotent way.
+
 ### 4. Tasks
 Ansible Tasks are the individual actions that Ansible performs on managed servers as part of a playbook. They are used because automation usually involves multiple steps such as installing packages, creating users, copying files, or starting services, and each of these actions needs to be clearly defined so Ansible knows what to do. A task basically tells Ansible which module to use and what operation should be performed. In a playbook, tasks are written under the **tasks section**, and they run one by one in the order they are defined. When the playbook is executed, Ansible connects to the target servers through SSH and runs each task using the specified module, ensuring that the required configuration or action is applied correctly on the servers.
 
@@ -133,3 +136,30 @@ Policy as Code is the practice of defining and managing rules or policies using 
 
 ### Order of execution of tasks Ansible
 Only when task number one is complete and successful, Ansible will move to the task number two and only when task number two is complete and successful, Anible will move to the task number three. 
+
+## Explain how you would integrate Ansible with cloud platforms like AWS or Azure for managing inventories.
+When integrating Ansible with cloud platforms like Amazon Web Services or Microsoft Azure for managing inventories, the idea is that instead of manually listing servers, Ansible can automatically fetch and update the list of machines from the cloud, which means the inventory becomes dynamic and always up to date; we need this because in cloud environments instances are created and terminated frequently, so static inventories quickly become outdated and error-prone; Ansible achieves this using dynamic inventory plugins like aws_ec2 for AWS or azure_rm for Azure, where we configure credentials and filters, and Ansible queries the cloud APIs to discover resources based on tags, regions, or resource groups, then groups them logically so playbooks can target the right machines without manual effort.
+
+## Describe your understanding of the Ansible Control Machine and its purpose.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
