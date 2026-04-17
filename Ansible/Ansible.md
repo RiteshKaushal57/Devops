@@ -8,7 +8,7 @@ Ansible works in a very simple but powerful way. You install it on one main mach
 Shell scripting is like writing a list of Linux commands in a text file and telling the computer to run them one by one. It works fine if you’re automating something small on a single server. But when you have to manage dozens or hundreds of servers, it becomes messy — you’d have to log into each one and run the script manually. That’s where Ansible comes in. Ansible automates tasks across multiple machines from one central control node using simple YAML playbooks. It’s smarter because it checks the state of the system first — so if something is already done, it won’t repeat it. It’s also agentless, so you don’t have to install anything on your target servers. In short, shell scripting is manual and procedural, while Ansible is automated, declarative, and scalable.
 
 ## What is  Passwordless Authentication?
-Passwordless authentication is a method that allows one system to log in to another system without typing a password each time. It is used because in automation tools like Ansible, the control machine needs to connect to many remote servers repeatedly, and entering a password every time would make automation impossible and slow. Instead of passwords, it uses **SSH key-based authentication**, which is more secure and convenient. In this process, we generate a pair of keys on the control machine called a **public key** and a **private key**. The public key is copied to the remote server, while the private key stays safely on the control machine. When Ansible tries to connect to the server through SSH, the server checks the public key and verifies it with the private key, and if they match, the login is allowed automatically without asking for a password. This makes automated communication between systems secure and smooth. 🔐
+Passwordless authentication is a method that allows one system to log in to another system without typing a password each time. It is used because in automation tools like Ansible, the control machine needs to connect to many remote servers repeatedly, and entering a password every time would make automation impossible and slow. Instead of passwords, it uses **SSH key-based authentication**, which is more secure and convenient. In this process, we generate a pair of keys on the control machine called a **public key** and a **private key**. The public key is copied to the remote server, while the private key stays safely on the control machine. When Ansible tries to connect to the server through SSH, the server checks the public key and verifies it with the private key, and if they match, the login is allowed automatically without asking for a password. This makes automated communication between systems secure and smooth. 
 
 ## What is Ansible Inventory?
 Ansible Inventory is a file where we define the list of servers that Ansible will manage and automate. It is needed because Ansible must know which machines it should connect to when running a playbook, especially when we are working with multiple servers in real environments. Instead of manually specifying server details every time, we keep them organized in the inventory file, which can include server IP addresses, hostnames, and groups of servers like web servers or database servers. This makes management easier because we can run automation tasks on a single server, a group of servers, or all servers at once. Ansible uses this inventory file to know where to connect through SSH and on which machines it should execute the tasks defined in the playbook, making automation structured and scalable.
@@ -136,30 +136,3 @@ Policy as Code is the practice of defining and managing rules or policies using 
 
 ### Order of execution of tasks Ansible
 Only when task number one is complete and successful, Ansible will move to the task number two and only when task number two is complete and successful, Anible will move to the task number three. 
-
-## Explain how you would integrate Ansible with cloud platforms like AWS or Azure for managing inventories.
-When integrating Ansible with cloud platforms like Amazon Web Services or Microsoft Azure for managing inventories, the idea is that instead of manually listing servers, Ansible can automatically fetch and update the list of machines from the cloud, which means the inventory becomes dynamic and always up to date; we need this because in cloud environments instances are created and terminated frequently, so static inventories quickly become outdated and error-prone; Ansible achieves this using dynamic inventory plugins like aws_ec2 for AWS or azure_rm for Azure, where we configure credentials and filters, and Ansible queries the cloud APIs to discover resources based on tags, regions, or resource groups, then groups them logically so playbooks can target the right machines without manual effort.
-
-## Describe your understanding of the Ansible Control Machine and its purpose.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

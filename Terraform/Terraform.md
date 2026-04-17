@@ -156,7 +156,7 @@ You don’t want Terraform to create a new server every time you run terraform a
 
 Terraform checks your current state, compares it with your code, and only makes changes if something is different. If everything already matches, Terraform shows “No changes. Your infrastructure is up-to-date.” This makes Terraform reliable, repeatable, and safe to run multiple times.
 
-## 19.Describe your understanding of infrastructure drift and how you would prevent it using Terraform tools and practices.
+## 19. Describe your understanding of infrastructure drift and how you would prevent it using Terraform tools and practices.
 Infrastructure drift happens when the actual infrastructure in the cloud becomes different from what is defined in your Terraform code, usually because someone made manual changes outside Terraform, meaning Terraform’s state and real resources no longer match. This is important because it breaks consistency, can cause unexpected failures during deployment, and makes your infrastructure unreliable since Terraform may try to overwrite or mis-handle those changes. To prevent this, the main approach is to ensure all changes go through Terraform only by restricting manual access, and regularly checking for drift using commands like terraform plan which compares the current state with real infrastructure and shows differences. Additionally, using remote state with locking, integrating Terraform into CI/CD pipelines, enabling proper access controls, and occasionally running refresh or drift detection processes help maintain alignment. By enforcing automation and avoiding manual changes, you keep infrastructure predictable, version-controlled, and consistent.
 
 
