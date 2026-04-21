@@ -197,3 +197,23 @@ If an application is not accessible, the goal is to trace the request path from 
 5. Finally, I inspect logs to understand errors at the application level.    
 This layered debugging ensures I don’t miss any component in the request flow.
 
+## What is Linux and why is it used in DevOps?
+## What are basic Linux commands you use daily?
+## What is the Linux file system structure?
+## What is the difference between root user and normal user?
+## What are file permissions in Linux?
+## How do you change file permissions using chmod?
+## What is chown command used for?
+## What is the difference between soft link and hard link?
+## How do you check running processes in Linux?
+## What is the difference between ps and top command?
+## How do you check memory and CPU usage?
+## What is disk usage and how do you check it?
+## What is grep command and how is it used?
+## What is a service in Linux?
+## How do you start, stop, and restart a service?
+## What are logs in Linux and where are they stored?
+## What is environment variable?
+## What is PATH variable?
+## What is SSH and how do you connect to a server?
+## What are some basic troubleshooting steps in Linux?
