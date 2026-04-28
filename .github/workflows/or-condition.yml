@@ -1,0 +1,19 @@
+name: Or demo
+on:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run this step for RiteshKaushal57 or RiteshKaushal
+        if: github.actor == 'RiteshKaushal57' || github.actor == 'RiteshKaushal'
+        run: echo "Running this for main step"
+      - name: Storing actor name in a variable
+        id: actore_name
+        run: echo "actor_name=${{ github.actor}} >> $GITHUB_OUTPUT"
+      - name: Revealing the actor name
+        run: echo "The actor name is ${{ steps.actore_name.outputs.actor_name }}"
+      
