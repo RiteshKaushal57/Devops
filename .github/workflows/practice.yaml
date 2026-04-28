@@ -5,9 +5,15 @@ on:
       - developer
       - main
 jobs:
-  build:
+  variable_demo:
    runs-on: ubuntu-latest
    steps:
      - name: Introdducing variables
        run: echo "Hello, ${{ vars.My_Name }}!"
+  secrets_demo:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Introducing secrets
+       run: echo "Hello, ${{ secrets.DOCKER_PASSWORD }}!"
+
   
