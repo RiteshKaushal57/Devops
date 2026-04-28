@@ -11,3 +11,6 @@ jobs:
           echo "The actor who triggered the workflow is: ${{ github.actor }}"
           echo "The workflow run ID is: ${{ github.run_id }}"
           echo "The branch or tag ref that triggered the workflow is: ${{ github.ref }}"
+
+      - name: Print all variables under Github
+        run: echo ${{ toJson(github) }}
