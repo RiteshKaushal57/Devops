@@ -1,12 +1,33 @@
-name: Outputs Demo
+# Outputs Demo for passing data between steps 
+#name: Outputs Demo
+#on: push
+#jobs:
+ # outputs-demo:
+ #   runs-on: ubuntu-latest
+ #   steps:
+ #     - name: Set one
+ #       id: set_one
+ #       run: echo "version=0.0.1" >> $GITHUB_OUTPUT
+  #    - name: Set two
+ #       id: set_two
+  #      run: echo "This version is ${{ steps.set_one.outputs.version }}"
+
+
+# Passing the data from job to job
+name: Outputs Demo for job to job data passing
 on: push
 jobs:
-  outputs-demo:
+  build:
+    outputs:
+      version: ${{ steps.build_step.outputs.version }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set one
-        id: set_one
+      - name: Build step
+        id: build_step
         run: echo "version=0.0.1" >> $GITHUB_OUTPUT
-      - name: Set two
-        id: set_two
-        run: echo "This version is ${{ steps.set_one.outputs.version }}"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy the app
+        run: echo "We are deploying the app with version ${{ needs.build.outputs.version }}" 
