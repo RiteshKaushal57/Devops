@@ -15,5 +15,10 @@ jobs:
    steps:
      - name: Introducing secrets
        run: echo "Hello, ${{ secrets.DOCKER_PASSWORD }}!"
-
+  action_demo:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Print the index.html
+        run: cat index.html
   
