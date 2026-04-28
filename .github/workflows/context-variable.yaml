@@ -13,4 +13,4 @@ jobs:
           echo "The branch or tag ref that triggered the workflow is: ${{ github.ref }}"
 
       - name: Print all variables under Github
-        run: echo ${{ toJson(github) }}
+        run: echo "${{ toJson(github) }}"
