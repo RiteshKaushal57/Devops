@@ -25,3 +25,4 @@ If we have env variable at job level and workflow level and at steps, then steps
 
 ### Input variables and parameters
 ### Understanding Context variables in GA
+### Outputs in Github

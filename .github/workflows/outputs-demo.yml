@@ -1,0 +1,12 @@
+name: Outputs Demo
+on: push
+jobs:
+  outputs-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set one
+        id: set_one
+        run: echo "version=0.0.1" >> $GITHUB_OUTPUT
+      - name: Set two
+        id: set_two
+        run: echo "This version is ${{ steps.set_one.outputs.version }}"
