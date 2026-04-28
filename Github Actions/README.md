@@ -18,3 +18,5 @@ Triggers determines when a workflow should run.
  **2. Manual triggers**    
  **3. Scheduled triggers**   
  **4. Workflow triggers**
+
+If we have env variable at job level and workflow level, then workflow level takes precedence.

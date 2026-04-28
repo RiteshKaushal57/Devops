@@ -9,4 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Introducing env variables
+        env:
+         APP_ENV: "dep"
         run: echo "App is connecting to $APP_ENV!"
