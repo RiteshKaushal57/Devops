@@ -9,5 +9,5 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Introdducing variables
-       run: echo "Hello, ${{ var.My_Name }}!"
+       run: echo "Hello, ${{ vars.My_Name }}!"
   
