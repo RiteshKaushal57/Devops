@@ -62,8 +62,4 @@ What is SonarQube and why is it used?
 How does OWASP dependency scanning work?
 Difference between Jenkins and GitLab CI
 What is Argo CD and GitOps?
-How Jenkins integrates with Argo CD
-
-
-
-source venv/bin/activate
+How Jenkins integrates with Argo CD?
