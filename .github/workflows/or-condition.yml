@@ -12,8 +12,8 @@ jobs:
         if: github.actor == 'RiteshKaushal57' || github.actor == 'RiteshKaushal'
         run: echo "Running this for main step"
       - name: Storing actor name in a variable
-        id: actore_name
+        id: actor_name
         run: echo "actor_name=${{ github.actor}} >> $GITHUB_OUTPUT"
       - name: Revealing the actor name
-        run: echo "The actor name is ${{ steps.actore_name.outputs.actor_name }}"
+        run: echo "The actor name is ${{ steps.actor_name.outputs.actor_name }}"
       
