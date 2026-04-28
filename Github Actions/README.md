@@ -19,5 +19,9 @@ Triggers determines when a workflow should run.
  **3. Scheduled triggers**   
  **4. Workflow triggers**
 
+### ENV Variables
 If we have env variable at job level and workflow level, then workflow level takes precedence.  
 If we have env variable at job level and workflow level and at steps, then steps takes precedence.
+
+### Input variables and parameters
+### Understanding Context variables in GA

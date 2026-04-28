@@ -1,0 +1,13 @@
+name: Learning Context Variables
+on: push
+jobs:
+  context-variables-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use context variables
+        run: |
+          echo "The event that triggered this workflow is: ${{ github.event_name }}"
+          echo "The repository name is: ${{ github.repository }}"
+          echo "The actor who triggered the workflow is: ${{ github.actor }}"
+          echo "The workflow run ID is: ${{ github.run_id }}"
+          echo "The branch or tag ref that triggered the workflow is: ${{ github.ref }}"
